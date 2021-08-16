@@ -1,0 +1,28 @@
+@import "./vendors/bootstrap";
+
+.list-group--custom {
+  left: 0;
+  right: 0;
+}
+
+#search {
+  box-shadow: none;
+  // border: none;
+}
+
+.fake-box {
+  border-radius: 1rem;
+  border: 1px solid $gray-300;
+}
+
+svg {
+  width: 1rem;
+}
+
+.list-group-item {
+  // cursor: default;
+
+  &:last-child {
+    margin-bottom: 1rem;
+  }
+}
