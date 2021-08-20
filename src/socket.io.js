@@ -5,11 +5,10 @@ const userRoutes = require ('./routes/routes')
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('Usuario conectado')
 
     socket.on('search', (data) => {
       console.log('criterio de búsqueda: ' + data.searchCriteria)
-      app.use(userRoutes)
+      io.emit('hello', 'hola mundo')
     })
 
     socket.on('disconnect', () => {

@@ -1,16 +1,9 @@
-const connection = require('../connection')
+module.exports = class User {
+  constructor(t) {
+    this.title = t
+  }
 
-/**
- * READ - Leer/Obtener datos
- */
-const read = (request, response) => {
-  connection.query(query, (error, result) => {
-    if (error) {
-      console.log('Ha ocurrido un error: ' + error)
-    } else {
-      response.json()
-    }
-  })
+  hello(name) {
+    console.log('Hola ' + name)
+  }
 }
-
-module.exports = read
