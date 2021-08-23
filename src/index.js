@@ -5,6 +5,7 @@ const socketio = require('socket.io')
 const http = require('http')
 const server = http.createServer(app)
 const io = socketio(server)
+const port = process.env.POT || 3000
 require('./socket.io')(io)
 
 // Settings
@@ -23,8 +24,8 @@ app.use('/', require ('./routes/index'))
 // Public
 app.use(express.static(path.join(__dirname, 'public')))
 
-server.listen(app.get('port'), () => {
-  console.log(`${app.get('title')} está corriendo en el puerto ${app.get('port')}`)
+server.listen(port, () => {
+  console.log(`${app.get('title')} está corriendo en el puerto ${port}`)
 })
 
 
