@@ -19,19 +19,9 @@ app.use(express.urlencoded({extended:false}))
 
 // Routes
 app.use('/', require ('./routes/index'))
-app.use('/login', require ('./routes/login'))
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')))
-
-
-// Server
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
 
 server.listen(app.get('port'), () => {
   console.log(`${app.get('title')} está corriendo en el puerto ${app.get('port')}`)

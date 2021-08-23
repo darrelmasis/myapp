@@ -1,14 +1,42 @@
 const express = require('express')
-const path = require('path')
-const app = express()
-const userRoutes = require ('./routes/routes')
+const connection = require("./connection")
+
+const now = (unit) => {
+  
+  const hrTime = process.hrtime();
+  
+  switch (unit) {
+    
+    case 'milli':
+      return hrTime[0] * 1000 + hrTime[1] / 1000000;
+      
+    case 'micro':
+      return hrTime[0] * 1000000 + hrTime[1] / 1000;
+      
+    case 'nano':
+    default:
+      return hrTime[0] * 1000000000 + hrTime[1];
+  }
+  
+};
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
 
-    socket.on('search', (data) => {
-      console.log('criterio de búsqueda: ' + data.searchCriteria)
-      io.emit('hello', 'hola mundo')
+    socket.on('search', (search) => {
+        let start = now('milli')
+        // Realizamos la busqueda con el operador LIKE de SQL
+          connection.query(`SELECT * FROM customers WHERE fullName LIKE '%${search.value}%' OR bussinessName LIKE '%${search.value}%'`, (err, result) => {
+            if (err) {
+              console.log('Error en la consulta: ' + err)
+            } else {
+              socket.emit('search-results', { result: result})
+            }
+          })
+
+        let end = now('milli')
+        socket.emit('search-time', {milli: Math.floor(end - start)/1000})
+
     })
 
     socket.on('disconnect', () => {
