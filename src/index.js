@@ -6,7 +6,7 @@ const server = http.createServer(app)
 const path = require('path')
 const socketio = require('socket.io')
 const io = socketio(server)
-const port = process.env.POT || 3000
+const port = process.env.PORT || 3000
 require('./socket.io')(io)
 
 // Settings
