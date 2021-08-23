@@ -1,9 +1,10 @@
 const express = require('express')
-const path = require('path')
 const app = express()
-const socketio = require('socket.io')
 const http = require('http')
 const server = http.createServer(app)
+
+const path = require('path')
+const socketio = require('socket.io')
 const io = socketio(server)
 const port = process.env.POT || 3000
 require('./socket.io')(io)
@@ -19,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended:false}))
 
 // Routes
-app.use('/', require ('./routes/index'))
+app.get('/', require ('./routes/index'))
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')))
