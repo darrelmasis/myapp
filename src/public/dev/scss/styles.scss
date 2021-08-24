@@ -1,13 +1,25 @@
 @import "./vendors/bootstrap";
+@import "./components/scrollbar";
+*, html{
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #f0f2f5;
 }
 
+.main-content {
+  margin-top: 5rem;
+}
+
 .logo {
-  width: 16.75rem;
-  height: 6.75rem;
+  width: 15rem;
+  height: 12.5rem;
   background-image: url(../../dist/assets/logo-harinas@svg.svg);
   background-repeat: no-repeat;
+  background-size: contain;
+  background-position: bottom center;
+  margin-bottom: 2.5rem;
 }
 
 .list-group--custom {
@@ -19,18 +31,23 @@ body {
   box-shadow: none;
 }
 
+#search-results {
+  overflow-y: scroll;
+  max-height: 300px;
+}
+
 .fake-box {
   border-radius: 1rem;
   border: 1px solid $gray-300;
   @media (min-width: 1024px) {
     & {
-      max-width: 512px;
+      max-width: 35rem;
     }
   }
 }
 
 .list-group-item {
-  padding-bottom: 0.75rem;
+  padding-bottom: 1rem;
 }
 .search-criteria {
   font-weight: bold;
