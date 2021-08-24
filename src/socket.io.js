@@ -26,7 +26,7 @@ module.exports = (io) => {
         if(search.value != '') {
           let start = now('milli')
         // Realizamos la busqueda con el operador LIKE de SQL
-          connection.query(`SELECT * FROM customers WHERE fullName LIKE '%${search.value}%' OR bussinessName LIKE '%${search.value}%'`, (err, result) => {
+          connection.query(`SELECT * FROM customers WHERE fullName LIKE '%${search.value}%' OR bussinessName LIKE '%${search.value}%' OR customerCode LIKE '%${search.value}%'`, (err, result) => {
             if (err) {
               console.log('Error en la consulta: ' + err)
               throw err

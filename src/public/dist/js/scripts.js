@@ -153,8 +153,7 @@ searchBar.addEventListener('blur', function (e) {
   console.log(e.target.id);
 
   if (searchBar.value != '') {
-    if (e.target.id !== '') {
-      resultData.classList.toggle('d-none');
+    if (e.target.id !== '') {// resultData.classList.toggle('d-none')
     }
   }
 });
@@ -201,9 +200,9 @@ socket.on('search-results', function (data) {
       if (customer != undefined) {
         var content = (0, _dom.createCustomElement)('div', {
           id: 'result-box'
-        }, ["<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\">".concat(customer.fullName, "</span>")]);
+        }, ["<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>")]);
         var listItem = (0, _dom.createCustomElement)('a', {
-          href: "#",
+          href: "/cliente/".concat(customer.customerCode),
           class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'
         }, [content]);
         searchResults.appendChild(listItem);

@@ -28,7 +28,7 @@ searchBar.addEventListener('blur', (e) => {
   console.log(e.target.id)
   if(searchBar.value != '') {
     if(e.target.id !== '') {
-      resultData.classList.toggle('d-none')
+      // resultData.classList.toggle('d-none')
     }
   }
 })
@@ -74,8 +74,8 @@ socket.on('search-results', data => {
     for (let i = 0; i < limit; i++) {
       const customer = results[i]
         if(customer != undefined) {
-          let content = createCustomElement('div', {id: 'result-box'}, [`<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3">${customer.fullName}</span>`])
-          let listItem = createCustomElement('a', {href: `#`, class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'}, [content])
+          let content = createCustomElement('div', {id: 'result-box'}, [`<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3"><span class="text-secondary">${customer.customerCode}</span> ${customer.fullName}</span>`])
+          let listItem = createCustomElement('a', {href: `/cliente/${customer.customerCode}`, class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'}, [content])
           searchResults.appendChild(listItem)
         }
     }
