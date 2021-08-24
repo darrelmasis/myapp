@@ -1,15 +1,15 @@
 const mysql = require('mysql')
 const { mysql_database } = require('./config')
 
+let host = mysql_database.local
 
-
-const connection = mysql.createConnection(mysql_database)
+const connection = mysql.createConnection(host)
 
 connection.connect((error, success) => {
   if (error) {
-    console.log('Hubo algunos errores durante la conneción: ' + error)
+    console.log('Hubo algunos errores durante la conexión: ' + error)
   } else {
-    console.log('Conexión con la BD exitosa')
+    console.log(`Conexión con la base de datos "${host.database}" exitosa`)
     return success
   }
 })
