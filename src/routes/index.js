@@ -1,9 +1,10 @@
-const express = require('express')
-const userController = require('../controllers/user-controller')
-const router = express.Router()
+// const express = require('express')
+// const router = express.Router()
 
-// index
-router.get('index', userController.read)
+// // index
+// router.get('index', (req, res) => {
+  
+// })
 
 
-module.exports = router
+// module.exports = router

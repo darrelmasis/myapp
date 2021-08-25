@@ -1,8 +1,10 @@
 const baseModel = require('./base_model')
 
-class Search extends baseModel {
+class Search {
 
   search(value) {
-    baseModel.read('','customers', `WHERE fullName LIKE '%${value}%'`)
+   return baseModel.read('*','customers', `WHERE fullName LIKE '%${value}%'`)
   }
 }
+
+module.exports = new Search
