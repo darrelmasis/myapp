@@ -9,24 +9,28 @@ const io = socketio(server)
 const port = process.env.PORT || 3000
 require('./socket.io')(io)
 
-// Settings
+// Configuración básica
 app.set('title', 'myapp')
 app.set('port', process.env.PORT || 3000)
-// view engine setup
+
+// Motor de vistas [pug]
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
+
+// Archivos estáticos
+app.use(express.json())
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Middlewares
 app.use(express.urlencoded({extended:false}))
 
 // Routes
-app.get('/', require ('./routes/index'))
-
-// Public
-app.use(express.static(path.join(__dirname, 'public')))
+app.get('/', (req, res) => {
+  res.render('index')
+})
 
 server.listen(port, () => {
-  console.log(`${app.get('title')} está corriendo en el puerto ${port}`)
+  console.log(`Aplicación ${app.get('title')} corriendo en el puerto ${port}`)
 })
 
 
