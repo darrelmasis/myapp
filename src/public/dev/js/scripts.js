@@ -23,16 +23,6 @@ searchBar.addEventListener('keyup', (e) => {
   }
 })
 
-// Seguir trabajando en el buscador
-searchBar.addEventListener('blur', (e) => {
-  console.log(e.target.id)
-  if(searchBar.value != '') {
-    if(e.target.id !== '') {
-      // resultData.classList.toggle('d-none')
-    }
-  }
-})
-
 searchBar.addEventListener('focus', (e) => {
   if(searchBar.value != '') {
     resultData.classList.toggle('d-none')

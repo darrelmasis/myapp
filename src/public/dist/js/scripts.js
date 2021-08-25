@@ -147,15 +147,6 @@ searchBar.addEventListener('keyup', function (e) {
     resultData.classList.add('d-none');
     btnClear.classList.add('d-none');
   }
-}); // Seguir trabajando en el buscador
-
-searchBar.addEventListener('blur', function (e) {
-  console.log(e.target.id);
-
-  if (searchBar.value != '') {
-    if (e.target.id !== '') {// resultData.classList.toggle('d-none')
-    }
-  }
 });
 searchBar.addEventListener('focus', function (e) {
   if (searchBar.value != '') {
