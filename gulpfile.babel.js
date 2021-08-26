@@ -11,6 +11,8 @@ import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
 import autoprefixer from 'autoprefixer'
 import rename from 'gulp-rename'
+import pug from "gulp-pug";
+import GulpPostCss from 'gulp-postcss'
 
 const sass = gulpSass(darthSass)
 
@@ -23,6 +25,10 @@ const path = {
   scripts: {
       src: "./src/public/dev/js/scripts.js",
       dest: "./src/public/dist/js"
+  },
+  pug: {
+      src: './src/views/pages/*.pug',
+      dest: './src/public/pages/'
   }
 }
 
@@ -42,6 +48,12 @@ const path = {
   done()
 }
 
+const views = done => {
+  gulp.src(path.pug.src)
+    .pipe(pug({}))
+    .pipe(gulp.dest(path.pug.dest))
+  done()
+}
 /**
  * Compila JavaScript para producción
  */
@@ -74,8 +86,10 @@ const path = {
  */
 gulp.task('styles', styles)
 
+gulp.task('views', views)
 gulp.task('scripts', scripts)
 
 
 gulp.watch(path.styles.src, styles)
+gulp.watch(path.pug.src, views)
 gulp.watch(path.scripts.src, scripts)
