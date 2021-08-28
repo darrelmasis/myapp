@@ -13,6 +13,7 @@ import autoprefixer from 'autoprefixer'
 import rename from 'gulp-rename'
 import pug from "gulp-pug";
 import GulpPostCss from 'gulp-postcss'
+import beautify from 'gulp-beautify'
 
 const sass = gulpSass(darthSass)
 
@@ -50,7 +51,8 @@ const path = {
 
 const views = done => {
   gulp.src(path.pug.src)
-    .pipe(pug({}))
+    .pipe(pug())
+    .pipe(beautify.html({ indent_size: 2 }))
     .pipe(gulp.dest(path.pug.dest))
   done()
 }
