@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Location | Inicio</title>
+  <link rel="stylesheet" href="./dist/css/styles.min.css">
+</head>
+<main class="container">
+  <div class="main-content w-100  d-flex flex-column justify-content-center align-items-center text-center">
+    <div class="logo"></div>
+
+    <div class="py-2 w-100 fake-box position-relative bg-white">
+
+      <form id="search-form" action="/" method="GET">
+
+        <div id="form-group" class="input-group align-items-center">
+          <span class="input-group-text border-0 icon icon-search p-0 ms-3 me-2" id="basic-addon1"></span>
+          <input class="form-control border-0 bg-transparent" autofocus id="search-bar" type="text"
+            placeholder="¿A quién buscas hoy?" name="s" aria-label="Username" aria-describedby="basic-addon1"
+            autocomplete="off">
+          <span class="input-group-text button border-0 icon icon-close p-0 ms-2 me-3 d-none" id="btn-clear"></span>
+        </div>
+        
+      </form>
+
+      <div id="results-data" class="d-none">
+        <div id="results-count" class=" d-flex justify-content-end px-3"></div>
+
+        <div class="list-group list-group--custom border-0" id="search-results">
+          <div class="text-center">
+            <div id="spinner" class="spinner-border" role="status">
+              <!-- <span class="sr-only">Loading...</span> -->
+            </div>
+          </div>
+        </div>
+
+        <div id="results-message" class="mx-3"></div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="./dist/js/scripts.min.js"></script>
