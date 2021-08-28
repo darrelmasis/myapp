@@ -1,3 +1,16 @@
-extends ../includes/template
+extends ../templates/template
 append config
   - title = 'Inicio'
+block main
+  main.container
+    .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center
+      div.logo
+      div.search.position-relative.bg-white
+        div.search-box
+          form(id="search-form" action="/" method="POST")
+            div.search-bar.input-group
+              span.input-group-text.border-0.p-0.ms-3.me-2.icon.icon-search
+              input(id="search-bar" class="form-control border-0 gb-transparent" type="search", name="search")
+              span.input-group-text.border-0.p-0.ms-3.me-2.icon.icon-close
+      div.search-results
+      div.search-results-message
