@@ -15,7 +15,7 @@ app.set('port', process.env.PORT || 3000)
 
 // Motor de vistas [pug]
 app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'views/pages/'))
 
 // Archivos estáticos
 app.use(express.json())
