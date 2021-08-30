@@ -46,7 +46,7 @@ router.get('/cliente/:id', (req, res) => {
               large: days[date.getDay()] + ' ' + day + ' de ' + months[date.getMonth()] + ' de  ' + year
             }
           }
-          res.render('../profile', { customer: data[0] })
+          res.render('profile', { customer: data[0] })
         })
     })
 })

@@ -15,6 +15,7 @@ app.set('title', 'myapp')
 app.set('port', process.env.PORT || 3000)
 
 // Motor de vistas [pug]
+app.engine('pug', require('pug').__express)
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views/pages/'))
 
