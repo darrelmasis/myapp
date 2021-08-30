@@ -28,8 +28,8 @@ app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
 // Routes
-app.use('/', searchRoute)
-app.use('/cliente/:id', customerRoute)
+app.get('/', searchRoute)
+app.get('/cliente/:id', customerRoute)
 app.get('/cliente/', (req, res) => {
   res.redirect('/')
 })

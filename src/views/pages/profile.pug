@@ -1,6 +1,6 @@
 extends ../templates/template
 append config
-  - title = 'Perfil'
+  - pageTitle= `${customer.customerCode}`
   -let type = customer.type
 block main
   .container
