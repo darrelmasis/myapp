@@ -1,4 +1,3 @@
-const { fromJSON } = require('postcss')
 const connection = require('../connection')
 class Base_model {
 
