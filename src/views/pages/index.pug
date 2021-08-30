@@ -3,14 +3,16 @@ append config
   - title = 'Inicio'
 block main
   main.container
-    .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center
+    .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
       div.logo
-      div.search.position-relative.bg-white
+      div.search.position-relative.bg-white.w-100
         div.search-box
           form(id="search-form" action="/" method="POST")
-            div.search-bar.input-group
-              span.input-group-text.border-0.p-0.ms-3.me-2.icon.icon-search
-              input(id="search-bar" class="form-control border-0 gb-transparent" type="search", name="search")
-              span.input-group-text.border-0.p-0.ms-3.me-2.icon.icon-close
-      div.search-results
-      div.search-results-message
+            div.search-bar.input-group.align-items-center
+              span.input-group-text.border-0.p-0.mx-3.icon.icon-search
+              input(id="search-bar" placeholder="¿A quién buscas hoy?" class="form-control border-0 gb-transparent" type="search" name="search" autocomplete="off" spellcheck="false" autofocus)
+              button(id="btn-clear" type='button').invisible.input-group-text.border-0.p-0.mx-3.icon.icon-close
+        div(id="results-data").d-none.pb-3
+          div#results-count
+          div#search-results
+          div#results-message

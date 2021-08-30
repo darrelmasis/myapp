@@ -141,11 +141,11 @@ searchBar.addEventListener('keyup', function (e) {
     value: searchBar.value.trim()
   });
   resultData.classList.remove('d-none');
-  btnClear.classList.remove('d-none');
+  btnClear.classList.remove('invisible');
 
   if (searchBar.value == '') {
     resultData.classList.add('d-none');
-    btnClear.classList.add('d-none');
+    btnClear.classList.add('invisible');
   }
 });
 searchBar.addEventListener('focus', function (e) {
@@ -161,11 +161,11 @@ searchForm.addEventListener('submit', function (e) {
 });
 btnClear.addEventListener('click', function (e) {
   resultData.classList.add('d-none');
-  btnClear.classList.add('d-none');
+  btnClear.classList.add('invisible');
   searchBar.value = '';
 });
 socket.on('search-results', function (data) {
-  spinner.classList.add('d-none');
+  // spinner.classList.add('d-none')
   var results = data.result;
 
   if (results.length < limit) {
@@ -189,9 +189,7 @@ socket.on('search-results', function (data) {
       var customer = results[i];
 
       if (customer != undefined) {
-        var content = (0, _dom.createCustomElement)('div', {
-          id: 'result-box'
-        }, ["<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>")]);
+        var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>");
         var listItem = (0, _dom.createCustomElement)('a', {
           href: "/cliente/".concat(customer.customerCode),
           class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'
@@ -202,10 +200,10 @@ socket.on('search-results', function (data) {
 
     resultsMessage.innerHTML = '';
     limit > results.length ? limit = results.length : null;
-    resultsCount.innerHTML = " <span class=\"flex-end text-secondary small\">Mostrando ".concat(limit, " resultados de ").concat(results.length, "</span>");
+    resultsCount.innerHTML = " <div class=\"text-secondary small text-end me-3\">Mostrando ".concat(limit, " resultados de ").concat(results.length, "</div>");
   } else {
     resultsCount.innerHTML = '';
-    resultsMessage.innerHTML = "No se han encontrado resultados para tu b\xFAsqueda <span class=\"search-criteria\">(".concat(searchBar.value, ")</span>");
+    resultsMessage.innerHTML = "<div class=\"text-secondary text-center\">No se han encontrado resultados para tu b\xFAsqueda <span class=\"search-criteria\">(".concat(searchBar.value, ")</span></div>");
   }
 });
 

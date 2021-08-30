@@ -9,7 +9,7 @@ body {
 }
 
 .main-content {
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 
 .logo {
@@ -22,21 +22,16 @@ body {
   margin-bottom: 2.5rem;
 }
 
-.list-group--custom {
-  left: 0;
-  right: 0;
-}
-
 #search-bar {
   box-shadow: none;
+  height: 2.75rem;
+  padding: 0;
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
 }
 
-#search-results {
-  overflow-y: scroll;
-  max-height: 300px;
-}
-
-.fake-box {
+.search {
   border-radius: 1rem;
   border: 1px solid $gray-300;
   @media (min-width: 1024px) {
@@ -75,5 +70,13 @@ body {
     &:hover {
       background-color: $dark;
     }
+  }
+}
+
+.customer-image {
+  max-width: 128px;
+  margin: auto;
+  & img {
+    border-radius: 50%;
   }
 }

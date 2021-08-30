@@ -1,0 +1,92 @@
+extends ../templates/template
+append config
+  - title = 'Perfil'
+  -let type = customer.type
+block main
+  .container
+    a(href="/") regresar
+    .row.mt-5 
+      .col-md-3
+        .card.text-center.bg-white.rounded.border.mb-3
+          .card-body 
+            .customer-image.d-flex.justify-content-center 
+              img(src="/dist/assets/defect.png" alt="foto del cliente").w-100
+            .mt-3 
+              h5.card-title= `${customer.fullName}`  
+              p.text-secondary.mb-1= `${customer.type}`
+              p.text-muted= `Cliente desde ${customer.dateFormat(customer.admissionDate).short}`
+              a(href="https://google.com/maps/dir/11.966806,-86.088184/11.937184093813926, -85.95210958827181" target="_blank").btn.btn-primary.px-3 Visitar
+      .col-md-9
+        form(action="/save" method="POST").bg-white.p-3.rounded.border
+          ul.list-group.list-group-flush
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Código:
+                .col-sm-9.text-secondary=`${customer.customerCode}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Nombre completo:
+                .col-sm-9.text-secondary
+                  input(type="text", name="fullName" value=`${customer.fullName}` spellcheck="false").form-control
+                  input(type="hidden", name="customerCode" value=`${customer.customerCode}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Razón social:
+                .col-sm-9.text-secondary
+                  input(type="text", name="bussinessName" value=`${customer.bussinessName}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Dirección:
+                .col-sm-9.text-secondary
+                  input(type="text", name="address" value=`${customer.address}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-6
+                  .row 
+                    .col-sm-6.fw-bold Telefono Convencional:
+                    .col-sm-6.text-secondary
+                      input(type="text", name="primaryPhone" value=`${customer.primaryPhone}` spellcheck="false").form-control
+                .col-sm-6
+                  .row
+                    .col-sm-6.fw-bold Teléfono Móvil:
+                    .col-sm-6.text-secondary
+                      input(type="text", name="secondaryPhone" value=`${customer.secondaryPhone}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-6
+                  .row 
+                    .col-sm-6.fw-bold Correo Electrónico primario:
+                    .col-sm-6.text-secondary
+                      input(type="text", name="primaryEmail" value=`${customer.primaryEmail}` spellcheck="false").form-control
+                .col-sm-6
+                  .row
+                    .col-sm-6.fw-bold Correo Electrónico secundario:
+                    .col-sm-6.text-secondary
+                      input(type="text", name="secondaryEmail" value=`${customer.secondaryEmail}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-6
+                  .row 
+                    .col-sm-6.fw-bold Tipo:
+                    .col-sm-6.text-secondary
+                      select(name="type").form-select
+                        if type === 'Contado'
+                          option(value=`${customer.type}` selected)=`${customer.type}`
+                          option(value=`Crédito`) Credito
+                        else
+                          option(value=`${customer.type}` selected)=`${customer.type}`
+                          option(value=`Contado`) Contado
+                .col-sm-6
+                  .row
+                    .col-sm-6.fw-bold Condición de pago:
+                    .col-sm-6.text-secondary
+                      input(type="number", name="payCondition" value=`${customer.payCondition}` spellcheck="false").form-control
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Vendedor:
+                .col-sm-9.text-secondary= `${customer.sellerInfo.fullName}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-bold Cliente desde:
+                .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
+          input(type="submit", value="Guardar").btn.btn-success
