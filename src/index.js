@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.createServer(app)
-
+const searchRoute = require('./routes/search_route')
+const customerRoute = require('./routes/customer_route')
 const path = require('path')
 const socketio = require('socket.io')
 const io = socketio(server)
@@ -23,11 +24,15 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // Middlewares
 app.use(express.urlencoded({extended:false}))
+app.use(express.json())
 
 // Routes
-app.get('/', (req, res) => {
-  res.render('index')
+app.get('/', searchRoute)
+app.get('/cliente/:id', customerRoute)
+app.get('/cliente/', (req, res) => {
+  res.redirect('/')
 })
+app.post('/save', customerRoute)
 
 server.listen(port, () => {
   console.log(`Aplicación ${app.get('title')} corriendo en el puerto ${port}`)
