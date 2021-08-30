@@ -1,3 +1,4 @@
+const { fromJSON } = require('postcss')
 const connection = require('../connection')
 class Base_model {
 
@@ -75,21 +76,26 @@ class Base_model {
    */
   update(table, data, condition) {
     const keys = Object.keys(data)
-    const values = Object.value(data)
+    const values = Object.values(data)
     let param = []
 
     keys.forEach((key, i, array) => {
-      values.forEach((value, j) => {
-        param.push(`${key} = ${value}`)
-        if (j < array.lenght - 1) {
+        param.push(`${key} = '${values[i]}'`)
+        if (i < array.lenght - 1) {
           param.push(',')
         }
-      });
     });
 
-    const query = `UPDATE ${table} SET ${param.toString()}`
+    const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
+    console.log(query)
+    connection.query(query, (err, result) => {
+      if(err) {
+        return console.log(err)
+      } else {
+        return console.log(result)
+      }
+    })
 
-    return this.#promise(query)
   }
 
   /**
