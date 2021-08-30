@@ -12,7 +12,7 @@ require('./socket.io')(io)
 
 // Configuración básica
 app.set('title', 'myapp')
-app.set('port', process.env.PORT || 3000)
+app.set('port', port)
 
 // Motor de vistas [pug]
 app.engine('pug', require('pug').__express)
