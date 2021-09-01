@@ -32,17 +32,17 @@ searchBar.addEventListener('keyup', () => {
   if(searchBar.value == '') {
     resultData.classList.add('d-none')
       btnClear.classList.add('invisible')
-  search.classList.remove('open')
+      search.classList.remove('open')
 
   }
 
 })
 
-searchBar.addEventListener('focus', (e) => {
-  if(searchBar.value != '') {
-    resultData.classList.toggle('d-none')
-  }
-})
+// searchBar.addEventListener('focus', (e) => {
+//   if(searchBar.value != '') {
+//     resultData.classList.toggle('d-none')
+//   }
+// })
 
 searchForm.addEventListener('submit', (e) => {
   socket.emit('search', {value: searchBar.value.trim()})
@@ -80,8 +80,10 @@ socket.on('search-results', data => {
   if(results.length > 0 ) {
     for (let i = 0; i < limit; i++) {
       const customer = results[i]
+      customer.fullName = customer.fullName.replace(new RegExp(searchBar.value, "gi"), `<b>${searchBar.value}</b>`)
+
         if(customer != undefined) {
-          let content = `<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3"><span class="text-secondary">${customer.customerCode}</span> ${customer.fullName}</span>`
+          let content = `<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3"><span class="text-secondary fw-bold">${customer.customerCode}</span> ${customer.fullName}</span>`
           let listItem = createCustomElement('a', {href: `/cliente/${customer.customerCode}`, class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'}, [content])
           searchResults.appendChild(listItem)
         }

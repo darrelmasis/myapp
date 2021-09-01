@@ -157,12 +157,12 @@ searchBar.addEventListener('keyup', function () {
     btnClear.classList.add('invisible');
     search.classList.remove('open');
   }
-});
-searchBar.addEventListener('focus', function (e) {
-  if (searchBar.value != '') {
-    resultData.classList.toggle('d-none');
-  }
-});
+}); // searchBar.addEventListener('focus', (e) => {
+//   if(searchBar.value != '') {
+//     resultData.classList.toggle('d-none')
+//   }
+// })
+
 searchForm.addEventListener('submit', function (e) {
   socket.emit('search', {
     value: searchBar.value.trim()
@@ -198,9 +198,10 @@ socket.on('search-results', function (data) {
   if (results.length > 0) {
     for (var i = 0; i < limit; i++) {
       var customer = results[i];
+      customer.fullName = customer.fullName.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(searchBar.value, "</b>"));
 
       if (customer != undefined) {
-        var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>");
+        var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary fw-bold\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>");
         var listItem = (0, _dom.createCustomElement)('a', {
           href: "/cliente/".concat(customer.customerCode),
           class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'
