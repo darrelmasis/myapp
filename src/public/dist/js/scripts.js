@@ -126,7 +126,14 @@ var _dom = require("./modules/dom");
 
 var _localStorage = require("./modules/localStorage");
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var socket = io();
+
+var Search = function Search() {
+  _classCallCheck(this, Search);
+};
+
 var searchForm = (0, _dom.select)('search-form', 'id');
 var searchBar = (0, _dom.select)('search-bar', 'id');
 var resultData = (0, _dom.select)('results-data', 'id');
@@ -135,17 +142,20 @@ var resultsCount = (0, _dom.select)('results-count', 'id');
 var resultsMessage = (0, _dom.select)('results-message', 'id');
 var btnClear = (0, _dom.select)('btn-clear', 'id');
 var spinner = (0, _dom.select)('spinner', 'id');
+var search = (0, _dom.select)('search', 'id');
 var limit = 10;
-searchBar.addEventListener('keyup', function (e) {
+searchBar.addEventListener('keyup', function () {
   socket.emit('search', {
     value: searchBar.value.trim()
   });
   resultData.classList.remove('d-none');
   btnClear.classList.remove('invisible');
+  search.classList.add('open');
 
   if (searchBar.value == '') {
     resultData.classList.add('d-none');
     btnClear.classList.add('invisible');
+    search.classList.remove('open');
   }
 });
 searchBar.addEventListener('focus', function (e) {
@@ -160,6 +170,7 @@ searchForm.addEventListener('submit', function (e) {
   e.preventDefault();
 });
 btnClear.addEventListener('click', function (e) {
+  search.classList.remove('open');
   resultData.classList.add('d-none');
   btnClear.classList.add('invisible');
   searchBar.value = '';

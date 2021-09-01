@@ -2,6 +2,15 @@ const socket = io()
 import { createCustomElement, select, addAttributes } from "./modules/dom";
 import { storage } from "./modules/localStorage";
 
+class Search {
+
+  constructor() {
+
+  }
+
+  
+}
+
 const searchForm = select('search-form', 'id')
 const searchBar = select('search-bar', 'id')
 const resultData = select('results-data', 'id')
@@ -10,17 +19,23 @@ const resultsCount = select('results-count', 'id')
 const resultsMessage = select('results-message', 'id')
 const btnClear = select('btn-clear', 'id')
 const spinner = select('spinner', 'id')
+
+const search = select('search', 'id')
 let limit = 10
 
-searchBar.addEventListener('keyup', e => {
+searchBar.addEventListener('keyup', () => {
   socket.emit('search', {value: searchBar.value.trim()})
   resultData.classList.remove('d-none')
   btnClear.classList.remove('invisible')
+  search.classList.add('open')
 
   if(searchBar.value == '') {
     resultData.classList.add('d-none')
       btnClear.classList.add('invisible')
+  search.classList.remove('open')
+
   }
+
 })
 
 searchBar.addEventListener('focus', (e) => {
@@ -35,9 +50,11 @@ searchForm.addEventListener('submit', (e) => {
 })
 
 btnClear.addEventListener('click', e => {
+  search.classList.remove('open')
   resultData.classList.add('d-none')
   btnClear.classList.add('invisible')
   searchBar.value = ''
+
 })
 
 

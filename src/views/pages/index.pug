@@ -5,14 +5,14 @@ block main
   main.container
     .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
       div.logo
-      div.search.position-relative.bg-white.w-100
+      div#search.search.position-relative.bg-white.w-100
         div.search-box
           form(id="search-form" action="/" method="POST")
             div.search-bar.input-group.align-items-center
               span.input-group-text.border-0.p-0.mx-3.icon.icon-search
-              input(id="search-bar" placeholder="¿A quién buscas hoy?" class="form-control border-0 gb-transparent" type="search" name="search" autocomplete="off" spellcheck="false" autofocus)
+              input(id="search-bar" placeholder="¿A quién buscas hoy?" class="form-control border-0 bg-transparent" type="search" name="search" autocomplete="off" spellcheck="false" autofocus)
               button(id="btn-clear" type='button').invisible.input-group-text.border-0.p-0.mx-3.icon.icon-close
-        div(id="results-data").d-none.pb-3
+        div(id="results-data").search-results.d-none.pb-3.bg-white.border
           div#results-count
           div#search-results
           div#results-message
