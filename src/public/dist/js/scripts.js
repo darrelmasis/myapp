@@ -144,18 +144,50 @@ var btnClear = (0, _dom.select)('btn-clear', 'id');
 var spinner = (0, _dom.select)('spinner', 'id');
 var search = (0, _dom.select)('search', 'id');
 var limit = 10;
-searchBar.addEventListener('keyup', function () {
-  socket.emit('search', {
-    value: searchBar.value.trim()
-  });
-  resultData.classList.remove('d-none');
-  btnClear.classList.remove('invisible');
-  search.classList.add('open');
+var key = -1;
+var prev = -2;
+searchBar.addEventListener('keyup', function (e) {
+  if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
+    socket.emit('search', {
+      value: searchBar.value.trim()
+    });
+    key = 0;
+    prev = -1;
+    resultData.classList.remove('d-none');
+    btnClear.classList.remove('invisible');
+    search.classList.add('open');
 
-  if (searchBar.value == '') {
-    resultData.classList.add('d-none');
-    btnClear.classList.add('invisible');
-    search.classList.remove('open');
+    if (searchBar.value == '') {
+      resultData.classList.add('d-none');
+      btnClear.classList.add('invisible');
+      search.classList.remove('open');
+    }
+  }
+});
+searchBar.addEventListener("keydown", function (e) {
+  var mylist = document.querySelectorAll('.list-group-item');
+
+  if (mylist) {
+    if (e.key === 'ArrowDown') {
+      console.dir(mylist[key]);
+      searchBar.value = mylist[key].innerText;
+      key < limit - 1 ? key++ : key = key - (limit - 1);
+      key === 0 ? prev = limit - 1 : prev = key - 1;
+      mylist[key].classList.add("active");
+
+      if (prev != -1) {
+        mylist[prev].classList.remove("active");
+      }
+    } else if (e.key === 'ArrowUp') {
+      key < 0 ? key = limit - 1 : key--;
+      key < limit - 1 ? prev = key + 1 : prev = 0;
+
+      if (prev != -1) {
+        mylist[prev].classList.remove("active");
+      }
+
+      mylist[key].classList.add("active");
+    }
   }
 }); // searchBar.addEventListener('focus', (e) => {
 //   if(searchBar.value != '') {
@@ -209,7 +241,6 @@ socket.on('search-results', function (data) {
           array[index] = word.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(word.substr(index2, searchBar.value.length), "</b>"));
         }
       });
-      console.log(split);
       customer.fullName = split.toString().replace(/,/g, ' ');
 
       if (customer != undefined) {

@@ -23,20 +23,60 @@ const spinner = select('spinner', 'id')
 const search = select('search', 'id')
 let limit = 10
 
-searchBar.addEventListener('keyup', () => {
-  socket.emit('search', { value: searchBar.value.trim() })
-  resultData.classList.remove('d-none')
-  btnClear.classList.remove('invisible')
-  search.classList.add('open')
+let key = -1;
+let prev = -2;
 
-  if (searchBar.value == '') {
-    resultData.classList.add('d-none')
-    btnClear.classList.add('invisible')
-    search.classList.remove('open')
+searchBar.addEventListener('keyup', e => {
+  if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
+    socket.emit('search', { value: searchBar.value.trim() })
+    key = 0
+    prev = -1
+    resultData.classList.remove('d-none')
+    btnClear.classList.remove('invisible')
+    search.classList.add('open')
 
+
+    if (searchBar.value == '') {
+      resultData.classList.add('d-none')
+      btnClear.classList.add('invisible')
+      search.classList.remove('open')
+
+    }
   }
 
+  
 })
+
+
+
+searchBar.addEventListener("keydown", (e) => {
+let mylist = document.querySelectorAll('.list-group-item');
+
+  if(mylist) {
+
+    if (e.key === 'ArrowDown') {
+      console.dir(mylist[key])
+    searchBar.value = mylist[key].innerText
+    key < limit - 1 ? key++ : key = key - (limit - 1)
+    key === 0 ? prev = limit -1 : prev = key - 1 
+    mylist[key].classList.add("active");
+    if (prev != -1) {
+      mylist[prev].classList.remove("active")
+    }
+
+  } else if (e.key === 'ArrowUp') {
+    key < 0 ? key = limit - 1: key--
+    key < limit -1 ? prev = key  +1 : prev = 0
+    if (prev != -1) {
+      mylist[prev].classList.remove("active")
+    }
+    mylist[key].classList.add("active");
+
+
+  }
+  }
+});
+
 
 // searchBar.addEventListener('focus', (e) => {
 //   if(searchBar.value != '') {
@@ -80,7 +120,6 @@ socket.on('search-results', data => {
   if (results.length > 0) {
     for (let i = 0; i < limit; i++) {
       const customer = results[i]
-
       const split = customer.fullName.split(' ')
 
       split.forEach((word, index, array) => {
@@ -92,8 +131,7 @@ socket.on('search-results', data => {
           array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index2, searchBar.value.length)}</b>`)
         }
       })
-      console.log(split)
-      customer.fullName = split.toString().replace(/,/g,' ')
+      customer.fullName = split.toString().replace(/,/g, ' ')
 
 
       if (customer != undefined) {
@@ -110,4 +148,6 @@ socket.on('search-results', data => {
     resultsMessage.innerHTML = `<div class="text-secondary text-center">No se han encontrado resultados para tu búsqueda <span class="search-criteria">(${searchBar.value})</span></div>`
 
   }
+
 })
+
