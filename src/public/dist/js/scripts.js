@@ -198,7 +198,19 @@ socket.on('search-results', function (data) {
   if (results.length > 0) {
     for (var i = 0; i < limit; i++) {
       var customer = results[i];
-      customer.fullName = customer.fullName.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(searchBar.value, "</b>"));
+      var split = customer.fullName.split(' ');
+      split.forEach(function (word, index, array) {
+        var index1 = word.indexOf(searchBar.value);
+        var index2 = word.indexOf(searchBar.value.toLowerCase());
+
+        if (index1 != -1) {
+          array[index] = word.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(word.substr(index1, searchBar.value.length), "</b>"));
+        } else {
+          array[index] = word.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(word.substr(index2, searchBar.value.length), "</b>"));
+        }
+      });
+      console.log(split);
+      customer.fullName = split.toString().replace(/,/g, ' ');
 
       if (customer != undefined) {
         var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary fw-bold\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>");

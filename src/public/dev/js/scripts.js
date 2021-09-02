@@ -8,7 +8,7 @@ class Search {
 
   }
 
-  
+
 }
 
 const searchForm = select('search-form', 'id')
@@ -24,15 +24,15 @@ const search = select('search', 'id')
 let limit = 10
 
 searchBar.addEventListener('keyup', () => {
-  socket.emit('search', {value: searchBar.value.trim()})
+  socket.emit('search', { value: searchBar.value.trim() })
   resultData.classList.remove('d-none')
   btnClear.classList.remove('invisible')
   search.classList.add('open')
 
-  if(searchBar.value == '') {
+  if (searchBar.value == '') {
     resultData.classList.add('d-none')
-      btnClear.classList.add('invisible')
-      search.classList.remove('open')
+    btnClear.classList.add('invisible')
+    search.classList.remove('open')
 
   }
 
@@ -45,7 +45,7 @@ searchBar.addEventListener('keyup', () => {
 // })
 
 searchForm.addEventListener('submit', (e) => {
-  socket.emit('search', {value: searchBar.value.trim()})
+  socket.emit('search', { value: searchBar.value.trim() })
   e.preventDefault()
 })
 
@@ -62,31 +62,45 @@ btnClear.addEventListener('click', e => {
 socket.on('search-results', data => {
   // spinner.classList.add('d-none')
   const results = data.result
-  if(results.length < limit) {
+  if (results.length < limit) {
     limit = results.length
-  } else if(results.length === 1) {
+  } else if (results.length === 1) {
     limit = results.length
-  } else if(results.length === 0) {
+  } else if (results.length === 0) {
     limit = 0
   } else {
     limit = 10
   }
-  if(searchResults.hasChildNodes()) {
+  if (searchResults.hasChildNodes()) {
     while (searchResults.childNodes.length >= 1) {
       searchResults.removeChild(searchResults.firstChild)
     }
   }
 
-  if(results.length > 0 ) {
+  if (results.length > 0) {
     for (let i = 0; i < limit; i++) {
       const customer = results[i]
-      customer.fullName = customer.fullName.replace(new RegExp(searchBar.value, "gi"), `<b>${searchBar.value}</b>`)
 
-        if(customer != undefined) {
-          let content = `<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3"><span class="text-secondary fw-bold">${customer.customerCode}</span> ${customer.fullName}</span>`
-          let listItem = createCustomElement('a', {href: `/cliente/${customer.customerCode}`, class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'}, [content])
-          searchResults.appendChild(listItem)
+      const split = customer.fullName.split(' ')
+
+      split.forEach((word, index, array) => {
+        let index1 = word.indexOf(searchBar.value);
+        let index2 = word.indexOf(searchBar.value.toLowerCase());
+        if (index1 != -1) {
+          array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index1, searchBar.value.length)}</b>`)
+        } else {
+          array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index2, searchBar.value.length)}</b>`)
         }
+      })
+      console.log(split)
+      customer.fullName = split.toString().replace(/,/g,' ')
+
+
+      if (customer != undefined) {
+        let content = `<span class="icon icon-user me-3 d-inline-block"></span><span class="ml-3"><span class="text-secondary fw-bold">${customer.customerCode}</span> ${customer.fullName}</span>`
+        let listItem = createCustomElement('a', { href: `/cliente/${customer.customerCode}`, class: 'list-group-item d-flex list-group-item-action border-0 rounded-0' }, [content])
+        searchResults.appendChild(listItem)
+      }
     }
     resultsMessage.innerHTML = ''
     limit > results.length ? limit = results.length : null
