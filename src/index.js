@@ -2,12 +2,13 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.createServer(app)
-const searchRoute = require('./routes/search_route')
-const customerRoute = require('./routes/customer_route')
+const router = require('./routes/router')
 const path = require('path')
 const socketio = require('socket.io')
 const io = socketio(server)
 const port = process.env.PORT || 3000
+const cookieParser = require('cookie-parser')
+
 require('./socket.io')(io)
 
 // Configuración básica
@@ -15,7 +16,6 @@ app.set('title', 'myapp')
 app.set('port', port)
 
 // Motor de vistas [pug]
-app.engine('pug', require('pug').__express)
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views/pages/'))
 
@@ -27,18 +27,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
+//para poder trabajar con las cookies
+app.use(cookieParser())
+
 // Routes
-app.get('/', searchRoute)
-app.get('/cliente/:id', customerRoute)
-app.get('/cliente/', (req, res) => {
-  res.redirect('/')
-})
-app.post('/save', customerRoute)
+app.use('/', router)
 
 server.listen(port, () => {
   console.log(`Aplicación ${app.get('title')} corriendo en el puerto ${port}`)
 })
-
-
-
-

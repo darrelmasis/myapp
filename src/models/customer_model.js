@@ -3,7 +3,7 @@ const baseModel = require('./base_model')
 class Customer {
 
   get(value) {
-   return baseModel.read('*','customers', `WHERE customerCode LIKE '%${value}%'`)
+   return baseModel.read('*','customers', `WHERE customerCode = '${value}'`)
   }
 
   getSeller(value) {

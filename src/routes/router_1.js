@@ -1,7 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const customer = require('../controllers/customer_controller')
+const userController = require('../controllers/user_controller')
+const bcrypt = require('bcryptjs')
 
+
+// Vista inicial
+router.get('/', (req, res) => {
+  res.render('index')
+})
+
+
+// Vista del perfil de los clientes
 router.get('/cliente/:id', (req, res) => {
   customer.get(req.params.id)
     .then(data => {
@@ -49,6 +59,34 @@ router.post('/save', (req, res) => {
   }
   customer.update(data)
   res.redirect('/cliente/' + data.id)
+})
+
+router.get('/registro', (req, res) => {
+  res.render('register')
+})
+
+router.get('/login', (req, res) => {
+  res.render('login')
+})
+
+router.post('/register', async (req, res) => {
+  const data = {
+    fullName: req.body.fullName,
+    username: req.body.username,
+    email: req.body.email,
+    password: await bcrypt.hash(req.body.password, 8)
+  }
+   userController.register(data)
+  res.send('registro')
+})
+
+router.post('/login', async (req, res) => {
+  const data = {
+    username: req.body.username,
+    password: await bcrypt.hash(req.body.password, 8)
+  }
+   userController.login(data)
+  res.send('Login')
 })
 
 module.exports = router

@@ -6,10 +6,10 @@ class Base_model {
    * @param {string} query Cadena de consulta a la BD
    * @returns new Promise
    */
-  #promise (query) {
-    const promise = new Promise ((resolve,reject) => {
+  #promise(query) {
+    const promise = new Promise((resolve, reject) => {
       connection.query(query, (err, result) => {
-        if(err) {
+        if (err) {
           reject(err)
         } else {
           resolve(result)
@@ -27,16 +27,19 @@ class Base_model {
    * @param {string} condition condición de la consulta
    * @returns new Promise
    */
-  create(table, data, condition) {
+  create(table, data) {
     const keys = Object.keys(data)
     const values = Object.values(data)
-    let params = []
+    let param = []
 
-    for (let i = 0; i < keys.length; i++) {
-      i < keys.length - 1 ? params.push('?,') : params.push('?')
-    }
-    const query = `INSERT INTO ${table} (${Object.keys(data).join()}) VALUES (${params}), ${values}`
+    keys.forEach((key, i, array) => {
+      param.push(`${key} = '${values[i]}'`)
+      if (i < array.lenght - 1) {
+        param.push(',')
+      }
+    });
 
+    const query = `INSERT INTO ${table} SET ${param}`
     return this.#promise(query)
   }
 
@@ -79,16 +82,16 @@ class Base_model {
     let param = []
 
     keys.forEach((key, i, array) => {
-        param.push(`${key} = '${values[i]}'`)
-        if (i < array.lenght - 1) {
-          param.push(',')
-        }
+      param.push(`${key} = '${values[i]}'`)
+      if (i < array.lenght - 1) {
+        param.push(',')
+      }
     });
 
     const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
     console.log(query)
     connection.query(query, (err, result) => {
-      if(err) {
+      if (err) {
         return console.log(err)
       } else {
         return console.log(result)

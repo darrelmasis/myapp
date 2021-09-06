@@ -126,14 +126,7 @@ var _dom = require("./modules/dom");
 
 var _localStorage = require("./modules/localStorage");
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
 var socket = io();
-
-var Search = function Search() {
-  _classCallCheck(this, Search);
-};
-
 var searchForm = (0, _dom.select)('search-form', 'id');
 var searchBar = (0, _dom.select)('search-bar', 'id');
 var resultData = (0, _dom.select)('results-data', 'id');
@@ -142,125 +135,147 @@ var resultsCount = (0, _dom.select)('results-count', 'id');
 var resultsMessage = (0, _dom.select)('results-message', 'id');
 var btnClear = (0, _dom.select)('btn-clear', 'id');
 var spinner = (0, _dom.select)('spinner', 'id');
-var search = (0, _dom.select)('search', 'id');
-var limit = 10;
-var key = -1;
-var prev = -2;
-searchBar.addEventListener('keyup', function (e) {
-  if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
-    socket.emit('search', {
-      value: searchBar.value.trim()
-    });
-    key = 0;
-    prev = -1;
-    resultData.classList.remove('d-none');
-    btnClear.classList.remove('invisible');
-    search.classList.add('open');
 
-    if (searchBar.value == '') {
-      resultData.classList.add('d-none');
-      btnClear.classList.add('invisible');
-      search.classList.remove('open');
-    }
-  }
-});
-searchBar.addEventListener("keydown", function (e) {
-  var mylist = document.querySelectorAll('.list-group-item');
-
-  if (mylist) {
-    if (e.key === 'ArrowDown') {
-      console.dir(mylist[key]);
-      searchBar.value = mylist[key].innerText;
-      key < limit - 1 ? key++ : key = key - (limit - 1);
-      key === 0 ? prev = limit - 1 : prev = key - 1;
-      mylist[key].classList.add("active");
-
-      if (prev != -1) {
-        mylist[prev].classList.remove("active");
+if (searchBar) {
+  var search = (0, _dom.select)('search', 'id');
+  var limit = 10;
+  var key = -1;
+  var prev = -1;
+  searchBar.addEventListener('keyup', function (e) {
+    if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
+      if (searchBar.value.trim() === '') {
+        resultData.classList.add('d-none');
+        btnClear.classList.add('invisible');
+        search.classList.remove('open');
+      } else {
+        socket.emit('search', {
+          value: searchBar.value.trim()
+        });
+        key = -1;
+        prev = -1;
+        resultData.classList.remove('d-none');
+        btnClear.classList.remove('invisible');
+        search.classList.add('open');
       }
-    } else if (e.key === 'ArrowUp') {
-      key < 0 ? key = limit - 1 : key--;
-      key < limit - 1 ? prev = key + 1 : prev = 0;
-
-      if (prev != -1) {
-        mylist[prev].classList.remove("active");
-      }
-
-      mylist[key].classList.add("active");
     }
-  }
-}); // searchBar.addEventListener('focus', (e) => {
-//   if(searchBar.value != '') {
-//     resultData.classList.toggle('d-none')
-//   }
-// })
-
-searchForm.addEventListener('submit', function (e) {
-  socket.emit('search', {
-    value: searchBar.value.trim()
   });
-  e.preventDefault();
-});
-btnClear.addEventListener('click', function (e) {
-  search.classList.remove('open');
-  resultData.classList.add('d-none');
-  btnClear.classList.add('invisible');
-  searchBar.value = '';
-});
-socket.on('search-results', function (data) {
-  // spinner.classList.add('d-none')
-  var results = data.result;
+  document.addEventListener("keydown", function (e) {
+    var mylist = document.querySelectorAll('.list-group-item');
 
-  if (results.length < limit) {
-    limit = results.length;
-  } else if (results.length === 1) {
-    limit = results.length;
-  } else if (results.length === 0) {
-    limit = 0;
-  } else {
-    limit = 10;
-  }
+    if (mylist) {
+      if (e.key === 'ArrowDown') {
+        key < limit - 1 ? key++ : key = 0; // Asigna un valor a key para el elemento siguiente
 
-  if (searchResults.hasChildNodes()) {
-    while (searchResults.childNodes.length >= 1) {
-      searchResults.removeChild(searchResults.firstChild);
-    }
-  }
+        key === 0 ? prev = limit - 1 : prev = key - 1; // Asigna un valor a prev para el elemento anterior 
 
-  if (results.length > 0) {
-    for (var i = 0; i < limit; i++) {
-      var customer = results[i];
-      var split = customer.fullName.split(' ');
-      split.forEach(function (word, index, array) {
-        var index1 = word.indexOf(searchBar.value);
-        var index2 = word.indexOf(searchBar.value.toLowerCase());
+        mylist[key].classList.add("search-item__active"); // Marca como activo el elemento de la lista de resultados
 
-        if (index1 != -1) {
-          array[index] = word.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(word.substr(index1, searchBar.value.length), "</b>"));
-        } else {
-          array[index] = word.replace(new RegExp(searchBar.value, "gi"), "<b>".concat(word.substr(index2, searchBar.value.length), "</b>"));
+        if (mylist.length > 1) {
+          prev > -1 ? mylist[prev].classList.remove("search-item__active") : null; // Desmarca el elemento actibo anterior
         }
-      });
-      customer.fullName = split.toString().replace(/,/g, ' ');
+      } else if (e.key === 'ArrowUp') {
+        key <= 0 ? key = limit - 1 : key--; // Asigna un valor a key para el elemento Anterior
 
-      if (customer != undefined) {
-        var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span><span class=\"ml-3\"><span class=\"text-secondary fw-bold\">".concat(customer.customerCode, "</span> ").concat(customer.fullName, "</span>");
-        var listItem = (0, _dom.createCustomElement)('a', {
-          href: "/cliente/".concat(customer.customerCode),
-          class: 'list-group-item d-flex list-group-item-action border-0 rounded-0'
-        }, [content]);
-        searchResults.appendChild(listItem);
+        key < limit - 1 ? prev = key + 1 : prev = 0;
+        mylist[key].classList.add("search-item__active");
+
+        if (mylist.length > 1) {
+          prev > -1 ? mylist[prev].classList.remove("search-item__active") : null; // Desmarca el elemento actibo anterior
+        }
+      }
+    }
+  }); // searchBar.addEventListener('focus', (e) => {
+  //   if(searchBar.value != '') {
+  //     resultData.classList.toggle('d-none')
+  //   }
+  // })
+
+  searchForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var el = document.querySelector('.search-item__active');
+    location.href = el.href;
+  });
+  btnClear.addEventListener('click', function (e) {
+    search.classList.remove('open');
+    resultData.classList.add('d-none');
+    btnClear.classList.add('invisible');
+    searchBar.value = '';
+  });
+  socket.on('search-results', function (data) {
+    // spinner.classList.add('d-none')
+    var results = data.result;
+
+    if (results.length < limit) {
+      limit = results.length;
+    } else if (results.length === 1) {
+      limit = results.length;
+    } else if (results.length === 0) {
+      limit = 0;
+    } else {
+      limit = 10;
+    }
+
+    if (searchResults.hasChildNodes()) {
+      while (searchResults.childNodes.length >= 1) {
+        searchResults.removeChild(searchResults.firstChild);
       }
     }
 
-    resultsMessage.innerHTML = '';
-    limit > results.length ? limit = results.length : null;
-    resultsCount.innerHTML = " <div class=\"text-secondary small text-end me-3\">Mostrando ".concat(limit, " resultados de ").concat(results.length, "</div>");
-  } else {
-    resultsCount.innerHTML = '';
-    resultsMessage.innerHTML = "<div class=\"text-secondary text-center\">No se han encontrado resultados para tu b\xFAsqueda <span class=\"search-criteria\">(".concat(searchBar.value, ")</span></div>");
-  }
-});
+    if (results.length > 0) {
+      for (var i = 0; i < limit; i++) {
+        var customer = results[i]; // const split = customer.fullName.split(' ')
+        // split.forEach((word, index, array) => {
+        //   let index1 = word.indexOf(searchBar.value);
+        //   let index2 = word.indexOf(searchBar.value.toLowerCase());
+        //   if (index1 != -1) {
+        //     array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index1, searchBar.value.length)}</b>`)
+        //   } else {
+        //     array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index2, searchBar.value.length)}</b>`)
+        //   }
+        // })
+        // customer.fullName = split.toString().replace(/,/g, ' ')
+
+        if (customer != undefined) {
+          var content = "<span class=\"icon icon-user me-3 d-inline-block\"></span> <!-- <span class=\"ml-3\"><span class=\"text-secondary fw-bold\">".concat(customer.customerCode, "</span> -->").concat(customer.fullName, "</span>");
+          var listItem = (0, _dom.createCustomElement)('a', {
+            href: "/cliente/".concat(customer.customerCode),
+            class: 'align-items-center list-group-item d-flex list-group-item-action border-0 rounded-0'
+          }, [content]);
+          searchResults.appendChild(listItem);
+        }
+      }
+
+      resultsMessage.innerHTML = '';
+      limit > results.length ? limit = results.length : null;
+      resultsCount.innerHTML = " <div class=\"text-secondary small text-end me-3\">Mostrando ".concat(limit, " resultados de ").concat(results.length, "</div>");
+    } else {
+      resultsCount.innerHTML = '';
+      resultsMessage.innerHTML = "<div class=\"text-secondary text-center\">No se han encontrado resultados para tu b\xFAsqueda <span class=\"search-criteria\">(".concat(searchBar.value, ")</span></div>");
+    }
+  });
+} // if(signupForm != undefined) {
+//   signupForm.addEventListener('submit', e => {
+//     e.preventDefault()
+//     const username = email.value.substr(0, email.value.indexOf('@'))
+//     const data = {
+//       fullName: firstName.value + ' ' + lastName.value,
+//       username: username,
+//       email: email.value,
+//       password: password.value,
+//     }
+//     socket.emit('signup', {post: data})
+//   })
+// }
+// if(signinForm) {
+//   signinForm.addEventListener('submit', e => {
+//     e.preventDefault()
+//     const data = {
+//       username: username.value,
+//       password: password.value
+//     }
+//     socket.emit('signin', {data})
+//   })
+// }
 
 },{"./modules/dom":1,"./modules/localStorage":2}]},{},[3]);
 
