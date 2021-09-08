@@ -4,6 +4,7 @@
 root = true
 
 [*]
+[*.{html,css,js,scss}]
 indent_style = space
 indent_size = 2
 end_of_line = crlf

@@ -12,7 +12,6 @@ import buffer from 'vinyl-buffer'
 import autoprefixer from 'autoprefixer'
 import rename from 'gulp-rename'
 import pug from "gulp-pug";
-import GulpPostCss from 'gulp-postcss'
 import beautify from 'gulp-beautify'
 
 const sass = gulpSass(darthSass)
@@ -40,8 +39,8 @@ const path = {
  const styles = done => {
   gulp.src(path.styles.src)
       .pipe(sourcemaps.init())
-      // .pipe(plumber())
-      .pipe(sass({outputStyle: 'compressed', sourceComments: true}))
+      .pipe(plumber())
+      .pipe(sass({outputStyle: 'expanded', sourceComments: true}))
       .pipe(postcss([autoprefixer()]))
       .pipe(sourcemaps.write())
       .pipe(rename({ suffix: '.min' }))
@@ -93,5 +92,6 @@ gulp.task('scripts', scripts)
 
 
 gulp.watch(path.styles.src, styles)
+gulp.watch('./src/public/dev/scss/**/*.scss', styles)
 // gulp.watch(path.pug.src, views)
 gulp.watch(path.scripts.src, scripts)

@@ -3,9 +3,9 @@ append config
   - pageTitle= `${customer.customerCode}`
   -let type = customer.type
 block main
-  .container
-    a(href="/") regresar
-    .row.mt-5 
+  include ../layout/header
+  .container.mt-3
+    .row
       .col-md-3
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body 

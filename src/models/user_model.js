@@ -7,11 +7,15 @@ class User {
     }
 
     async read(data) {
-        return await baseModel.read('*', 'users', `WHERE id = ${data}`)
+        return await baseModel.read('*', 'users', `WHERE username = '${data}'`)
     }
 
     async signin(data) {
         return await baseModel.read('*', 'users', `WHERE username = '${data.username}' OR email = '${data.username}'`)
+    }
+
+    async isLogged(id) {
+        return await baseModel.read('*', 'users', `WHERE id = '${id}'`)
     }
 }
 

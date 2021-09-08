@@ -9,7 +9,7 @@ const searchResults = select('search-results', 'id')
 const resultsCount = select('results-count', 'id')
 const resultsMessage = select('results-message', 'id')
 const btnClear = select('btn-clear', 'id')
-const spinner = select('spinner', 'id')
+
 
 if (searchBar) {
   const search = select('search', 'id')
@@ -26,6 +26,8 @@ if (searchBar) {
         search.classList.remove('open')
 
       } else {
+        searchIcon ? searchIcon.classList.add('d-none') : null
+        searchSpinner ? searchSpinner.classList.remove('d-none') : null
         socket.emit('search', { value: searchBar.value.trim() })
         key = -1
         prev = -1
@@ -82,7 +84,6 @@ if (searchBar) {
 
 
   socket.on('search-results', data => {
-    // spinner.classList.add('d-none')
     const results = data.result
     if (results.length < limit) {
       limit = results.length
@@ -130,6 +131,8 @@ if (searchBar) {
       resultsMessage.innerHTML = `<div class="text-secondary text-center">No se han encontrado resultados para tu búsqueda <span class="search-criteria">(${searchBar.value})</span></div>`
 
     }
+    searchIcon ? searchIcon.classList.remove('d-none') : null
+    searchSpinner ? searchSpinner.classList.add('d-none') : null
 
   })
 }

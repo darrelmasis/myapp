@@ -134,7 +134,6 @@ var searchResults = (0, _dom.select)('search-results', 'id');
 var resultsCount = (0, _dom.select)('results-count', 'id');
 var resultsMessage = (0, _dom.select)('results-message', 'id');
 var btnClear = (0, _dom.select)('btn-clear', 'id');
-var spinner = (0, _dom.select)('spinner', 'id');
 
 if (searchBar) {
   var search = (0, _dom.select)('search', 'id');
@@ -148,6 +147,8 @@ if (searchBar) {
         btnClear.classList.add('invisible');
         search.classList.remove('open');
       } else {
+        searchIcon ? searchIcon.classList.add('d-none') : null;
+        searchSpinner ? searchSpinner.classList.remove('d-none') : null;
         socket.emit('search', {
           value: searchBar.value.trim()
         });
@@ -202,7 +203,6 @@ if (searchBar) {
     searchBar.value = '';
   });
   socket.on('search-results', function (data) {
-    // spinner.classList.add('d-none')
     var results = data.result;
 
     if (results.length < limit) {
@@ -252,6 +252,9 @@ if (searchBar) {
       resultsCount.innerHTML = '';
       resultsMessage.innerHTML = "<div class=\"text-secondary text-center\">No se han encontrado resultados para tu b\xFAsqueda <span class=\"search-criteria\">(".concat(searchBar.value, ")</span></div>");
     }
+
+    searchIcon ? searchIcon.classList.remove('d-none') : null;
+    searchSpinner ? searchSpinner.classList.add('d-none') : null;
   });
 } // if(signupForm != undefined) {
 //   signupForm.addEventListener('submit', e => {

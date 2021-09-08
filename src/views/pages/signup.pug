@@ -7,9 +7,9 @@ block main
       a(href="#").navbar-brand Navbar
   main.container
     .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
-        form#signupForm(action="/singup", method="post").mt-5
+        form#signupForm(action="/signup", method="post").mt-5
             input#firstName(type="text", placeholder="Nombre" name="firstName" autocomplete="off" value="Darrel").form-control
-            input#lastName(type="text", placeholder="Apellido" name="lastname" autocomplete="off" value="Masis").form-control.mt-3
+            input#lastName(type="text", placeholder="Apellido" name="lastName" autocomplete="off" value="Masis").form-control.mt-3
             input#email(type="email", placeholder="Correo Electrónico" name="email" autocomplete="off" value="darrelmasis@gmail.com").form-control.mt-3
             input#password(type="password", placeholder="Contraseña" name="password" autocomplete="off" value="dmasis1996").form-control.mt-3
             input(type="submit", value="Registrarse").btn.w-100.btn-primary.mt-3
