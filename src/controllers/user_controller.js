@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const userModel = require('../models/user_model')
 const { promisify } = require('util')
 
-const signup = async req => {
+const signup = async (req, res) => {
   try {
     let username = req.body.email.substr(0, req.body.email.indexOf('@'))
     const data = {
@@ -14,7 +14,7 @@ const signup = async req => {
       password: await bcryptjs.hash(req.body.password, 8),
     }
 
-    return await userModel.create(data)
+    return res.redirect('/signin')
   } catch (error) {
     console.log(error)
   }

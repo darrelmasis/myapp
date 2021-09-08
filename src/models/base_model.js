@@ -6,9 +6,9 @@ class Base_model {
    * @param {string} query Cadena de consulta a la BD
    * @returns new Promise
    */
-  #promise(query) {
+  #promise(query, data) {
     const promise = new Promise((resolve, reject) => {
-      connection.query(query, (err, result) => {
+      connection.query(query, data, (err, result) => {
         if (err) {
           reject(err)
         } else {
@@ -16,7 +16,6 @@ class Base_model {
         }
       })
     })
-
     return promise
   }
 
@@ -30,17 +29,17 @@ class Base_model {
   create(table, data) {
     const keys = Object.keys(data)
     const values = Object.values(data)
-    let param = []
+    const columns = `(${keys.toString()})`
+    let columnsValues = []
+    let parameters = []
 
-    keys.forEach((key, i, array) => {
-      param.push(`${key} = '${values[i]}'`)
-      if (i < array.lenght - 1) {
-        param.push(',')
-      }
+    values.forEach(key => {
+      parameters.push('?')
+      columnsValues.push(key)
     });
 
-    const query = `INSERT INTO ${table} SET ${param}`
-    return this.#promise(query)
+    const query = `INSERT INTO ${table} ${columns} VALUES(${parameters.toString()})`
+    return this.#promise(query, columnsValues)
   }
 
   /**
