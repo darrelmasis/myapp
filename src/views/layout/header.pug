@@ -1,0 +1,23 @@
+header.main-header
+  nav.nav
+    .container 
+      a(href="/").nav-brand
+        img(src="/dist/assets/logo-harinas@svg.svg", width="" height="32" alt="Logotipo")
+      ul.nav-menu
+        li.nav-item.dropdown 
+          a#user-menu(href= "#" data-bs-toggle="dropdown" aria-expanded="false").nav-link.user.dropdown-toggle
+            div.user-image.user-image-small
+              img(src="/dist/assets/defect.png", alt="avatar")
+            div.user-name= `${user.firstname}`
+            span.dropdown-caret
+          ul(aria-labelledby="user-menu").dropdown-menu 
+            li 
+              div.d-flex.dropdown-item-text.align-items-center 
+                div.user-image.user-image-big.me-3
+                  img(src="/dist/assets/defect.png", alt="avatar")
+                .d-flex.flex-column 
+                  span.fw-bold= `${user.fullName}`
+                  span= `@${user.username}`
+            li.dropdown-divider
+            li 
+              a(href="/signout").dropdown-item.text-danger Cerrar Sesión

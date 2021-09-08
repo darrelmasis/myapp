@@ -1,0 +1,125 @@
+// Color System
+
+// Base color
+$accent                     : #f0b500;
+$accent-alt                 : #1861f2;
+$white                      : #fff;
+$light                      : #f7f8fa;
+$gray                       : #dcdfe5;
+$dark                       : #17181a;
+// Status color
+$danger                     : #f21861;
+$warning                    : #f28518;
+$success                    : #26bf40;
+
+$colors: (
+  "accent"                  : $accent,
+  "white"                   : $white,
+  "light"                   : $light,
+  "gray"                    : $gray,
+  "dark"                    : $dark,
+  "danger"                  : $danger,
+  "warning"                 : $warning,
+  "success"                 : $success
+  );
+
+// Body Config            
+$body-bg                    : $gray !default;
+$body-color                 : $dark !default;
+$body-font-family           : 'Segoe UI';
+
+// Transitions
+$transition-duration        : .33s;
+$transition-timing          : cubic-bezier(0.05, 1.04, 0.72, 0.98);
+
+  // Scrollbar
+$scrollbar-width            : .6rem;
+$scrollbar-height           : $scrollbar-width;
+$scrollbar-radius           : 1rem;
+$scrollbar-bg               : #6c7380;
+$scrollbar-bg-hover         : #4c5059;
+$scrollbar-bg-active        : #333740;
+$scrollbar-track-bg         : #e9ecf2;
+
+// Links
+$link-color                 : $accent-alt;
+$link-decoration            : none;
+$link-hover-color           : darken($accent-alt, 20%);
+$link-hover-decoration      : underline;
+
+// Form Labels
+$label-margin-bottom        : .5rem;
+
+// Breakpoints
+$breakpoints: (
+  "xs"                      : 0px,
+  "sm"                      : 425px,
+  "md"                      : 768px,
+  "lg"                      : 960px,
+  "xl"                      : 1200px
+);
+
+// Containers max-width
+$containers: (
+  xs                        : 0px,
+  sm                        : 390px,
+  md                        : 720px,
+  lg                        : 992px,
+  xl                        : 1140px
+);
+
+// Typography
+$font-family                : 'Segoe UI', sans-serif;
+$font-size-base             : 1rem; // (1rem ~ 16px)
+$font-ratio                 : 1.250;
+$line-height-base           : 1.5;
+$titles-margin-bottom       : .5rem;
+$titles-line-height         : 1.2;
+$titles-font-weight         : 400;
+
+  // Font Size
+$h6-font-size               : $font-size-base * $font-ratio;
+$h5-font-size               : $h6-font-size * $font-ratio;
+$h4-font-size               : $h5-font-size * $font-ratio;
+$h3-font-size               : $h4-font-size * $font-ratio;
+$h2-font-size               : $h3-font-size * $font-ratio;
+$h1-font-size               : $h2-font-size * $font-ratio;
+$small-font-size            : math.div($font-size-base, $font-ratio);
+$smaller-font-size          : math.div($small-font-size, $font-ratio);
+
+  // Font Weight
+$font-weight-bolder       : bolder;
+$font-weight-bold         : 700;
+$font-weight-normal       : 400;
+$font-weight-light        : 300;
+$font-weight-lighter      : lighter;
+
+  // Paragraphps
+$p-margin-bottom          : 1rem;
+
+  // Project Font size
+$font-sizes: (
+  h1                      : $h1-font-size,
+  h2                      : $h2-font-size,
+  h3                      : $h3-font-size,
+  h4                      : $h4-font-size,
+  h5                      : $h5-font-size,
+  h6                      : $h6-font-size,
+  normal                  : $font-size-base,
+  small                   : $small-font-size,
+  smaller                 : $smaller-font-size,
+);
+
+// Components
+$border-shadow: 0 1px 2px rgba($dark, 0.2);
+$border-radius-base       : .25rem;
+$header-height            : 3rem;
+
+// Navbar
+
+
+
+
+
+
+

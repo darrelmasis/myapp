@@ -1,0 +1,58 @@
+.dropdown {
+  position: relative;
+
+  &::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    background-color: $gray;
+    position: absolute;
+    top: calc(50% - 8px);
+    right: .5rem;
+    mask-image: url(../../../dist/assets/caret-down.svg);
+    mask-size: 100%;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    cursor: pointer;
+    pointer-events: none;
+  }
+
+  &:hover &-menu {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  &:hover &::after {
+    transform: rotate(180deg);
+  }
+
+  &-menu {
+    position: absolute;
+    // display: none;
+    transform: translateY(-150%);
+    opacity: 0;
+    min-width: 150px;
+    list-style: none;
+    background-color: $white;
+    background-clip: padding-box;
+    box-shadow: $border-shadow;
+    right: 0;
+    transition: $transition-duration $transition-timing;
+    // top: calc(100% + 6px);
+  }
+
+
+  &-divider {
+    height: 0;
+    margin: .5rem 0;
+    border-top: 1px solid $gray;
+  }
+
+  &-item {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background-color: transparent;
+    border: 0;
+  }
+}

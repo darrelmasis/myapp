@@ -1,0 +1,13 @@
+:root {
+    @each $key, $val in $colors {
+        --#{$key}:#{$val};
+    }
+
+    /*Media queries breakpoints*/
+    @each $key,
+    $val in $breakpoints {
+        --#{$key}: #{$val};
+    }
+    /* Custom font family*/
+    --font-family: #{inspect( $font-family)};
+}

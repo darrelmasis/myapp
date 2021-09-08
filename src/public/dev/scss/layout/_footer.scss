@@ -1,0 +1,64 @@
+@include screen(max, medium) {
+  .footer-icons {
+    font-size: 1.35em;
+  }
+}
+
+.footer {
+  background-color: $dark;
+  color: $light;
+  padding: 1rem 0;
+
+  >.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr auto;
+    align-items: center;
+    text-align: center;
+  }
+
+
+  &-copy {
+    grid-row: 1;
+    grid-column: span 2;
+  }
+
+  &-location {
+    grid-column: span 2;
+    grid-row: 2;
+    color: darken($light, 10%);
+  }
+
+  &-icons {
+    grid-row: 3;
+    grid-column: span 2;
+
+    svg {
+      margin: 0 .5rem;
+    }
+  }
+}
+
+@include screen(min, md) {
+  .footer {
+    padding: 3rem 0;
+    >.container {
+      text-align: left;
+    }
+
+    &-copy {
+      grid-column: 1;
+    }
+
+    &-location {
+      grid-column: 1;
+      margin-bottom: 0;
+    }
+
+    &-icons {
+      grid-row: span 2;
+      grid-column: 2;
+      text-align: right;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+@mixin font-size($size) {
+
+  
+  @include screen(max, sm) {
+    font-size: math.div(math.div(size($size), $font-ratio), $font-ratio);
+  }
+  
+  @include screen(max, md) {
+    font-size: math.div(size($size), $font-ratio);
+  }
+  
+  font-size: size( $size);
+
+}
