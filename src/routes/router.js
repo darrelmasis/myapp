@@ -24,7 +24,7 @@ router.get('/signup', (req, res) => {
   res.render('signup')
 })
 
-router.get('/signin',userController.isLogged, (req, res) => {
+router.get('/signin', (req, res) => {
   res.render('signin')
 })
 
