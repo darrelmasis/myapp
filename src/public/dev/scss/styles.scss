@@ -1,119 +1,119 @@
-@use "sass:math";
+// @use "sass:math";
 
 // Functions
-@import "./config/functions";
+// @import "./config/functions";
 
 // Variables
-@import "./config/variables";
+// @import "./config/variables";
 
 // Mixins
-@import "./config/mixins";
+// @import "./config/mixins";
 
 // Root
-@import "./base/root";
+// @import "./base/root";
 
 // Base + Reboot
-@import "./base/base";
-@import "./base/typography";
-@import "./base/reboot";
+// @import "./base/base";
+// @import "./base/typography";
+// @import "./base/reboot";
 
 // Layout
-@import "./layout/containers";
-@import "./layout/main-header";
+// @import "./layout/containers";
+// @import "./layout/main-header";
 
 // Components
-@import "./components/navigation";
-@import "./components/dropdwon";
+// @import "./components/navigation";
+// @import "./components/dropdwon";
 
 // Vendors
 @import "./vendors/bootstrap";
 
-.logo {
-  width: 15rem;
-  height: 10rem;
-  background-image: url(../../dist/assets/logo-harinas@svg.svg);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: bottom center;
-  margin-bottom: 3rem;
-}
+// .logo {
+//   width: 15rem;
+//   height: 10rem;
+//   background-image: url(../../dist/assets/logo-harinas@svg.svg);
+//   background-repeat: no-repeat;
+//   background-size: contain;
+//   background-position: bottom center;
+//   margin-bottom: 3rem;
+// }
 
-#search-bar {
-  box-shadow: none;
-  height: 2.75rem;
-  padding: 0;
-  &::-webkit-search-cancel-button {
-    display: none;
-  }
-}
+// #search-bar {
+//   box-shadow: none;
+//   height: 2.75rem;
+//   padding: 0;
+//   &::-webkit-search-cancel-button {
+//     display: none;
+//   }
+// }
 
-.search {
-  border-radius: calc(0.5 * 2.75rem);
-  box-shadow: $border-shadow;
-  @media (min-width: 1024px) {
-    & {
-      max-width: 35rem;
-    }
-  }
+// .search {
+//   border-radius: calc(0.5 * 2.75rem);
+//   box-shadow: $border-shadow;
+//   @media (min-width: 1024px) {
+//     & {
+//       max-width: 35rem;
+//     }
+//   }
 
-  &[class~='open' ] {
-    background-color: transparent!important;
-    box-shadow: none;
-  }
-  &-results {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    padding-top: 2.75rem;
-    border-radius: calc(0.25 * 2.75rem);
-    z-index: -1;
-    box-shadow: $border-shadow;
-  }
-}
+//   &[class~='open' ] {
+//     background-color: transparent!important;
+//     box-shadow: none;
+//   }
+//   &-results {
+//     position: absolute;
+//     left: 0;
+//     right: 0;
+//     top: 0;
+//     padding-top: 2.75rem;
+//     border-radius: calc(0.25 * 2.75rem);
+//     z-index: -1;
+//     box-shadow: $border-shadow;
+//   }
+// }
 
-.icon {
-  width: 1rem;
-  height: 1rem;
-  background-color: $secondary;
-  mask-repeat: no-repeat;
-  mask-size: 100%;
+// .icon {
+//   width: 1rem;
+//   height: 1rem;
+//   background-color: $secondary;
+//   mask-repeat: no-repeat;
+//   mask-size: 100%;
 
-  &-search {
-    mask-image: url(../../dist/assets/search-solid.svg);
-  }
+//   &-search {
+//     mask-image: url(../../dist/assets/search-solid.svg);
+//   }
 
-  &-user {
-    width: 1rem;
-    mask-image: url(../../dist/assets/user-light.svg);
-  }
+//   &-user {
+//     width: 1rem;
+//     mask-image: url(../../dist/assets/user-light.svg);
+//   }
 
-  &-close {
-    cursor: pointer;
-    mask-image: url(../../dist/assets/times-circle.svg);
+//   &-close {
+//     cursor: pointer;
+//     mask-image: url(../../dist/assets/times-circle.svg);
 
-    &:hover {
-      background-color: $dark;
-    }
-  }
-}
+//     &:hover {
+//       background-color: $dark;
+//     }
+//   }
+// }
 
-.customer-image {
-  max-width: 128px;
-  margin: auto;
-  & img {
-    border-radius: 50%;
-  }
-}
+// .customer-image {
+//   max-width: 128px;
+//   margin: auto;
+//   & img {
+//     border-radius: 50%;
+//   }
+// }
 
-.search-item__active {
-  color: #212529;
-  background-color: #0e0f11;
-}
+// .search-item__active {
+//   color: #212529;
+//   background-color: #0e0f11;
+// }
 
-#signinForm {
-  width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
-}
+// #signinForm {
+//   width: 100%;
+//   max-width: 330px;
+//   padding: 15px;
+//   margin: auto;
+// }
