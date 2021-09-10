@@ -2,12 +2,19 @@ extends ../templates/template
 append config
   -pageTitle = 'Iniciar Sesión'
 block main
-  main.container.d-flex.align-items-center.py-5
-    form(action="/signin", method="POST")#signinForm.bg-white.rounded.shadow-sm.border.text-center
-          img(src="./dist/assets/logo-harinas@svg.svg", width="100px" alt="", srcset="")
-          h1.h3.fw-normal.mt-4 Iniciar Sesión
-          input#username(type="text", name="username" autocomplete="off" placeholder="Correo electrónico o nombre de usuario").form-control.mt-3
-          input#password(type="password", name="password" placeholder="Contraseña").form-control.mt-3
-          input(type="submit", value="Iniciar Sesión").btn.btn-warning.mt-3.w-100.btn-l
+  main.container.text-center
+    form#signinForm(action="/signin", method="POST" style="max-width:330px").w-100.mx-auto.p-3.bg-white.rounded.shadow-sm.border.mt-5
+      img(src="./dist/assets/logo-harinas@svg.svg" width="160px" alt="logotipo de harinas monisa").mb-4
+      //- h1.h3.mb-3.fw-normal Iniciar Sesión
+      input#username(type="text", name="username" placeholder="Usuario" autocomplete="off" required).form-control.form-control-lg.fs-6.mb-3
+      input#password(type="password", name="password" placeholder="Contraseña" required).form-control.form-control-lg.fs-6.mb-3
+      div.text-start.text-danger.small.mb-3.visually-hidden El nombre de usuario que ingresaste no está conectado a ninguna cuenta
+      input(type="submit", value="Iniciar Sesión").btn.btn-primary.btn-lg.w-100.mb-2.fw-bold
+      a(href="#").btn.btn-link.mb-3 ¿Olvidaste tu contraseña?
+      div.border-top.mb-4
+      a(href="/signup").btn.btn-lg.btn-success Crear cuenta nueva
+    p.text-muted.my-3  darrelmasis © 2021
+
+
           
 
