@@ -28,11 +28,6 @@ router.get('/signin', (req, res) => {
   res.render('signin')
 })
 
-
-router.get('/signout', userController.signout)
-router.post('/signin', userController.signin)
-router.post('/signup', userController.signup)
-
 // Definimos los errores 404
 router.get('*', (req, res) => {
   res.status(404).render('404')

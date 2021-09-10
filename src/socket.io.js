@@ -23,29 +23,31 @@ const now = (unit) => {
 module.exports = (io) => {
   io.on('connection', (socket) => {
 
-    socket.on('search', (search) => {
-      if (search.value != '') {
-        let start = now('milli')
-        searchController(search.value)
-          .then(data => {
-            socket.emit('search-results', { result: data })
-          })
+    // socket.on('search', (search) => {
+    //   if (search.value != '') {
+    //     let start = now('milli')
+    //     searchController(search.value)
+    //       .then(data => {
+    //         socket.emit('search-results', { result: data })
+    //       })
 
-        let end = now('milli')
-        socket.emit('search-time', { milli: Math.floor(end - start) / 1000 })
-      }
+    //     let end = now('milli')
+    //     socket.emit('search-time', { milli: Math.floor(end - start) / 1000 })
+    //   }
 
-    })
+    // })
 
     socket.on('signup', (data) => {
-      userController.signup(data)
+      userController.signup(data.signup).then(res => {
+        socket.emit('response', {response: res})
+      })
     })
 
-    // socket.on('signin', (data) => {
-    //   userController.signin(data).then(e => {
-    //     console.log(e)
-    //   })
-    // })
+    socket.on('signin', (data) => {
+      userController.signin(data.signin).then(e => {
+        console.log(e)
+      })
+    })
 
     socket.on('disconnect', () => {
       console.log('Usuario desconectado')

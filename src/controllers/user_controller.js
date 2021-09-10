@@ -3,38 +3,54 @@ const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/user_model')
 const { promisify } = require('util')
+let response = {}
 
-const signup = async (req, res) => {
+const signup = async data => {
   try {
-    let username = req.body.email.substr(0, req.body.email.indexOf('@'))
-    const data = {
-      fullName: req.body.firstName + ' ' + req.body.lastName,
-      username: username,
-      email: req.body.email,
-      password: await bcryptjs.hash(req.body.password, 8),
+    const user = {
+      fullName: data.fullName,
+      username: data.username,
+      email: data.email,
+      password: await bcryptjs.hash(data.password, 8),
     }
 
-    return res.redirect('/signin')
+    const results = userModel.create(user)
+
+    if(!results) {
+      response.type = 'error'
+      response.message = 'Error en la consulta'
+      return response
+    } else {
+      response.type = 'ok'
+      response.message = 'Usuario registrado con éxito'
+      return response
+    }
+
   } catch (error) {
-    console.log(error)
+    console.log('Error: ' + error)
+    response.type = 'error'
+    response.message = '¡Oops! Hubo algunos errores al registrar el usuario'
+    return response
   }
 }
 
-const signin = async (req, res) => {
+const signin = async data => {
   try {
-    const data = {
-      username: req.body.username || '',
-      password: req.body.password
+    const user = {
+      username: data.username || '',
+      password: data.password
     }
 
-    if (data.username === '' || data.password === '') {
+    let response
+
+    if (user.username === '' || user.password === '') {
       // Cuando los campos están vacíos
       return 'Todos los campos son obligatorios'
     } else {
       // Cuando los campos son incorrectos
-      const results = await userModel.signin(data)
+      const results = await userModel.signin(user)
       if (results.length > 0) {
-        if (!(await bcryptjs.compare(data.password, results[0].password))) {
+        if (!(await bcryptjs.compare(user.password, results[0].password))) {
           console.log(await bcryptjs.compare('dmasis1996', results[0].password))
           console.log('Usuario y/o contraseña incorrecta')
 

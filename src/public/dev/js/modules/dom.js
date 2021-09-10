@@ -60,4 +60,4 @@ const addAttributes = (element, attrObj) => {
   }
 };
 
-export { select, createCustomElement, addAttributes }
+export { select, createCustomElement, addAttributes}
