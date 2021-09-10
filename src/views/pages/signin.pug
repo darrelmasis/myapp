@@ -6,11 +6,12 @@ block main
     form#signinForm(action="/signin", method="POST" style="max-width:330px").w-100.mx-auto.p-3.bg-white.rounded.shadow-sm.border.mt-5
       img(src="./dist/assets/logo-harinas@svg.svg" width="160px" alt="logotipo de harinas monisa").mb-4
       //- h1.h3.mb-3.fw-normal Iniciar Sesión
-      input#username(type="text", name="username" placeholder="Usuario" autocomplete="off" required).form-control.form-control-lg.fs-6.mb-3
-      input#password(type="password", name="password" placeholder="Contraseña" required).form-control.form-control-lg.fs-6.mb-3
+      input#username(type="text", name="username" placeholder="Usuario" autocomplete="off").form-control.form-control-lg.fs-6.mb-3
+      input#password(type="password", name="password" placeholder="Contraseña").form-control.form-control-lg.fs-6.mb-3
       div.text-start.text-danger.small.mb-3.visually-hidden El nombre de usuario que ingresaste no está conectado a ninguna cuenta
       input(type="submit", value="Iniciar Sesión").btn.btn-primary.btn-lg.w-100.mb-2.fw-bold
       a(href="#").btn.btn-link.mb-3 ¿Olvidaste tu contraseña?
+      #messages
       div.border-top.mb-4
       a(href="/signup").btn.btn-lg.btn-success Crear cuenta nueva
     p.text-muted.my-3  darrelmasis © 2021

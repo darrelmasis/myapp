@@ -146,6 +146,17 @@ if (signinForm) {
     socket.emit('signin', {
       signin: data
     });
+    socket.on('response', function (e) {
+      console.log(e);
+
+      if (e.response.type === 'error') {
+        messages.classList.add('text-danger');
+      } else {
+        messages.classList.add('text-success');
+      }
+
+      messages.innerHTML = e.response.message;
+    });
   });
 }
 

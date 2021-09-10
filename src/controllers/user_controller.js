@@ -1,4 +1,3 @@
-
 const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/user_model')
@@ -14,17 +13,10 @@ const signup = async data => {
       password: await bcryptjs.hash(data.password, 8),
     }
 
-    const results = userModel.create(user)
-
-    if(!results) {
-      response.type = 'error'
-      response.message = 'Error en la consulta'
-      return response
-    } else {
-      response.type = 'ok'
-      response.message = 'Usuario registrado con éxito'
-      return response
-    }
+    userModel.create(user)
+    response.type = 'success'
+    response.message = 'Usuario registrado con éxito'
+    return response
 
   } catch (error) {
     console.log('Error: ' + error)
@@ -41,37 +33,39 @@ const signin = async data => {
       password: data.password
     }
 
-    let response
-
     if (user.username === '' || user.password === '') {
-      // Cuando los campos están vacíos
-      return 'Todos los campos son obligatorios'
+      response.type = 'empty'
+      response.message = 'Todos los campos son obligatorios'
+      return response
     } else {
-      // Cuando los campos son incorrectos
       const results = await userModel.signin(user)
       if (results.length > 0) {
         if (!(await bcryptjs.compare(user.password, results[0].password))) {
-          console.log(await bcryptjs.compare('dmasis1996', results[0].password))
-          console.log('Usuario y/o contraseña incorrecta')
-
+          response.type = 'error'
+          response.message = 'Usuario o contraseña inconrrecto'
+          return response
         } else {
-          const id = results[0].id
-          const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '7d' })
-          const cookiesOptions = {
-            expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-            httpOnly: true
-          }
-          res.cookie('jwt', token, cookiesOptions)
-          res.redirect('/')
+          response.type = 'success'
+          response.message = 'Iniciando sesión...'
+          return response
         }
       } else {
-        console.log('El usuario no existe')
+        response.type = 'error'
+        response.message = `El usuario <span class="fw-bold">${user.username}</span> no está asociado a ninguna cuenta`
+        return response
       }
     }
 
   } catch (error) {
-    console.log(error)
+    console.log('Error: ' + error)
+    response.type = 'error'
+    response.message = '¡Oops! Hubo algunos errores al iniciar sesión'
+    return response
   }
+}
+
+const signinComplete = (req, res) => {
+  
 }
 
 

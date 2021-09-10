@@ -25,7 +25,20 @@ router.get('/signup', (req, res) => {
 })
 
 router.get('/signin', (req, res) => {
+
+  // const id = results[0].id
+  // const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '7d' })
+  // const cookiesOptions = {
+  //   expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+  //   httpOnly: true
+  // }
+  // res.cookie('jwt', token, cookiesOptions)
+  // res.redirect('/')
+  console.log(req)
   res.render('signin')
+})
+
+router.post('/signin', (req, res) => {
 })
 
 // Definimos los errores 404

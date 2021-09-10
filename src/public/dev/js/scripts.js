@@ -21,6 +21,15 @@ if(signinForm) {
       password: password.value
     }
     socket.emit('signin', {signin: data})
+    socket.on('response', e => {
+      console.log(e)
+      if(e.response.type === 'error') {
+        messages.classList.add('text-danger')
+      } else {
+        messages.classList.add('text-success')
+      }
+      messages.innerHTML = e.response.message
+    })
   })
 }
 

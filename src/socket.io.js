@@ -38,14 +38,14 @@ module.exports = (io) => {
     // })
 
     socket.on('signup', (data) => {
-      userController.signup(data.signup).then(res => {
-        socket.emit('response', {response: res})
+      userController.signup(data.signup).then(data => {
+        socket.emit('response', {response: data})
       })
     })
 
     socket.on('signin', (data) => {
-      userController.signin(data.signin).then(e => {
-        console.log(e)
+      userController.signin(data.signin).then(data => {
+        socket.emit('response', {response: data})
       })
     })
 
