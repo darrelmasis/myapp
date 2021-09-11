@@ -5,7 +5,11 @@ const userController = require('../controllers/user_controller')
 const customerController = require('../controllers/customer_controller')
 
 router.get('/',userController.isLogged, (req, res) => {
-  res.render('index', {user: req.user})
+  if (req.isLogged) {
+    res.render('index', { user: req.user })
+  } else {
+    res.redirect('/signin')
+  }
 })
 
 router.get('/@:username',userController.isLogged, userController.get, (req, res) => {
@@ -20,25 +24,29 @@ router.get('/cliente/:id', userController.isLogged, customerController.get, (req
   res.render('profile', {customer: req.customer, user: req.user})
 })
 
-router.get('/signup', (req, res) => {
-  res.render('signup')
+// Rutas del registro de usuarios
+router.get('/signup',userController.isLogged,(req, res) => {
+  if (req.isLogged) {
+    res.redirect('/')
+  } else {
+    res.render('signup')
+  }
 })
+router.post('/signup', userController.signup)
 
-router.get('/signin', (req, res) => {
-
-  // const id = results[0].id
-  // const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '7d' })
-  // const cookiesOptions = {
-  //   expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-  //   httpOnly: true
-  // }
-  // res.cookie('jwt', token, cookiesOptions)
-  // res.redirect('/')
-  console.log(req)
-  res.render('signin')
+// Rutas del inicio de sesión de usuarios
+router.get('/signin', userController.isLogged, (req, res) => {
+  if(req.isLogged) {
+    res.redirect('/')
+  } else {
+    res.render('signin')
+  }
 })
+router.post('/signin', userController.signin)
 
-router.post('/signin', (req, res) => {
+// Ruta del cierre de sesión de los usuarios
+router.get('/signout/:username', userController.signout, (req, res) => {
+
 })
 
 // Definimos los errores 404
