@@ -58,6 +58,12 @@ const addAttributes = (element, attrObj) => {
   for (let attr in attrObj) {
     if (attrObj.hasOwnProperty(attr)) element.setAttribute(attr, attrObj[attr]);
   }
+}
+
+const removeAttributes = (element, attrObj) => {
+  for (let attr in attrObj) {
+    if (attrObj.hasOwnProperty(attr)) element.removeAttribute(attr, attrObj[attr]);
+  }
 };
 
-export { select, createCustomElement, addAttributes}
+export { select, createCustomElement, addAttributes, removeAttributes}
