@@ -2,9 +2,9 @@ extends ../templates/template
 append config
   -pageTitle = 'Iniciar Sesión'
 block main
-  main.container.text-center
-    .mx-auto.mt-4
-      img(src="./dist/assets/logo-harinas@svg.svg" width="160px" alt="logotipo de harinas monisa").mb-4
+  main.container.text-center.mb-5
+    .mx-auto.mt-5
+      img(src="./dist/assets/logo-harinas@svg.svg" width="192" alt="logotipo de harinas monisa").mb-4
       h1.h3.mb-4.fw-light Iniciar Sesión
       form#signinForm(action="/signin", method="POST" style="max-width: 330px").w-100.mx-auto.p-4.bg-white.rounded.shadow-sm.border
         .text-start.mb-3 
@@ -17,7 +17,7 @@ block main
         input#btnSubmit(type="submit", value="Iniciar Sesión").btn.btn-primary.btn-lg.w-100.mb-2.fw-bold
         a(href="#").btn.btn-link.mb-3 ¿Olvidaste tu contraseña?
         #messages.mb-3.visually-hidden
-        div.border-top.mb-4
+        div.border-top.mb-3
         a(href="/signup").btn.btn-lg.btn-success Crear cuenta nueva
 
 
