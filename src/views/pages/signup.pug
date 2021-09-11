@@ -2,34 +2,45 @@ extends ../templates/template
 append config
   -pageTitle = 'Registrarse'
 block main
-  main.container.text-center
-    .mx-auto.mt-4 
-      img(src="./dist/assets/logo-harinas@svg.svg" width="160px" alt="logotipo de harinas monisa").mb-4
+  main.container.text-center.mb-5
+    .mx-auto.mt-5
+      img(src="./dist/assets/logo-harinas@svg.svg" width="192" alt="logotipo de harinas monisa").mb-3
       h1.h3.mb-4.fw-light Crea tu cuenta
-      form#signupForm(action="/signup", method="POST" style="max-width: 420px").w-100.mx-auto.p-4.bg-white.rounded.shadow-sm.border
+      form#signupForm(action="/signup" method="POST" style="max-width: 420px").w-100.mx-auto.p-4.bg-white.rounded.shadow-sm.border
         .row.g-3.mb-3
           .col
             .text-start
               label(for="firstname").form-label.fw-bold.text-muted Nombre
-              input#firstname(type="text", placeholder="Nombre" name="firstname" autocomplete="off").form-control
+              input#firstname(type="text" placeholder="Nombre" name="firstname" autocomplete="off").form-control
           .col
             .text-start
               label(for="lastname").form-label.fw-bold.text-muted Apellido
-              input#lastname(type="text", placeholder="Apellido" name="lastname" autocomplete="off").form-control
+              input#lastname(type="text" placeholder="Apellido" name="lastname" autocomplete="off").form-control
         .text-start.mb-3
           label(for="email").form-label.fw-bold.text-muted Correo electrónico
-          input#email(type="email", placeholder="Correo Electrónico" name="email" autocomplete="off" ).form-control
+          input#email(type="email" placeholder="Correo Electrónico" name="email" autocomplete="off" ).form-control
         .row.g-3.mb-3
           .col
             .text-start 
               label(for="password").form-label.fw-bold.text-muted Contraseña
-              input#password(type="password", placeholder="Contraseña" name="password" autocomplete="off").form-control
+              input#password(type="password" placeholder="Contraseña" name="password" autocomplete="off").form-control
           .col
             .text-start 
               label(for="passwordVerify").form-label.fw-bold.text-muted Repetir contraseña
-              input#passwordVerify(type="password", placeholder="Contraseña" name="passwordVerify" autocomplete="off").form-control
-        input#btnSubmit(type="submit", value="Registrarse").btn.btn-primary.btn-lg.w-100.mb-4.fw-bold
+              input#passwordVerify(type="password" placeholder="Contraseña" name="passwordVerify" autocomplete="off").form-control
+        .row.g-3.mb-3
+          .text-start
+            label(for="gender").form-label.fw-bold.text-muted Género
+          .col.mt-0
+            .form-check.text-start
+              label(for="genderFem").form-check-label Masculino
+                input#genderFem(type="radio" name="gender" value="Masculino").form-check-input
+          .col.mt-0
+            .form-check.text-start
+              label(for="genderMas").form-check-label Femenino
+                input#genderMas(type="radio" name="gender" value="Femenino").form-check-input
+        input#btnSubmit(type="submit" value="Registrarse").btn.btn-primary.btn-lg.w-100.mb-4.fw-bold
         #messages.mb-3.visually-hidden
         div.border-top.mb-3
         p ¿Ya tienes una cuenta?
-           a(href="/signin").btn.btn-link Iniciar sesión
+          a(href="/signin").btn.btn-link Iniciar sesión
