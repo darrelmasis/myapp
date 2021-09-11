@@ -1,23 +1,13 @@
 header.main-header
-  nav.nav
+  nav.navbar.navbar-expand-lg.navbar-light.bg-white
     .container 
-      a(href="/").nav-brand
-        img(src="/dist/assets/logo-harinas@svg.svg", width="" height="32" alt="Logotipo")
-      ul.nav-menu
-        li.nav-item.dropdown 
-          a#user-menu(href= "#" data-bs-toggle="dropdown" aria-expanded="false").nav-link.user.dropdown-toggle
-            div.user-image.user-image-small
-              img(src="/dist/assets/defect.png", alt="avatar")
-            div.user-name= `${user.firstname}`
-            span.dropdown-caret
-          ul(aria-labelledby="user-menu").dropdown-menu 
-            li 
-              div.d-flex.dropdown-item-text.align-items-center 
-                div.user-image.user-image-big.me-3
-                  img(src="/dist/assets/defect.png", alt="avatar")
-                .d-flex.flex-column 
-                  span.fw-bold= `${user.fullName}`
-                  span= `@${user.username}`
-            li.dropdown-divider
-            li 
-              a(href="/signout").dropdown-item.text-danger Cerrar Sesión
+      a(href="/").navbar-brand
+        img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Logotipo")
+      ul.navbar-nav.ms-auto
+        li.nav-item.dropdown
+          button(type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false").btn.btn-link.dropdown-toggle
+            img(src="/dist/assets/defect.png", width="28" height="28" alt="Avatar").rounded-circle.me-2
+            span= `${user.fullName}`
+          ul(aria-labelledby="dropdownMenuButton1").dropdown-menu 
+            li.dropdown-item
+              a(href=`/signout/${user.username}`).dropdown-item.text-danger Cerrar Sesión
