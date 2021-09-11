@@ -66,4 +66,13 @@ const removeAttributes = (element, attrObj) => {
   }
 };
 
-export { select, createCustomElement, addAttributes, removeAttributes}
+const passVerify = (pass1, pass2) => {
+  let passOk
+  if(pass1 == '' && pass2 == '') {
+    passOk = false
+  } else {
+    pass1 === pass2 ? passOk = true : passOk = false
+  }
+  return passOk
+}
+export { select, createCustomElement, addAttributes, removeAttributes, passVerify}
