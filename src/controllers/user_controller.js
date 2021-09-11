@@ -4,55 +4,68 @@ const userModel = require('../models/user_model')
 const { promisify } = require('util')
 let response = {}
 
-const signup = async data => {
+const signup = async (req, res) => {
   try {
     const user = {
-      fullName: data.fullName,
-      username: data.username,
-      email: data.email,
-      password: await bcryptjs.hash(data.password, 8),
+      fullName: req.body.fullName,
+      username: req.body.username,
+      email: req.body.email,
+      password: await bcryptjs.hash(req.body.password, 8),
     }
 
-    userModel.create(user)
-    response.type = 'success'
-    response.message = 'Usuario registrado con éxito'
-    return response
+    if(user.fullName === '' || user.username === '' || user.email === '' || user.password === '') {
+      response.type = 'error'
+      response.message = 'Todos los campos son obligatorios'
+      return res.status(200).res.send(response)
+    } else {
+      userModel.create(user)
+      response.type = 'success'
+      response.message = 'Usuario registrado correctamente'
+      return res.send(response)
+    }
 
   } catch (error) {
     console.log('Error: ' + error)
     response.type = 'error'
     response.message = '¡Oops! Hubo algunos errores al registrar el usuario'
-    return response
+    return res.send(response)
   }
 }
 
-const signin = async data => {
+const signin = async (req, res) => {
   try {
     const user = {
-      username: data.username || '',
-      password: data.password
+      username: req.body.username || '',
+      password: req.body.password
     }
 
     if (user.username === '' || user.password === '') {
       response.type = 'empty'
       response.message = 'Todos los campos son obligatorios'
-      return response
+      return res.send(response)
     } else {
       const results = await userModel.signin(user)
       if (results.length > 0) {
         if (!(await bcryptjs.compare(user.password, results[0].password))) {
           response.type = 'error'
           response.message = 'Usuario o contraseña inconrrecto'
-          return response
+          return res.send(response)
         } else {
+          const id = results[0].id
+          const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '7d' })
+          const cookiesOptions = {
+            expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+            httpOnly: true
+          }
+          res.cookie('jwt', token, cookiesOptions)
           response.type = 'success'
           response.message = 'Iniciando sesión...'
-          return response
+          return res.send(response)
         }
       } else {
         response.type = 'error'
         response.message = `El usuario <span class="fw-bold">${user.username}</span> no está asociado a ninguna cuenta`
-        return response
+        return res.send(response)
       }
     }
 
@@ -63,11 +76,6 @@ const signin = async data => {
     return response
   }
 }
-
-const signinComplete = (req, res) => {
-  
-}
-
 
 const isLogged = async (req, res, next) => {
   if (req.cookies.jwt) {
@@ -85,23 +93,26 @@ const isLogged = async (req, res, next) => {
       return next()
     }
   } else {
-    res.redirect('/signin')
+    req.isLogged = false
+    return next()
   }
 }
 
 const get = async (req, res, next) => {
   try {
     await userModel.read(req.params.username)
-      .then(async data => {
-        if (data.length === 0) {
-          req.user = false
-          return next()
-        } else {
-          return next()
-        }
-      })
-  } catch (error) {
-    console.log(error);
+    .then(data => {
+      console.log(data)
+      if (data.length === 0) {
+        req.user = false
+        return next()
+      } else {
+        req.user = data[0]
+        return next()
+      } 
+    })
+  } catch {
+
   }
 }
 
