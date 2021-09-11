@@ -5,19 +5,25 @@ const { promisify } = require('util')
 let response = {}
 
 const signup = async (req, res) => {
-  try {
+  try { 
     const user = {
       fullName: req.body.fullName,
       username: req.body.username,
       email: req.body.email,
       password: await bcryptjs.hash(req.body.password, 8),
+      gender: req.body.gender,
+      createTime: new Date()
     }
-
-    if(user.fullName === '' || user.username === '' || user.email === '' || user.password === '') {
+    if(user.fullName === '' || user.username === '' || user.email === '' || user.password === '' || user.gender === '') {
       response.type = 'error'
       response.message = 'Todos los campos son obligatorios'
-      return res.status(200).res.send(response)
+      return res.send(response)
     } else {
+      if(req.body.password === '') {
+        response.type = 'error'
+        response.message = 'Las contraseñas no coinciden'
+        return res.send(response)
+      }
       userModel.create(user)
       response.type = 'success'
       response.message = 'Usuario registrado correctamente'
