@@ -729,7 +729,7 @@ try {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeAttributes = exports.addAttributes = exports.createCustomElement = exports.select = void 0;
+exports.nomProp = exports.passVerify = exports.removeAttributes = exports.addAttributes = exports.createCustomElement = exports.select = void 0;
 var id = document.getElementById.bind(document);
 var q = document.querySelector.bind(document);
 var all = document.querySelectorAll.bind(document);
@@ -808,6 +808,31 @@ var removeAttributes = function removeAttributes(element, attrObj) {
 
 exports.removeAttributes = removeAttributes;
 
+var passVerify = function passVerify(pass1, pass2) {
+  var passOk;
+
+  if (pass1 == '' && pass2 == '') {
+    passOk = false;
+  } else {
+    pass1 === pass2 ? passOk = true : passOk = false;
+  }
+
+  return passOk;
+};
+
+exports.passVerify = passVerify;
+
+var nomProp = function nomProp(string) {
+  var newString = [];
+  string.split(' ').forEach(function (word) {
+    word.toLowerCase();
+    newString.push(word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+  });
+  return newString.toString().replace(',', '');
+};
+
+exports.nomProp = nomProp;
+
 },{}],3:[function(require,module,exports){
 "use strict";
 
@@ -875,7 +900,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var socket = io();
 var signinForm = (0, _dom.select)('signinForm');
 var signupForm = (0, _dom.select)('signupForm'); // Prepara el registro de los usuarios
 
@@ -915,12 +939,15 @@ if (signupForm) {
     }); // Establece el boton como habilitado
 
     btnSubmit.value = 'Registrando...';
+    var passwordOk = (0, _dom.passVerify)(password.value, passwordVerify.value);
     var data = {
-      fullName: firstName.value + ' ' + lastName.value,
-      username: email.value.substr(0, email.value.indexOf('@')),
-      email: email.value,
-      password: password.value
+      fullName: (0, _dom.nomProp)(firstname.value) + ' ' + (0, _dom.nomProp)(lastname.value),
+      username: email.value.substr(0, email.value.indexOf('@')).toLowerCase(),
+      email: email.value.toLowerCase(),
+      password: passwordOk,
+      gender: (0, _dom.nomProp)(signupForm.gender.value)
     };
+    passwordOk === true ? data.password = password.value : data.password = '';
     signup(data).then(function (data) {
       if (data.type === 'error' || data.type === 'empty') {
         messages.classList.remove('text-success');
@@ -928,18 +955,25 @@ if (signupForm) {
         (0, _dom.removeAttributes)(btnSubmit, {
           disabled: ''
         }); // Establece el boton como habilitado
+
+        btnSubmit.value = 'Registrarse';
       } else {
         messages.classList.remove('text-danger');
         messages.classList.add('text-success');
         (0, _dom.removeAttributes)(btnSubmit, {
           disabled: ''
         }); // Establece el boton como habilitado
+
+        btnSubmit.value = 'Registrarse';
+        signupForm.reset();
+        window.location.href = '/';
       }
 
       messages.classList.remove('visually-hidden');
       messages.innerHTML = data.message;
     }).catch(function (error) {
       console.log('Error: ' + error);
+      btnSubmit.value = 'Registrarse';
     });
   });
 } // Prepara el inicio de sesión de los usuarios
@@ -1001,115 +1035,10 @@ if (signinForm) {
       messages.classList.remove('visually-hidden');
       messages.innerHTML = data.message;
     }).catch(function (error) {
-      console.log('Error: ' + error);
+      console.log(error);
     });
   });
-} // if (searchBar) {
-//   const search = select('search', 'id')
-//   let limit = 10
-//   let key = -1;
-//   let prev = -1;
-//   searchBar.addEventListener('keyup', e => {
-//     if (e.key != 'ArrowDown' && e.key != 'ArrowUp') {
-//       if (searchBar.value.trim() === '') {
-//         resultData.classList.add('d-none')
-//         btnClear.classList.add('invisible')
-//         search.classList.remove('open')
-//       } else {
-//         searchIcon ? searchIcon.classList.add('d-none') : null
-//         searchSpinner ? searchSpinner.classList.remove('d-none') : null
-//         socket.emit('search', { value: searchBar.value.trim() })
-//         key = -1
-//         prev = -1
-//         resultData.classList.remove('d-none')
-//         btnClear.classList.remove('invisible')
-//         search.classList.add('open')
-//       }
-//     }
-//   })
-//   document.addEventListener("keydown", (e) => {
-//     let mylist = document.querySelectorAll('.list-group-item');
-//     if (mylist) {
-//       if (e.key === 'ArrowDown') {
-//         key < (limit - 1) ? key++ : key = 0 // Asigna un valor a key para el elemento siguiente
-//         key === 0 ? prev = (limit - 1) : prev = key - 1 // Asigna un valor a prev para el elemento anterior 
-//         mylist[key].classList.add("search-item__active"); // Marca como activo el elemento de la lista de resultados
-//         if (mylist.length > 1) {
-//           prev > -1 ? mylist[prev].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
-//         }
-//       } else if (e.key === 'ArrowUp') {
-//         key <= 0 ? key = (limit - 1) : key-- // Asigna un valor a key para el elemento Anterior
-//         key < (limit - 1) ? prev = key + 1 : prev = 0
-//         mylist[key].classList.add("search-item__active");
-//         if (mylist.length > 1) {
-//           prev > -1 ? mylist[prev].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
-//         }
-//       }
-//     }
-//   });
-//   // searchBar.addEventListener('focus', (e) => {
-//   //   if(searchBar.value != '') {
-//   //     resultData.classList.toggle('d-none')
-//   //   }
-//   // })
-//   searchForm.addEventListener('submit', e => {
-//     e.preventDefault()
-//     const el = document.querySelector('.search-item__active')
-//     location.href = el.href
-//   })
-//   btnClear.addEventListener('click', e => {
-//     search.classList.remove('open')
-//     resultData.classList.add('d-none')
-//     btnClear.classList.add('invisible')
-//     searchBar.value = ''
-//   })
-//   socket.on('search-results', data => {
-//     const results = data.result
-//     if (results.length < limit) {
-//       limit = results.length
-//     } else if (results.length === 1) {
-//       limit = results.length
-//     } else if (results.length === 0) {
-//       limit = 0
-//     } else {
-//       limit = 10
-//     }
-//     if (searchResults.hasChildNodes()) {
-//       while (searchResults.childNodes.length >= 1) {
-//         searchResults.removeChild(searchResults.firstChild)
-//       }
-//     }
-//     if (results.length > 0) {
-//       for (let i = 0; i < limit; i++) {
-//         const customer = results[i]
-//         // const split = customer.fullName.split(' ')
-//         // split.forEach((word, index, array) => {
-//         //   let index1 = word.indexOf(searchBar.value);
-//         //   let index2 = word.indexOf(searchBar.value.toLowerCase());
-//         //   if (index1 != -1) {
-//         //     array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index1, searchBar.value.length)}</b>`)
-//         //   } else {
-//         //     array[index] = word.replace(new RegExp(searchBar.value, "gi"), `<b>${word.substr(index2, searchBar.value.length)}</b>`)
-//         //   }
-//         // })
-//         // customer.fullName = split.toString().replace(/,/g, ' ')
-//         if (customer != undefined) {
-//           let content = `<span class="icon icon-user me-3 d-inline-block"></span> <!-- <span class="ml-3"><span class="text-secondary fw-bold">${customer.customerCode}</span> -->${customer.fullName}</span>`
-//           let listItem = createCustomElement('a', { href: `/cliente/${customer.customerCode}`, class: 'align-items-center list-group-item d-flex list-group-item-action border-0 rounded-0' }, [content])
-//           searchResults.appendChild(listItem)
-//         }
-//       }
-//       resultsMessage.innerHTML = ''
-//       limit > results.length ? limit = results.length : null
-//       resultsCount.innerHTML = ` <div class="text-secondary small text-end me-3">Mostrando ${limit} resultados de ${results.length}</div>`
-//     } else {
-//       resultsCount.innerHTML = ''
-//       resultsMessage.innerHTML = `<div class="text-secondary text-center">No se han encontrado resultados para tu búsqueda <span class="search-criteria">(${searchBar.value})</span></div>`
-//     }
-//     searchIcon ? searchIcon.classList.remove('d-none') : null
-//     searchSpinner ? searchSpinner.classList.add('d-none') : null
-//   })
-// }
+}
 
 },{"./modules/dom":2,"./modules/postData":3,"regenerator-runtime":1}]},{},[4]);
 

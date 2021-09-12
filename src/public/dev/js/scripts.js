@@ -1,4 +1,4 @@
-import { select, addAttributes, removeAttributes } from "./modules/dom";
+import { select, addAttributes, removeAttributes, passVerify, nomProp} from "./modules/dom";
 import regeneratorRuntime from "regenerator-runtime";
 import { postData } from "./modules/postData";
 
@@ -16,29 +16,35 @@ if (signupForm) {
     e.preventDefault()
     addAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
     btnSubmit.value = 'Registrando...'
-
+    const passwordOk = passVerify(password.value, passwordVerify.value)
     const data = {
-      fullName: firstName.value + ' ' + lastName.value,
-      username: email.value.substr(0, email.value.indexOf('@')),
-      email: email.value,
-      password: password.value,
+      fullName: nomProp(firstname.value) + ' ' + nomProp(lastname.value),
+      username: email.value.substr(0, email.value.indexOf('@')).toLowerCase(),
+      email: email.value.toLowerCase(),
+      password: passwordOk,
+      gender: nomProp(signupForm.gender.value)
     }
-
+    passwordOk === true ? data.password = password.value : data.password = ''
     signup(data)
       .then(data => {
         if (data.type === 'error' || data.type === 'empty') {
           messages.classList.remove('text-success')
           messages.classList.add('text-danger')
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
+          btnSubmit.value = 'Registrarse'
         } else {
           messages.classList.remove('text-danger')
           messages.classList.add('text-success')
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
+          btnSubmit.value = 'Registrarse'
+          signupForm.reset()
+          window.location.href = '/'
         }
         messages.classList.remove('visually-hidden')
         messages.innerHTML = data.message
       }).catch(error => {
         console.log('Error: ' + error)
+        btnSubmit.value = 'Registrarse'
       })
   })
 }
@@ -52,7 +58,7 @@ const signin = async userData => {
 if (signinForm) {
   signinForm.addEventListener('submit', e => {
     e.preventDefault()
-    addAttributes(btnSubmit, {disabled: ''}) // Establece el boton como deshabilitado
+    addAttributes(btnSubmit, { disabled: '' }) // Establece el boton como deshabilitado
     const data = {
       username: username.value,
       password: password.value
@@ -73,7 +79,7 @@ if (signinForm) {
         messages.classList.remove('visually-hidden')
         messages.innerHTML = data.message
       }).catch(error => {
-        console.log('Error: ' + error)
+        console.log(error)
       })
 
   })
