@@ -75,4 +75,13 @@ const passVerify = (pass1, pass2) => {
   }
   return passOk
 }
-export { select, createCustomElement, addAttributes, removeAttributes, passVerify}
+
+const nomProp = (string) => {
+  let newString = []
+  string.split(' ').forEach(word => {
+    word.toLowerCase()
+    newString.push(word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+  });
+  return newString.toString().replace(',','')
+}
+export { select, createCustomElement, addAttributes, removeAttributes, passVerify, nomProp}
