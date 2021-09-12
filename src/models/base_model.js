@@ -7,16 +7,20 @@ class Base_model {
    * @returns new Promise
    */
   #promise(query, data) {
-    const promise = new Promise((resolve, reject) => {
-      connection.query(query, data, (err, result) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(result)
-        }
+    try {
+      const promise = new Promise((resolve, reject) => {
+        connection.query(query, data, (err, result) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(result[0])
+          }
+        })
       })
-    })
-    return promise
+      return promise
+    } catch (error) {
+      return error
+    }
   }
 
   /**
@@ -29,7 +33,7 @@ class Base_model {
   create(table, data) {
     const keys = Object.keys(data)
     const values = Object.values(data)
-    const columns = `(${keys.toString()})`
+    const columns = keys.toString()
     let columnsValues = []
     let parameters = []
 
@@ -38,34 +42,22 @@ class Base_model {
       columnsValues.push(key)
     });
 
-    const query = `INSERT INTO ${table} ${columns} VALUES(${parameters.toString()})`
+    const query = `INSERT INTO ${table} (${columns}) VALUES(${parameters.toString()})`
     return this.#promise(query, columnsValues)
   }
 
   /**
    * Obtiene registros de la base de datos
-   * @param {string} [columns] Columnas de la tabla de la BD (Opcional)
+   * @param {string} columns Columnas de la tabla de la BD (Opcional)
    * @param {string} table Nombre de la tabla
-   * @param {string} [condition] Condicón de la consulta a la BD (Opcional)
+   * @param {string} condition Condicón de la consulta a la BD (Opcional)
    * @param {string} condition condición de la consulta
+   * @param {array} data array de datos
    * @returns new Promise
    */
-  read(columns = '*', table, condition = '') {
+  read(columns, table, condition, data) {
     const query = `SELECT ${columns} FROM ${table} ${condition}`
-
-
-    // return new Promise ((resolve, reject) => {
-    //   connection.query(query, (err, result) => {
-    //     if(err) {
-    //       console.log('Ha habido un error en la consulta: ' +err)
-    //       reject(err)
-    //     } else {
-    //       resolve(result)
-    //     }
-    //   })
-    // })
-    return this.#promise(query)
-
+    return this.#promise(query, data)
   }
 
   /**
