@@ -65,7 +65,6 @@ const signin = async (req, res) => {
         return res.send(response)
       } else {
         const results = await userModel.signin(user)
-        console.log(results)
         if (!(await bcryptjs.compare(user.password, results.password))) {
           response.type = 'error'
           response.message = 'Usuario o contraseña inconrrecto'
