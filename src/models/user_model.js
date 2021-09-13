@@ -37,7 +37,7 @@ class User {
   async exist(data) {
     try {
       const result = await baseModel.read('email', 'users', 'WHERE username = ? OR email = ?', [data, data])
-      if (result) { return true }
+      if (result[0]) { return true }
       return false
     } catch (error) {
       return error

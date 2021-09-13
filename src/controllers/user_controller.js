@@ -64,7 +64,8 @@ const signin = async (req, res) => {
         response.message = `El usuario <span class="fw-bold">${user.username}</span> no está asociado a ninguna cuenta`
         return res.send(response)
       } else {
-        const results = await userModel.signin(user)
+        let results = await userModel.signin(user)
+        results = results[0]
         if (!(await bcryptjs.compare(user.password, results.password))) {
           response.type = 'error'
           response.message = 'Usuario o contraseña inconrrecto'
@@ -97,7 +98,7 @@ const isLogged = async (req, res, next) => {
     try {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
       await userModel.isLogged(id.id).then(data => {
-        req.user = data
+        req.user = data[0]
         req.isLogged = true
         return next()
       })
