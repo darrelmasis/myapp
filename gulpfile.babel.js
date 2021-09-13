@@ -11,8 +11,6 @@ import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
 import autoprefixer from 'autoprefixer'
 import rename from 'gulp-rename'
-import pug from "gulp-pug";
-import beautify from 'gulp-beautify'
 
 const sass = gulpSass(darthSass)
 
@@ -25,22 +23,17 @@ const path = {
   scripts: {
       src: "./src/public/dev/js/scripts.js",
       dest: "./src/public/dist/js"
-  },
-  pug: {
-      src: './src/views/pages/*.pug',
-      dest: './src/public/pages/'
   }
 }
 
 /**
  * Compila SASS para producción
  */
-
  const styles = done => {
   gulp.src(path.styles.src)
       .pipe(sourcemaps.init())
       .pipe(plumber())
-      .pipe(sass({outputStyle: 'expanded', sourceComments: true}))
+      .pipe(sass({outputStyle: 'compressed', sourceComments: true}))
       .pipe(postcss([autoprefixer()]))
       .pipe(sourcemaps.write())
       .pipe(rename({ suffix: '.min' }))
@@ -48,13 +41,8 @@ const path = {
   done()
 }
 
-const views = done => {
-  gulp.src(path.pug.src)
-    .pipe(pug())
-    .pipe(beautify.html({ indent_size: 2 }))
-    .pipe(gulp.dest(path.pug.dest))
-  done()
-}
+
+
 /**
  * Compila JavaScript para producción
  */
@@ -81,15 +69,7 @@ const views = done => {
   done()
 }
 
-
-/**
- * Gulp tasks
- */
-gulp.task('styles', styles)
-
-gulp.task('views', views)
-gulp.task('scripts', scripts)
-
-
-gulp.watch('./src/public/dev/scss/**/*.scss', styles)
-gulp.watch(path.scripts.src, scripts)
+exports.default = () => {
+  gulp.watch('./src/public/dev/scss/**/*.scss', styles)
+  gulp.watch(path.scripts.src, scripts)
+}
