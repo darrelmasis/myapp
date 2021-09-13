@@ -1,13 +1,12 @@
-header.main-header
-  nav.navbar.navbar-expand-lg.navbar-light.bg-white
+header.main-header.border-bottom
+  nav.navbar.navbar-expand.navbar-light.bg-white
     .container 
       a(href="/").navbar-brand
         img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Logotipo")
       ul.navbar-nav.ms-auto
         li.nav-item.dropdown
-          button(type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false").btn.btn-link.dropdown-toggle
+          button(type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
             img(src="/dist/assets/defect.png", width="28" height="28" alt="Avatar").rounded-circle.me-2
-            span= `${user.fullName}`
-          ul(aria-labelledby="dropdownMenuButton1").dropdown-menu 
-            li.dropdown-item
-              a(href=`/signout/${user.username}`).dropdown-item.text-danger Cerrar Sesión
+            span.fw-semibold=`${user.fullName}`
+          div(aria-labelledby="dropdownMenuButton1").dropdown-menu.dropdown-menu-end.px-2
+            a(href=`/signout/${user.username}`).dropdown-item.rounded.fw-500 Salir
