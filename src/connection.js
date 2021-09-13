@@ -3,24 +3,17 @@ const { mysql_database } = require('./config')
 
 let host = mysql_database.remote
 
-const connection = mysql.createConnection(host)
+const pool = mysql.createPool(host)
 
-connection.connect((error, success) => {
+pool.getConnection((error, success) => {
   if (error) {
-    console.log('Hubo algunos errores durante la conexión: ' + error)
+    throw error
   } else {
-    console.log(`Conexión con la base de datos "${host.database}" exitosa`)
+    console.log('%cConexión con la base de datos exitosa',"color: blue; font-size:15px;")
     return success
   }
 })
 
-connection.on('error', err => {
-  console.log(err.toString())
-})
-
-setInterval(function () {
-  connection.query('SELECT 1');
-}, 2000);
 
 
-module.exports = connection
+module.exports = pool
