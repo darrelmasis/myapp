@@ -1010,6 +1010,7 @@ var signin = /*#__PURE__*/function () {
 if (signinForm) {
   signinForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    btnSubmit.value = '...Iniciando';
     (0, _dom.addAttributes)(btnSubmit, {
       disabled: ''
     }); // Establece el boton como deshabilitado
@@ -1022,11 +1023,12 @@ if (signinForm) {
       if (data.type === 'error' || data.type === 'empty') {
         messages.classList.remove('text-success');
         messages.classList.add('text-danger');
+        btnSubmit.value = 'Iniciar Sesión';
         (0, _dom.removeAttributes)(btnSubmit, {
           disabled: ''
         }); // Establece el boton como habilitado
       } else {
-        btnSubmit.value = 'Iniciando...';
+        btnSubmit.value = '...Iniciando';
         messages.classList.remove('text-danger');
         messages.classList.add('text-success');
         window.location.href = '/';

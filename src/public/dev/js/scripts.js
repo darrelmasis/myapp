@@ -58,6 +58,7 @@ const signin = async userData => {
 if (signinForm) {
   signinForm.addEventListener('submit', e => {
     e.preventDefault()
+    btnSubmit.value = '...Iniciando'
     addAttributes(btnSubmit, { disabled: '' }) // Establece el boton como deshabilitado
     const data = {
       username: username.value,
@@ -69,9 +70,10 @@ if (signinForm) {
         if (data.type === 'error' || data.type === 'empty') {
           messages.classList.remove('text-success')
           messages.classList.add('text-danger')
+          btnSubmit.value = 'Iniciar Sesión'
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
         } else {
-          btnSubmit.value = 'Iniciando...'
+          btnSubmit.value = '...Iniciando'
           messages.classList.remove('text-danger')
           messages.classList.add('text-success')
           window.location.href = '/'
