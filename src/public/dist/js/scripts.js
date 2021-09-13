@@ -901,7 +901,8 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var signinForm = (0, _dom.select)('signinForm');
-var signupForm = (0, _dom.select)('signupForm'); // Prepara el registro de los usuarios
+var signupForm = (0, _dom.select)('signupForm');
+var searchForm = (0, _dom.select)('searchForm'); // Prepara el registro de los usuarios
 
 var signup = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee(userData) {
@@ -1039,6 +1040,169 @@ if (signinForm) {
     }).catch(function (error) {
       console.log(error);
     });
+  });
+} // Prepara la búsqueda
+
+
+var search = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee3(searchValue) {
+    var data;
+    return _regeneratorRuntime.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            _context3.next = 2;
+            return (0, _postData.postData)('/search', 'POST', searchValue);
+
+          case 2:
+            data = _context3.sent;
+            return _context3.abrupt("return", data);
+
+          case 4:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  }));
+
+  return function search(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}(); // Envía formulario de búsqueda y recibe respuesta del servidor
+
+
+if (searchForm) {
+  // Configruración del botón clear
+  btnClear.addEventListener('click', function (e) {
+    // Oculta los resultados
+    // vacía la barra de búsqueda
+    searchBar.value = ''; // Oculta el botón clear
+
+    btnClear.classList.add('visually-hidden'); // Oculta los resultados
+
+    resultsData.classList.add('visually-hidden'); // Marca como cerrado el buscador
+
+    searchContainer.classList.remove('open');
+  }); // Definimos las variables del entorno del buscador
+
+  var LIMIT = 10,
+      NEXT = -1,
+      PREV = -1;
+  document.addEventListener("keydown", function (e) {
+    var mylist = document.querySelectorAll('#searchResults .list-group-item');
+
+    if (mylist) {
+      if (e.key === 'ArrowDown') {
+        NEXT < LIMIT - 1 ? NEXT++ : NEXT = 0; // Asigna un valor a NEXT para el elemento siguiente
+
+        NEXT === 0 ? PREV = LIMIT - 1 : PREV = NEXT - 1; // Asigna un valor a PREV para el elemento anterior 
+
+        mylist[NEXT].classList.add("search-item__active"); // Marca como activo el elemento de la lista de resultados
+
+        mylist[NEXT].classList.add("fw-semibold");
+
+        if (mylist.length > 1) {
+          PREV > -1 ? mylist[PREV].classList.remove("search-item__active") : null; // Desmarca el elemento actibo anterior
+
+          PREV > -1 ? mylist[PREV].classList.remove("fw-semibold") : null; // Desmarca el elemento actibo anterior
+        }
+      } else if (e.key === 'ArrowUp') {
+        NEXT <= 0 ? NEXT = LIMIT - 1 : NEXT--; // Asigna un valor a NEXT para el elemento Anterior
+
+        NEXT < LIMIT - 1 ? PREV = NEXT + 1 : PREV = 0;
+        mylist[NEXT].classList.add("search-item__active");
+        mylist[NEXT].classList.add("fw-semibold");
+
+        if (mylist.length > 1) {
+          PREV > -1 ? mylist[PREV].classList.remove("search-item__active") : null; // Desmarca el elemento actibo anterior
+
+          PREV > -1 ? mylist[PREV].classList.remove("fw-semibold") : null; // Desmarca el elemento actibo anterior
+        }
+      }
+    }
+  }); // Evento cuando se levanta una tecla
+
+  searchBar.addEventListener('keyup', function (e) {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {// selecciona un elemento de la lista de resultados
+    } else {
+      var searchValue = searchBar.value.trim(); // Obtenemos el valor del campo de búsqueda
+
+      if (searchValue === '') {
+        // ocultar los resultados
+        // Oculta el botón clear
+        btnClear.classList.add('visually-hidden'); // ocultar el spinner
+
+        searchSpinner.classList.add('visually-hidden'); // Muestra el icono de búsqueda
+
+        searchIcon.classList.remove('visually-hidden'); // Oculta los resultados
+
+        resultsData.classList.add('visually-hidden'); // Marca como cerrado el buscador
+
+        searchContainer.classList.remove('open');
+      } else {
+        // Muestra el boton clear
+        btnClear.classList.remove('visually-hidden'); // Muestra el spinner
+
+        searchSpinner.classList.remove('visually-hidden'); // Oculta el icono de búsqueda
+
+        searchIcon.classList.add('visually-hidden'); // Enviar formulario yrecibir la respuesta
+
+        search({
+          searchValue: searchValue
+        }).then(function (response) {
+          // Oculta el spinner
+          searchSpinner.classList.add('visually-hidden'); // muestra el icono de búsqueda
+
+          searchIcon.classList.remove('visually-hidden'); // Muestra los resultados
+
+          resultsData.classList.remove('visually-hidden'); // Marca como abierto el buscador
+
+          searchContainer.classList.add('open'); // Reinicializamos las variables
+
+          NEXT = -1;
+          PREV = -1;
+
+          if (response.message.length > 0) {
+            // Si obtuvo algún resultado
+            // Limpiamos los resultados anteriores
+            searchResults.innerHTML = '';
+            resultsMessage.innerHTML = ''; // Mostramos estados de resultados
+
+            resultsState.innerHTML = "<div class=\"text-muted small text-end me-3\">Mostrando ".concat(LIMIT, " resultados de ").concat(response.message.length, "</div>");
+
+            for (var i = 0; i < LIMIT; i++) {
+              var result = response.message[i];
+
+              if (result != undefined) {
+                var content = "<span>".concat(result.fullName, "</span>");
+                var listItem = (0, _dom.createCustomElement)('a', {
+                  href: "/cliente/".concat(result.customerCode),
+                  class: 'align-item-center list-group-item d-flex list-group-item-action border-0'
+                }, [content]);
+                searchResults.appendChild(listItem);
+              }
+            }
+          } else {
+            // si no obtuvo resultados
+            // Limpiamos los resultados anteriores
+            searchResults.innerHTML = '';
+            resultsState.innerHTML = ''; // Mostramos mensaje sin resultados
+
+            resultsMessage.innerHTML = "<div class=\"text-secondary text-center fw-semibold\">Al parecer, no hay buenas coincidencias para tu b\xFAsqueda</div>";
+          }
+        }).catch(function (error) {
+          console.log(error);
+        });
+      }
+    }
+  }); // Evento cuando se se envía el formulario con submit
+
+  searchForm.addEventListener('submit', function (e) {
+    e.preventDefault(); // Enviamos al usuario al perfil del clienteseleciononado previamene en los resultados de búsqueda
+
+    var el = document.querySelector('.search-item__active');
+    location.href = el.href;
   });
 }
 
