@@ -3,6 +3,7 @@ const router = express.Router()
 const bcrypt = require('bcryptjs')
 const userController = require('../controllers/user_controller')
 const customerController = require('../controllers/customer_controller')
+const searchController = require('../controllers/search_controller')
 
 router.get('/',userController.isLogged, (req, res) => {
   if (req.isLogged) {
@@ -48,6 +49,10 @@ router.post('/signin', userController.signin)
 router.get('/signout/:username', userController.signout, (req, res) => {
 
 })
+
+// Rutas para la búsqueda
+router.post('/search', searchController.search)
+
 
 // Definimos los errores 404
 router.get('*', (req, res) => {
