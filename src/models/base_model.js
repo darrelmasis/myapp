@@ -13,7 +13,11 @@ class Base_model {
           if (err) {
             reject(err)
           } else {
-            resolve(result[0])
+            if(result.length === 1) {
+              resolve(result[0])
+            } else {
+              resolve(result)
+            }
           }
         })
       })
