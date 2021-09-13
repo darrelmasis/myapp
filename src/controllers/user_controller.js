@@ -85,7 +85,7 @@ const signin = async (req, res) => {
     }
 
   } catch (error) {
-    console.log('Error: ' + error)
+    console.log(error)
     response.type = 'error'
     response.message = '¡Oops! Hubo algunos errores al iniciar sesión'
     return res.send(response)
@@ -96,8 +96,7 @@ const isLogged = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
-      userModel.isLogged(id.id).then(data => {
-        data.firstname = data.fullName.split(' ')[0]
+      await userModel.isLogged(id.id).then(data => {
         req.user = data
         req.isLogged = true
         return next()
