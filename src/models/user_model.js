@@ -28,7 +28,7 @@ class User {
 
   async isLogged(id) {
     try {
-      return await baseModel.read('*', 'users', `WHERE id = '${id}'`)
+      return await baseModel.read('*', 'users', 'WHERE id = ?', [id])
     } catch (error) {
       return error
     }
