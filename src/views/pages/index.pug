@@ -6,15 +6,15 @@ block main
   main.container
     .w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
       div.logo
-      div.search.position-relative.w-100.border.bg-white
-        form(id="search-form" action="/" method="POST")
+      div#searchContainer.search.position-relative.w-100.border.bg-white
+        form#searchForm(action="/search" method="POST")
           div.input-group.align-items-center
             div.input-group-text.border-0.p-0.mx-3.bg-transparent
               span#searchIcon.icon.icon-search
-              span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.d-none
+              span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.visually-hidden
             input#searchBar(placeholder="¿A quién buscas hoy?" type="search" name="search" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
             button#btnClear(type='button').input-group-text.border-0.p-0.mx-3.icon.icon-close.visually-hidden
-        div(id="results-data").search-results.d-none.pb-3.bg-white
-          div#results-count
-          div#search-results
-          div#results-message
+        div#resultsData.search-results.border.pb-3.bg-white.visually-hidden
+          div#resultsState
+          div#searchResults.list-group.rounded-0
+          div#resultsMessage
