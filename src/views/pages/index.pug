@@ -4,17 +4,16 @@ append config
 block main
   include ../layout/header
   main.container
-    .main-content.w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
+    .w-100.d-flex.flex-column.justify-content-center.align-items-center.mb-3
       div.logo
-      div#search.search.position-relative.bg-white.w-100
-        div.search-box
-          form(id="search-form" action="/" method="POST")
-            div.search-bar.input-group.align-items-center
-              div.input-group-text.border-0.p-0.mx-3.bg-transparent
-                span#searchIcon.icon.icon-search
-                span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.d-none
-              input(id="search-bar" placeholder="¿A quién buscas hoy?" class="form-control border-0 bg-transparent" type="search" name="search" autocomplete="off" spellcheck="false" autofocus)
-              button(id="btn-clear" type='button').invisible.input-group-text.border-0.p-0.mx-3.icon.icon-close
+      div.search.position-relative.w-100.border.bg-white
+        form(id="search-form" action="/" method="POST")
+          div.input-group.align-items-center
+            div.input-group-text.border-0.p-0.mx-3.bg-transparent
+              span#searchIcon.icon.icon-search
+              span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.d-none
+            input#searchBar(placeholder="¿A quién buscas hoy?" type="search" name="search" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
+            button#btnClear(type='button').input-group-text.border-0.p-0.mx-3.icon.icon-close.visually-hidden
         div(id="results-data").search-results.d-none.pb-3.bg-white
           div#results-count
           div#search-results
