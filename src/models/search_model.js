@@ -2,8 +2,12 @@ const baseModel = require('./base_model')
 
 class Search {
 
-  search(value) {
-   return baseModel.read('*','customers', `WHERE fullName LIKE '%${value}%' OR customerCode LIKE '%${value}%'`)
+  async search(value) {
+    try {
+      return await baseModel.read('*','customers', 'WHERE fullName LIKE ? OR customerCode LIKE ?', [`%${value}%`,`%${value}%`])
+    } catch (error) {
+      return error
+    }
   }
 }
 
