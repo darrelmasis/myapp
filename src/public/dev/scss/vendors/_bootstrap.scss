@@ -10,10 +10,28 @@ $link-hover-decoration: underline;
 $input-focus-box-shadow: none;
 $input-btn-focus-box-shadow: none;
 $btn-focus-box-shadow: none;
+$component-active-bg: #ced4da; //$gray-400
+$component-active-color: #212529; //$gray-900
+$font-weight-semibold: 500;
+
 
 @import "../../../../../node_modules/bootstrap/scss/variables";
 @import "../../../../../node_modules/bootstrap/scss/mixins";
 @import "../../../../../node_modules/bootstrap/scss/utilities";
+
+@if map-has-key($utilities, 'font-weight') {
+  // Inserta la siguiente propiedad al map 'font-weight' para crear la clase 'fw-semibold' = (font-weight: 500)
+  $newValue: (semibold: $font-weight-semibold);
+
+  $valuesMap: map-get(map-get($utilities, 'font-weight'), values);
+  $newValuesMap:(values: map-merge($valuesMap, $newValue));
+
+  $fwMap:map-get($utilities, 'font-weight');
+  $newMap:("font-weight":map-merge($fwMap, $newValuesMap));
+
+  $utilities: map-merge($utilities, $newMap); // Nuevo map con la nueva propiedad incluida
+  @debug $newMap
+};
 
 // Optional Bootstrap components
 @import "../../../../../node_modules/bootstrap/scss/root";
