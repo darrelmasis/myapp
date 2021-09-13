@@ -4,12 +4,9 @@ const http = require('http')
 const server = http.createServer(app)
 const router = require('./routes/router')
 const path = require('path')
-const socketio = require('socket.io')
-const io = socketio(server)
 const port = process.env.PORT || 3000
 const cookieParser = require('cookie-parser')
 
-require('./socket.io')(io)
 
 // Configuración básica
 app.set('title', 'myapp')
