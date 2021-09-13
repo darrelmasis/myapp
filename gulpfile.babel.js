@@ -91,7 +91,5 @@ gulp.task('views', views)
 gulp.task('scripts', scripts)
 
 
-gulp.watch(path.styles.src, styles)
 gulp.watch('./src/public/dev/scss/**/*.scss', styles)
-// gulp.watch(path.pug.src, views)
 gulp.watch(path.scripts.src, scripts)
