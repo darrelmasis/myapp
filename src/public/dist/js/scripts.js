@@ -1175,7 +1175,7 @@ if (searchForm) {
               var result = response.message[i];
 
               if (result != undefined) {
-                var content = "<span>".concat(result.fullName, "</span>");
+                var content = "<span class=\"text-truncate\" title=\"".concat(result.fullName, "\">").concat(result.fullName, "</span>");
                 var listItem = (0, _dom.createCustomElement)('a', {
                   href: "/cliente/".concat(result.customerCode),
                   class: 'align-item-center list-group-item d-flex list-group-item-action border-0'

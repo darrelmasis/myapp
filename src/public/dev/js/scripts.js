@@ -185,7 +185,7 @@ if (searchForm) {
               for (let i = 0; i < LIMIT; i++) {
                 const result = response.message[i];
                 if (result != undefined) {
-                  let content = `<span>${result.fullName}</span>`
+                  let content = `<span class="text-truncate" title="${result.fullName}">${result.fullName}</span>`
                   let listItem = createCustomElement('a', { href: `/cliente/${result.customerCode}`, class: 'align-item-center list-group-item d-flex list-group-item-action border-0' }, [content])
                   searchResults.appendChild(listItem)
                 }
