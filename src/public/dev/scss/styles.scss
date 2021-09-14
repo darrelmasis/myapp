@@ -89,18 +89,26 @@ $border-shadow: 0 1px 2px rgba($dark, 0.2);
   mask-repeat: no-repeat;
 }
 
-.customer-image {
-  max-width: 128px;
-  margin: auto;
-  & img {
-    border-radius: 50%;
-  }
-}
-
 .search-item__active {
   background-color: $gray-300;
 }
 
 #userDropdownMenu {
   min-width: 15.625rem;
+}
+
+$imagesSizes: (
+  small: 28px,
+  medium: 56px,
+  large: 112px
+);
+
+@each $size, $value in $imagesSizes {
+  .image-#{$size} {
+    max-width: $value;
+    display: inline-block;
+    & img {
+      border-radius: 50%;
+    }
+  }
 }
