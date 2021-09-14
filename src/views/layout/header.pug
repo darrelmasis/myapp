@@ -6,14 +6,16 @@ header.main-header.border-bottom
       ul.navbar-nav.ms-auto
         li.nav-item.dropdown
           button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
-            img(src="/dist/assets/defect.png", width="28" height="28" alt="Avatar").rounded-circle.me-2
+            .image-small.me-2
+              img(src="/dist/assets/defect.png" alt="Avatar").w-100
             span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
-            .dropdown-item-text.d-flex
-              img(src="/dist/assets/defect.png", width="56" height="56" alt="Avatar").rounded-circle.me-2
+            .dropdown-item-text.d-flex.align-items-center
+              .image-medium.me-2 
+                img(src="/dist/assets/defect.png" alt="Avatar").w-100
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
-                .text-muted= `@${user.username}`
+                .text-muted.small= `@${user.username}`
             .dropdown-divider
             a(href=`/signout/${user.username}`).dropdown-item.rounded.fw-500.text-danger.fw-semibold.d-flex.align-items-center
               span.icon.icon-sign-out.me-2
