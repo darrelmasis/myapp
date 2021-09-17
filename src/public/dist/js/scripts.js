@@ -839,6 +839,79 @@ exports.nomProp = nomProp;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var get = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var options, currentPosition, data;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            options = {
+              enableHighAccuracy: true,
+              //default false
+              timeout: 5000,
+              //default 0
+              maximumAge: 0 // default 0
+
+            };
+
+            if (navigator.geolocation) {
+              _context.next = 5;
+              break;
+            }
+
+            console.warn('La geolocalización no está disponible');
+            _context.next = 16;
+            break;
+
+          case 5:
+            currentPosition = function currentPosition() {
+              return new Promise(function (resolve, reject) {
+                return navigator.geolocation.getCurrentPosition(resolve, reject, options);
+              });
+            };
+
+            _context.prev = 6;
+            _context.next = 9;
+            return currentPosition();
+
+          case 9:
+            data = _context.sent;
+            return _context.abrupt("return", data);
+
+          case 13:
+            _context.prev = 13;
+            _context.t0 = _context["catch"](6);
+            console.log(_context.t0);
+
+          case 16:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, null, [[6, 13]]);
+  }));
+
+  return function get() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var _default = get;
+exports.default = _default;
+
+},{}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.postData = void 0;
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -885,7 +958,7 @@ var postData = /*#__PURE__*/function () {
 
 exports.postData = postData;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 var _dom = require("./modules/dom");
@@ -893,6 +966,8 @@ var _dom = require("./modules/dom");
 var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
 
 var _postData = require("./modules/postData");
+
+var _geolocation = _interopRequireDefault(require("./modules/geolocation"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1206,6 +1281,10 @@ if (searchForm) {
   });
 }
 
-},{"./modules/dom":2,"./modules/postData":3,"regenerator-runtime":1}]},{},[4]);
+(0, _geolocation.default)().then(function (res) {
+  return console.log(res);
+});
+
+},{"./modules/dom":2,"./modules/geolocation":3,"./modules/postData":4,"regenerator-runtime":1}]},{},[5]);
 
 //# sourceMappingURL=scripts.js.map

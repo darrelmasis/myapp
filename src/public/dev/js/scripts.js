@@ -1,6 +1,7 @@
 import { select, addAttributes, removeAttributes, passVerify, nomProp, createCustomElement } from "./modules/dom";
 import regeneratorRuntime from "regenerator-runtime";
 import { postData } from "./modules/postData";
+import getPosition from "./modules/geolocation"
 
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
@@ -212,3 +213,5 @@ if (searchForm) {
     location.href = el.href
   })
 }
+
+getPosition().then(res => console.log(res))
