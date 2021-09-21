@@ -1,7 +1,7 @@
 const mysql = require('mysql')
 const { mysql_database } = require('./config')
 
-let host = mysql_database.local
+let host = mysql_database.remote
 
 const pool = mysql.createPool(host)
 
