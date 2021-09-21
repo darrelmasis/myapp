@@ -98,8 +98,8 @@ const isLogged = async (req, res, next) => {
     try {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
       await userModel.isLogged(id.id).then(data => {
-        req.user = data[0]
-        req.isLogged = true
+        res.data = data[0]
+        res.isLogged = true
         return next()
       })
 
@@ -108,7 +108,7 @@ const isLogged = async (req, res, next) => {
       return next()
     }
   } else {
-    req.isLogged = false
+    res.isLogged = false
     return next()
   }
 }
@@ -117,12 +117,11 @@ const get = async (req, res, next) => {
   try {
     await userModel.read(req.params.username)
       .then(data => {
-        console.log(data)
         if (data.length === 0) {
-          req.user = false
+          res.userProfile = false
           return next()
         } else {
-          req.user = data
+          res.userProfile = data[0]
           return next()
         }
       })
