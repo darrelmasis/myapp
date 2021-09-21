@@ -110,99 +110,107 @@ if (searchForm) {
   })
 
   // Definimos las variables del entorno del buscador
-  let LIMIT = 10, NEXT = -1, PREV = -1;
+  let LIMIT = 10, NEXT = 0, PREV = 0;
   document.addEventListener("keydown", (e) => {
-    let mylist = document.querySelectorAll('#searchResults .list-group-item');
-    if (mylist) {
+    let myList = document.querySelectorAll('#searchResults .list-group-item');
+    if (myList) {
+
       if (e.key === 'ArrowDown') {
         NEXT < (LIMIT - 1) ? NEXT++ : NEXT = 0 // Asigna un valor a NEXT para el elemento siguiente
         NEXT === 0 ? PREV = (LIMIT - 1) : PREV = NEXT - 1 // Asigna un valor a PREV para el elemento anterior 
-        mylist[NEXT].classList.add("search-item__active"); // Marca como activo el elemento de la lista de resultados
-        mylist[NEXT].classList.add("fw-semibold");
-        if (mylist.length > 1) {
-          PREV > -1 ? mylist[PREV].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
-          PREV > -1 ? mylist[PREV].classList.remove("fw-semibold") : null // Desmarca el elemento actibo anterior
+        myList[NEXT].classList.add("search-item__active") // Marca como activo el elemento de la lista de resultados
+        if (myList.length > 1) {
+          PREV > -1 ? myList[PREV].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
         }
       } else if (e.key === 'ArrowUp') {
         NEXT <= 0 ? NEXT = (LIMIT - 1) : NEXT-- // Asigna un valor a NEXT para el elemento Anterior
         NEXT < (LIMIT - 1) ? PREV = NEXT + 1 : PREV = 0
-        mylist[NEXT].classList.add("search-item__active");
-        mylist[NEXT].classList.add("fw-semibold");
-        if (mylist.length > 1) {
-          PREV > -1 ? mylist[PREV].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
-          PREV > -1 ? mylist[PREV].classList.remove("fw-semibold") : null // Desmarca el elemento actibo anterior
+        myList[NEXT].classList.add("search-item__active")
+        if (myList.length > 1) {
+          PREV > -1 ? myList[PREV].classList.remove("search-item__active") : null // Desmarca el elemento actibo anterior
         }
       }
     }
   });
-
+  let timeout = null
+  let searchValue = ''
+  const TIMEOUT = 350 // tiempo que retrasa la consuta
+  const ilegalKeys = [' ', 'Control', 'Tab', 'CapsLock', 'Shift', 'Alt', 'Meta', 'AltGraph', 'ContextMenu', 'ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Insert', 'Home', 'PageUp', 'Delete', 'End', 'PageDown', 'PrintScreen', 'ScrollLock', 'Pause']
   // Evento cuando se levanta una tecla
   searchBar.addEventListener('keyup', e => {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      // selecciona un elemento de la lista de resultados
-    } else {
-      let searchValue = searchBar.value.trim() // Obtenemos el valor del campo de búsqueda
-      if (searchValue === '') {
-        // ocultar los resultados
-        // Oculta el botón clear
-        btnClear.classList.add('visually-hidden')
-        // ocultar el spinner
-        searchSpinner.classList.add('visually-hidden')
-        // Muestra el icono de búsqueda
-        searchIcon.classList.remove('visually-hidden')
-        // Oculta los resultados
-        resultsData.classList.add('visually-hidden')
-        // Marca como cerrado el buscador
-        searchContainer.classList.remove('open')
-      } else {
-        // Muestra el boton clear
-        btnClear.classList.remove('visually-hidden')
-        // Muestra el spinner
-        searchSpinner.classList.remove('visually-hidden')
-        // Oculta el icono de búsqueda
-        searchIcon.classList.add('visually-hidden')
+    if(!ilegalKeys.includes(e.key)) {
+      // Muestra el boton clear
+      btnClear.classList.remove('visually-hidden')
+      // Muestra el spinner
+      searchSpinner.classList.remove('visually-hidden')
+      // Oculta el icono de búsqueda
+      searchIcon.classList.add('visually-hidden')
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        searchValue = searchBar.value.trim()
+        if (searchValue === '') {
+          // ocultar los resultados
+          // Oculta el botón clear
+          btnClear.classList.add('visually-hidden')
+          // ocultar el spinner
+          searchSpinner.classList.add('visually-hidden')
+          // Muestra el icono de búsqueda
+          searchIcon.classList.remove('visually-hidden')
+          // Oculta los resultados
+          resultsData.classList.add('visually-hidden')
+          // Marca como cerrado el buscador
+          searchContainer.classList.remove('open')
+        } else {
+          // Enviar formulario yrecibir la respuesta
+          search({ searchValue })
+            .then(response => {
+              // Oculta el spinner
+              searchSpinner.classList.add('visually-hidden')
+              // muestra el icono de búsqueda
+              searchIcon.classList.remove('visually-hidden')
+              // Muestra los resultados
+              resultsData.classList.remove('visually-hidden')
+              // Marca como abierto el buscador
+              searchContainer.classList.add('open')
+              // Reinicializamos las variables
+              NEXT = 0; PREV = 0
 
-        // Enviar formulario yrecibir la respuesta
-        search({ searchValue })
-          .then(response => {
-            // Oculta el spinner
-            searchSpinner.classList.add('visually-hidden')
-            // muestra el icono de búsqueda
-            searchIcon.classList.remove('visually-hidden')
-            // Muestra los resultados
-            resultsData.classList.remove('visually-hidden')
-            // Marca como abierto el buscador
-            searchContainer.classList.add('open')
-            // Reinicializamos las variables
-            NEXT = -1;PREV = -1
-            if (response.message.length > 0) {
-              // Si obtuvo algún resultado
-              // Limpiamos los resultados anteriores
-              searchResults.innerHTML = ''
-              resultsMessage.innerHTML = ''
-
-              // Mostramos estados de resultados
-              resultsState.innerHTML = `<div class="text-muted small text-end me-3">Mostrando ${LIMIT} resultados de ${response.message.length}</div>`
-              for (let i = 0; i < LIMIT; i++) {
-                const result = response.message[i];
-                if (result != undefined) {
-                  let content = `<span class="text-truncate" title="${result.fullName}">${result.fullName}</span>`
-                  let listItem = createCustomElement('a', { href: `/cliente/${result.customerCode}`, class: 'align-item-center list-group-item d-flex list-group-item-action border-0' }, [content])
-                  searchResults.appendChild(listItem)
-                }
+              if (response.message.length <= LIMIT || response.message.length === 1 || response.message.length === 0) {
+                LIMIT = response.message.length
+              } else {
+                LIMIT = 10
               }
-            } else {
-              // si no obtuvo resultados
-              // Limpiamos los resultados anteriores
-              searchResults.innerHTML = ''
-              resultsState.innerHTML = ''
-              // Mostramos mensaje sin resultados
-              resultsMessage.innerHTML = `<div class="text-secondary text-center fw-semibold">Al parecer, no hay buenas coincidencias para tu búsqueda</div>`
-            }
-          }).catch(error => {
-            console.log(error)
-          })
-      }
+              if (response.message.length > 0) {
+                // Si obtuvo algún resultado
+                // Limpiamos los resultados anteriores
+                searchResults.innerHTML = ''
+                resultsMessage.innerHTML = ''
+                
+                // Mostramos estados de resultados
+                resultsState.innerHTML = `<div class="text-muted small text-end me-3">Mostrando ${LIMIT} resultados de ${response.message.length}</div>`
+                for (let i = 0; i < LIMIT; i++) {
+                  const result = response.message[i];
+                  if (result != undefined) {
+                    let content = `<span class="text-truncate" title="${result.fullName}">${result.fullName}</span>`
+                    let listItem = createCustomElement('a', { href: `/cliente/${result.customerCode}`, class: 'align-item-center list-group-item d-flex list-group-item-action border-0' }, [content])
+                    searchResults.appendChild(listItem)
+                  }
+                }
+                let myList = document.querySelectorAll('#searchResults .list-group-item')
+                myList[0].classList.add("search-item__active")
+              } else {
+                // si no obtuvo resultados
+                // Limpiamos los resultados anteriores
+                searchResults.innerHTML = ''
+                resultsState.innerHTML = ''
+                // Mostramos mensaje sin resultados
+                resultsMessage.innerHTML = `<div class="text-secondary text-center fw-semibold">Al parecer, no hay buenas coincidencias para tu búsqueda</div>`
+              }
+            }).catch(error => {
+              console.log(error)
+            })
+        }
+      }, TIMEOUT);
     }
   })
   // Evento cuando se se envía el formulario con submit
