@@ -3,11 +3,7 @@ const baseModel = require('./base_model')
 class Customer {
 
   get(value) {
-   return baseModel.read('*','customers', `WHERE customerCode = '${value}'`)
-  }
-
-  getSeller(value) {
-    return baseModel.read('*','sellers', `WHERE sellerCode = '${value}'`)
+   return baseModel.read('*','customers', `LEFT JOIN sellers ON seller = sellers.sellerCode WHERE customerCode = '${value}'`)
   }
 
   update(data) {
