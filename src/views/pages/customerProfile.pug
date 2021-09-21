@@ -1,0 +1,71 @@
+extends ../templates/template
+append config
+  - pageTitle= `${customer.customerCode}`
+block main
+  include ../layout/header
+  .container.mt-3
+    .row.gx-3
+      .col-md-3
+        .card.text-center.bg-white.rounded.border
+          .card-body
+            .image-large
+              img(src="/dist/assets/defect.png" alt="foto del cliente").w-100
+            .mt-3 
+              h1.h5.card-title= `${customer.fullName}`  
+              p.small.fw-semibold.text-secondary.mb-3= `${customer.customerCode }`
+              .d-flex.justify-content-evenly
+                a(href="#").btn.btn-light.text-muted
+                  i.far.fa-edit
+                a(href="#").btn.btn-light.text-muted
+                  i.far.fa-eye
+                a(href="#").btn.btn-light.text-muted
+                  i.far.fa-directions
+        ul.list-group.list-group-flush.bg-white.rounded.border.my-3.p-2
+          li.list-group-item.d-flex.justify-content-between
+            span.fw-semibold Última visita:
+            span.text-danger Ninguna
+          li.list-group-item.d-flex.justify-content-between
+            span.fw-semibold
+              i.far.fa-eye.me-2
+              | Visitas:
+            span.badge.bg-primary.rounded-pill 0
+      .col-md-9
+        .bg-white.rounded.border.py-3
+          h2.h4.mb-3.ms-3 Información del cliente
+          ul.list-group.list-group-flush
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Código:
+                .col-sm-9.text-secondary=`${customer.customerCode}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Nombre completo:
+                .col-sm-9.text-secondary=`${customer.fullName}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Razón social:
+                .col-sm-9.text-secondary=`${customer.bussinessName}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Dirección:
+                .col-sm-9.text-secondary=`${customer.address}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Móvil:
+                .col-sm-9.text-secondary=`${customer.secondaryPhone}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Correo:
+                .col-sm-9.text-secondary=`${customer.primaryEmail}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Tipo:
+                .col-sm-9.text-secondary=`${customer.type}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Vendedor:
+                .col-sm-9.text-secondary= `${customer.sellerFullName}`
+            li.list-group-item.border-0
+              .row 
+                .col-sm-3.fw-semibold Cliente desde:
+                .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
