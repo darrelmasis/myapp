@@ -10,13 +10,16 @@ header.main-header.border-bottom
               img(src="/dist/assets/defect.png" alt="Avatar").w-100
             span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
-            .dropdown-item-text.d-flex.align-items-center
+            .dropdown-item-text.d-flex.align-items-center.mb-3
               .image-medium.me-2 
                 img(src="/dist/assets/defect.png" alt="Avatar").w-100
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`
+            a(href=`/@${user.username}`).dropdown-item.rounded.fw-semibold.d-flex.align-items-center.text-muted
+              span.icon.icon-user.me-2 
+              | Ver perfil
             .dropdown-divider
-            a(href=`/signout/${user.username}`).dropdown-item.rounded.fw-500.text-danger.fw-semibold.d-flex.align-items-center
+            a(href=`/signout/${user.username}`).dropdown-item.rounded.text-danger.fw-semibold.d-flex.align-items-center
               span.icon.icon-sign-out.me-2
               | Cerrar sesión
