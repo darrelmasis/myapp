@@ -10,7 +10,18 @@ const search = async (req, res) => {
       response.message = 'Búsqueda vacía'
       return res.send(response)
     } else {
-      const results = await searchModel.search(search.value)
+      const valueLength = search.value.length
+      let type = 'match'
+      const preResults = await searchModel.search(search.value, type)
+      if(preResults.length === 0 && type === 'match') {
+        type = 'like'
+      } else if(preResults.length === 0 && type === 'like') {
+        type = 'match'
+      }
+
+
+      console.log(type)
+      const results = await searchModel.search(search.value, type)
       response.type = 'success'
       response.message = results
       return res.send(response)
