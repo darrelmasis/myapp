@@ -2,6 +2,7 @@ import { select, addAttributes, removeAttributes, passVerify, nomProp, createCus
 import regeneratorRuntime from "regenerator-runtime";
 import { postData } from "./modules/postData";
 import getPosition from "./modules/geolocation"
+import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
 
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
@@ -222,4 +223,7 @@ if (searchForm) {
   })
 }
 
-getPosition().then(res => console.log(res))
+getPosition().then(res => {
+  latitude.innerHTML = `Lat: ${res.coords.latitude}`
+  longitude.innerHTML = `Lng: ${res.coords.longitude}`
+})
