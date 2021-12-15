@@ -4,6 +4,10 @@ header.main-header.border-bottom
       a(href="/").navbar-brand
         img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Logotipo")
       ul.navbar-nav.ms-auto
+        li.nav-item.me-4
+          a(href="/").nav-link.fw-semibold
+            i.far.fa-search.me-2
+            | Buscar
         li.nav-item.dropdown
           button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
             .image-small.me-2
@@ -17,9 +21,9 @@ header.main-header.border-bottom
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`
             a(href=`/@${user.username}`).dropdown-item.rounded.fw-semibold.d-flex.align-items-center.text-muted
-              span.icon.icon-user.me-2 
+              span.far.fa-user-circle.me-2 
               | Ver perfil
             .dropdown-divider
             a(href=`/signout/${user.username}`).dropdown-item.rounded.text-danger.fw-semibold.d-flex.align-items-center
-              span.icon.icon-sign-out.me-2
+              span.far.fa-sign-out-alt.me-2
               | Cerrar sesión

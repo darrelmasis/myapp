@@ -40,7 +40,7 @@ if (signupForm) {
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
           btnSubmit.value = 'Registrarse'
           signupForm.reset()
-          window.location.href = '/'
+          window.location.href = `/signin?user=${data.username}` // redirige al usuario al inicio de sesión y se autocompleta el campo del nombre de usuario
         }
         messages.classList.remove('visually-hidden')
         messages.innerHTML = data.message
@@ -72,10 +72,10 @@ if (signinForm) {
         if (data.type === 'error' || data.type === 'empty') {
           messages.classList.remove('text-success')
           messages.classList.add('text-danger')
-          btnSubmit.value = 'Iniciar Sesión'
+          btnSubmit.innerHTML = '<i class="far fa-sign-in-alt me-2"></i> Iniciar Sesión'
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
         } else {
-          btnSubmit.value = '...Iniciando'
+          btnSubmit.innerHTML = '...Iniciando'
           messages.classList.remove('text-danger')
           messages.classList.add('text-success')
           window.location.href = '/'
@@ -134,7 +134,7 @@ if (searchForm) {
   });
   let timeout = null
   let searchValue = ''
-  const TIMEOUT = 350 // tiempo que retrasa la consuta
+  const TIMEOUT = 300 // tiempo que retrasa la consuta
   const ilegalKeys = [' ', 'Control', 'Tab', 'CapsLock', 'Shift', 'Alt', 'Meta', 'AltGraph', 'ContextMenu', 'ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Insert', 'Home', 'PageUp', 'Delete', 'End', 'PageDown', 'PrintScreen', 'ScrollLock', 'Pause']
   // Evento cuando se levanta una tecla
   searchBar.addEventListener('keyup', e => {

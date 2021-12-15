@@ -1,6 +1,6 @@
 extends ../templates/template
 append config
-  -pageTitle = 'Iniciar Sesión'
+  - pageTitle = 'Iniciar Sesión'
 block main
   main.container.text-center.mb-5
     .mx-auto.mt-5
@@ -9,16 +9,20 @@ block main
       form#signinForm(action="/signin", method="POST" style="max-width: 330px").w-100.mx-auto.p-4.bg-white.rounded.shadow-sm.border
         .text-start.mb-3 
           label(for="username").form-label.fw-bold.text-muted Correo electrónico
-          input#username(type="text", name="username" placeholder="ejemplo@correo.com" autocomplete="off").form-control.form-control-lg.fs-6.mb-3
+          input#username(type="text", name="username" placeholder="ejemplo@correo.com" autocomplete="off" value= `${user}`).form-control.form-control-lg.fs-6.mb-3
         .text-start.mb-3
           label(for="password").form-label.fw-bold.text-muted Contraseña
           input#password(type="password", name="password" placeholder="Contraseña").form-control.form-control-lg.fs-6.mb-3
-        div.text-start.text-danger.small.mb-3.visually-hidden El nombre de usuario que ingresaste no está conectado a ninguna cuenta
-        input#btnSubmit(type="submit", value="Iniciar Sesión").btn.btn-primary.btn-lg.w-100.mb-2.fw-bold
+        div.text-start.text-danger.small.mb-3.visually-hidden
+        button#btnSubmit(type="submit").btn.btn-primary.btn-lg.w-100.mb-2.fw-bold
+          i.far.fa-sign-in-alt.me-2
+          | Iniciar sesión
         a(href="#").btn.btn-link.mb-3 ¿Olvidaste tu contraseña?
         #messages.mb-3.visually-hidden
         div.border-top.mb-3
-        a(href="/signup").btn.btn-lg.btn-success Crear cuenta nueva
+        a(href="/signup").btn.btn-lg.btn-success
+          i.far.fa-user-plus.me-2
+          | Crear cuenta nueva
 
 
           

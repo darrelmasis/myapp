@@ -39,7 +39,9 @@ block main
             .form-check.text-start
               label(for="genderMas").form-check-label Femenino
                 input#genderMas(type="radio" name="gender" value="Femenino").form-check-input
-        input#btnSubmit(type="submit" value="Registrarse").btn.btn-primary.btn-lg.w-100.mb-4.fw-bold
+        button#btnSubmit(type="submit").btn.btn-primary.btn-lg.w-100.mb-4.fw-bold
+          | Registrarse
+          i.far.fa-arrow-right.ms-2
         #messages.mb-3.visually-hidden
         div.border-top.mb-3
         p ¿Ya tienes una cuenta?

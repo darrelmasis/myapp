@@ -72,7 +72,7 @@ const signin = async (req, res) => {
           return res.send(response)
         } else {
           const id = results.id
-          const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '7d' })
+          const token = jwt.sign({ id: id }, 'super_secret', { expiresIn: '365d' })
           const cookiesOptions = {
             expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             httpOnly: true
@@ -132,7 +132,7 @@ const get = async (req, res, next) => {
 
 const signout = (req, res) => {
   res.clearCookie('jwt')
-  res.redirect('/')
+  res.redirect(`/signin?user=${req.params.username}`)
 }
 
 module.exports = { signup, signin, isLogged, get, signout }

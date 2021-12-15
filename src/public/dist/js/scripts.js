@@ -1042,7 +1042,7 @@ if (signupForm) {
 
         btnSubmit.value = 'Registrarse';
         signupForm.reset();
-        window.location.href = '/';
+        window.location.href = "/signin?user=".concat(data.username); // redirige al usuario al inicio de sesión y se autocompleta el campo del nombre de usuario
       }
 
       messages.classList.remove('visually-hidden');
@@ -1099,12 +1099,12 @@ if (signinForm) {
       if (data.type === 'error' || data.type === 'empty') {
         messages.classList.remove('text-success');
         messages.classList.add('text-danger');
-        btnSubmit.value = 'Iniciar Sesión';
+        btnSubmit.innerHTML = '<i class="far fa-sign-in-alt me-2"></i> Iniciar Sesión';
         (0, _dom.removeAttributes)(btnSubmit, {
           disabled: ''
         }); // Establece el boton como habilitado
       } else {
-        btnSubmit.value = '...Iniciando';
+        btnSubmit.innerHTML = '...Iniciando';
         messages.classList.remove('text-danger');
         messages.classList.add('text-success');
         window.location.href = '/';
@@ -1192,7 +1192,7 @@ if (searchForm) {
   });
   var timeout = null;
   var searchValue = '';
-  var TIMEOUT = 350; // tiempo que retrasa la consuta
+  var TIMEOUT = 300; // tiempo que retrasa la consuta
 
   var ilegalKeys = [' ', 'Control', 'Tab', 'CapsLock', 'Shift', 'Alt', 'Meta', 'AltGraph', 'ContextMenu', 'ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'Insert', 'Home', 'PageUp', 'Delete', 'End', 'PageDown', 'PrintScreen', 'ScrollLock', 'Pause']; // Evento cuando se levanta una tecla
 

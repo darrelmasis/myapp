@@ -55,13 +55,16 @@ router.get('/signup', userController.isLogged, (req, res) => {
 router.post('/signup', userController.signup)
 
 // Rutas del inicio de sesión de usuarios
-router.get('/signin', userController.isLogged, (req, res) => {
+router.get('/signin/', userController.isLogged, (req, res) => {
   if (req.isLogged) {
     res.redirect('/')
   } else {
-    res.render('signin')
+    let user
+    req.query.user ? user = req.query.user : user = ''
+    res.render('signin', {user})
   }
 })
+
 router.post('/signin', userController.signin)
 
 // Ruta del cierre de sesión de los usuarios

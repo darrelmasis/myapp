@@ -19,8 +19,6 @@ const search = async (req, res) => {
         type = 'match'
       }
 
-
-      console.log(type)
       const results = await searchModel.search(search.value, type)
       response.type = 'success'
       response.message = results
