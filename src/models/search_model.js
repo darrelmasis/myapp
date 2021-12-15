@@ -6,7 +6,7 @@ class Search {
     try {
       switch (mode) {
         case 'match':
-          return await baseModel.read('*', 'customers', 'WHERE MATCH(fullName) AGAINST(? IN NATURAL LANGUAGE MODE) OR MATCH(phoneNumber) AGAINST(? IN NATURAL LANGUAGE MODE) OR MATCH(address) AGAINST(? IN NATURAL LANGUAGE MODE)', [`${value}`,`${value}`,`${value}`])
+          return await baseModel.read('*', 'customers', 'WHERE MATCH(fullName) AGAINST(? IN NATURAL LANGUAGE MODE) OR MATCH(address) AGAINST(? IN NATURAL LANGUAGE MODE)', [`${value}`,`${value}`])
           break;
         case 'like':
           return await baseModel.read('*', 'customers', 'WHERE fullName LIKE ? OR customerCode LIKE ?', [`%${value}%`, `%${value}%`])
