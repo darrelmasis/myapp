@@ -1,4 +1,5 @@
 const customer_model = require('../models/customer_model')
+let response = {}
 
 const get = async (req, res, next) => {
   try {
@@ -40,8 +41,26 @@ const getSeller = (value) => {
   return customer_model.getSeller(value)
 }
 
-const update = (data) => {
-  return customer_model.update(data)
+// Actualiza la información de los clientes
+const update = async (req, res) => {
+  try {
+    const customerData = {
+      customerCode: req.body.customerCode,
+      address: req.body.address,
+      primaryPhone: req.body.primaryPhone,
+      primaryEmail: req.body.primaryEmail,
+      coords: req.body.coords
+    }
+
+    customer_model.update(customerData)
+    response.type = 'success'
+    response.message = 'Información actualizada correctamente'
+    return res.send(response)
+  } catch (error) {
+    response.type = 'error'
+    response.message = '¡Oops! Hubo algunos errores al actualizar la información'
+    return res.send(response)
+  }
 }
 
 module.exports = { get, getSeller, update }
