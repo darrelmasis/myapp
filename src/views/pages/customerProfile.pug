@@ -13,103 +13,62 @@ block main
             .mt-3 
               h1.h5.card-title= `${customer.fullName}`  
               p.small.fw-semibold.text-secondary.mb-3= `${customer.customerCode }`
-              .d-flex.justify-content-evenly
-                a(href="#").btn.btn-light.text-muted
-                  i.far.fa-edit
-                a(href="#").btn.btn-light.text-muted
-                  i.far.fa-eye
-                a(href="#").btn.btn-light.text-muted
-                  i.far.fa-directions
-        ul.list-group.list-group-flush.bg-white.rounded.border.my-3.p-2
-          li.list-group-item.d-flex.justify-content-between
-            span.fw-semibold Última visita:
-            span.text-danger Ninguna
-          li.list-group-item.d-flex.justify-content-between
-            span.fw-semibold
-              i.far.fa-eye.me-2
-              | Visitas:
-            span.badge.bg-primary.rounded-pill 0
-      .col-md-9.d-none
-        .bg-white.rounded.border.py-3
-          h2.h4.mb-3.ms-3 Información del cliente
-          ul.list-group.list-group-flush
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Código:
-                .col-sm-9.text-secondary=`${customer.customerCode}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Nombre completo:
-                .col-sm-9.text-secondary=`${customer.fullName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Razón social:
-                .col-sm-9.text-secondary=`${customer.bussinessName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Dirección:
-                .col-sm-9.text-secondary=`${customer.address}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Móvil:
-                .col-sm-9.text-secondary=`${customer.secondaryPhone}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Correo:
-                .col-sm-9.text-secondary=`${customer.primaryEmail}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Tipo:
-                .col-sm-9.text-secondary=`${customer.type}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Vendedor:
-                .col-sm-9.text-secondary= `${customer.sellerFullName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Cliente desde:
-                .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
-      .col-md-9
+              .d-flex.justify-content-center
+                a(href="#" title="Visitar Cliente").btn.btn-primary.me-3
+                  i.far.fa-directions.fa-lg
+                button#getCoordsButton(type="button" title="Obtener Coordenadas").btn.btn-outline-success
+                  i.far.fa-location-crosshairs.fa-lg
+      .col-md-9.mb-3
         .bg-white.rounded.border.py-3
           h2.h4.mb-3.ms-3 Actualizar información del cliente
-          form(action="", method="post")
-          ul.list-group.list-group-flush
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Código:
-                .col-sm-9.text-secondary=`${customer.customerCode}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Nombre completo:
-                .col-sm-9.text-secondary=`${customer.fullName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Razón social:
-                .col-sm-9.text-secondary=`${customer.bussinessName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Dirección:
-                .col-sm-9
-                  input#address(type="text", name="address" value=`${customer.address}`).form-control.bg-light
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Móvil:
-                .col-sm-9
-                  input#primaryPhone(type="text", name="primaryPhone" value=`${customer.primaryPhone}`).form-control.bg-light
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Correo:
-                .col-sm-9
-                  input#primaryEmail(type="text", name="primaryEmail" value=`${customer.primaryEmail}`).form-control.bg-light
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Tipo:
-                .col-sm-9.text-secondary=`${customer.type}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Vendedor:
-                .col-sm-9.text-secondary= `${customer.sellerFullName}`
-            li.list-group-item.border-0
-              .row 
-                .col-sm-3.fw-semibold Cliente desde:
-                .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
+          form#customerForm(action="/cliente", method="POST")
+            ul.list-group.list-group-flush
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Código:
+                  #customerCode.col-sm-9.text-secondary=`${customer.customerCode}`
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Nombre completo:
+                  .col-sm-9.text-secondary=`${customer.fullName}`
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Razón social:
+                  .col-sm-9.text-secondary=`${customer.bussinessName}`
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Dirección:
+                  .col-sm-9
+                    input#address(type="text", name="address" value=`${customer.address}`).form-control.bg-light
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Móvil:
+                  .col-sm-9
+                    input#primaryPhone(type="text", name="primaryPhone" value=`${customer.primaryPhone}`).form-control.bg-light
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Correo:
+                  .col-sm-9
+                    input#primaryEmail(type="text", name="primaryEmail" value=`${customer.primaryEmail}`).form-control.bg-light
+              li.list-group-item.border-0
+                .row 
+                    .col-sm-3.fw-semibold Coordenadas:
+                    .col-sm-9
+                      input#coords(type="text", name="coords" value=`${customer.coords}`).form-control.bg-light
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Tipo:
+                  .col-sm-9.text-secondary=`${customer.type}`
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Vendedor:
+                  .col-sm-9.text-secondary= `${customer.sellerFullName}`
+              li.list-group-item.border-0
+                .row 
+                  .col-sm-3.fw-semibold Cliente desde:
+                  .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
+              .text-center.my-3
+                button#saveButton(type="submit").btn.btn-success.btn-lg.text-center.mb-3
+                  i.far.fa-save.me-3
+                  | Guardar
+                .text-danger.fw-semibold.small * Revisar bien la información antes de guardar
