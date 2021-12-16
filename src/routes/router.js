@@ -74,7 +74,7 @@ router.get('/signout/:username', userController.signout, (req, res) => {
 
 // Rutas para la búsqueda
 router.post('/search', searchController.search)
-
+router.post('/cliente', customerController.update)
 
 // Definimos los errores 404
 router.get('*', (req, res) => {

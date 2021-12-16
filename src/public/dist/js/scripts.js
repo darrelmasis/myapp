@@ -1242,7 +1242,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var signinForm = (0, _dom.select)('signinForm');
 var signupForm = (0, _dom.select)('signupForm');
-var searchForm = (0, _dom.select)('searchForm'); // Prepara el registro de los usuarios
+var searchForm = (0, _dom.select)('searchForm');
+var customerForm = (0, _dom.select)('customerForm');
+var getCoords = (0, _dom.select)('getCoordsButton'); // Prepara el registro de los usuarios
 
 var signup = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee(userData) {
@@ -1553,12 +1555,83 @@ if (searchForm) {
     var el = document.querySelector('.search-item__active');
     location.href = el.href;
   });
-}
+} // getPosition().then(res => {
+//   latitude.innerHTML = `Lat: ${res.coords.latitude}`
+//   longitude.innerHTML = `Lng: ${res.coords.longitude}`
+// })
 
-(0, _geolocation.default)().then(function (res) {
-  latitude.innerHTML = "Lat: ".concat(res.coords.latitude);
-  longitude.innerHTML = "Lng: ".concat(res.coords.longitude);
-});
+
+if (getCoords) {
+  getCoords.addEventListener('click', function (e) {
+    (0, _geolocation.default)().then(function (res) {
+      var currentCoords = "".concat(res.coords.latitude, ", ").concat(res.coords.longitude);
+      coords.value = currentCoords;
+    });
+  });
+} // Prepara la actualización de los clientes
+
+
+var customerUpdate = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee4(customerData) {
+    var data;
+    return _regeneratorRuntime.default.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            _context4.next = 2;
+            return (0, _postData.postData)('/cliente', 'POST', customerData);
+
+          case 2:
+            data = _context4.sent;
+            return _context4.abrupt("return", data);
+
+          case 4:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+
+  return function customerUpdate(_x4) {
+    return _ref4.apply(this, arguments);
+  };
+}(); // Envía los datos del formulario para actualizar la información de los clientes
+
+
+if (customerForm) {
+  customerForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    saveButton.value = 'Guardando...';
+    (0, _dom.addAttributes)(saveButton, {
+      disabled: ''
+    }); // Establece el boton como deshabilitado
+
+    var data = {
+      address: address.value,
+      primaryPhone: primaryPhone.value,
+      primaryEmail: primaryEmail.value,
+      coords: coords.value,
+      customerCode: customerCode.textContent
+    };
+    console.log(data);
+    customerUpdate(data).then(function (data) {
+      if (data.type === 'error' || data.type === 'empty') {
+        // mensajes de error
+        alert('Error');
+      } else {
+        // mensajes de éxito
+        (0, _dom.removeAttributes)(saveButton, {
+          disabled: ''
+        }); // Establece el boton como deshabilitado
+
+        alert('Éxito');
+      }
+    }).catch(function (error) {
+      console.log(error);
+    });
+  });
+}
 
 },{"./modules/dom":3,"./modules/geolocation":4,"./modules/postData":5,"mysql/lib/protocol/constants/charsets":1,"regenerator-runtime":2}]},{},[6]);
 

@@ -7,6 +7,8 @@ import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
 const searchForm = select('searchForm')
+const customerForm = select ('customerForm')
+const getCoords = select('getCoordsButton')
 
 // Prepara el registro de los usuarios
 const signup = async userData => {
@@ -223,7 +225,52 @@ if (searchForm) {
   })
 }
 
-getPosition().then(res => {
-  latitude.innerHTML = `Lat: ${res.coords.latitude}`
-  longitude.innerHTML = `Lng: ${res.coords.longitude}`
-})
+// getPosition().then(res => {
+//   latitude.innerHTML = `Lat: ${res.coords.latitude}`
+//   longitude.innerHTML = `Lng: ${res.coords.longitude}`
+// })
+
+if (getCoords) {
+  getCoords.addEventListener('click', e => {
+    getPosition().then(res => {
+      const currentCoords = `${res.coords.latitude}, ${res.coords.longitude}`
+      coords.value = currentCoords
+    })
+  })
+}
+
+// Prepara la actualización de los clientes
+const customerUpdate = async customerData => {
+  const data = await postData('/cliente', 'POST', customerData)
+  return data
+}
+// Envía los datos del formulario para actualizar la información de los clientes
+if (customerForm) {
+  customerForm.addEventListener('submit', e => {
+    e.preventDefault()
+    saveButton.value = 'Guardando...'
+    addAttributes(saveButton, { disabled: '' }) // Establece el boton como deshabilitado
+    const data = {
+      address: address.value,
+      primaryPhone: primaryPhone.value,
+      primaryEmail: primaryEmail.value,
+      coords: coords.value,
+      customerCode: customerCode.textContent
+    }
+    console.log(data)
+
+    customerUpdate(data)
+      .then(data => {
+        if (data.type === 'error' || data.type === 'empty') {
+          // mensajes de error
+          alert('Error')
+        } else {
+          // mensajes de éxito
+          removeAttributes(saveButton, { disabled: '' }) // Establece el boton como deshabilitado
+          alert('Éxito')
+        }
+      }).catch(error => {
+      console.log(error)
+    })
+  })
+}
