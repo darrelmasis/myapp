@@ -1,5 +1,5 @@
 import { select, addAttributes, removeAttributes, passVerify, nomProp, createCustomElement } from "./modules/dom";
-import regeneratorRuntime from "regenerator-runtime";
+import regeneratorRuntime, { async } from "regenerator-runtime";
 import { postData } from "./modules/postData";
 import getPosition from "./modules/geolocation"
 import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
@@ -7,6 +7,8 @@ import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
 const searchForm = select('searchForm')
+const userUpdateForm = select('userUpdateForm')
+const updateAvatarForm = select('updateAvatarForm')
 const customerForm = select ('customerForm')
 const getCoords = select('getCoordsButton')
 
@@ -233,8 +235,10 @@ if (searchForm) {
 if (getCoords) {
   getCoords.addEventListener('click', e => {
     getPosition().then(res => {
+      coords.value = ''
       const currentCoords = `${res.coords.latitude}, ${res.coords.longitude}`
       coords.value = currentCoords
+      console.log(res)
     })
   })
 }
@@ -257,7 +261,6 @@ if (customerForm) {
       coords: coords.value,
       customerCode: customerCode.textContent
     }
-    console.log(data)
 
     customerUpdate(data)
       .then(data => {
@@ -272,5 +275,62 @@ if (customerForm) {
       }).catch(error => {
       console.log(error)
     })
+  })
+}
+
+const userUpdate = async userData => {
+  const data = await postData('/userUpdate', 'POST', userData)
+  return data
+}
+
+if (userUpdateForm) {
+  userUpdateForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const buttonOriginalValue = saveButton.innerHTML
+    saveButton.innerHTML = '<i class="far fa-save me-2"></i> Guardando...'
+    addAttributes(saveButton, { disabled: '' }) // Establece el boton como deshabilitado
+    const data = {
+      userId: userId.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      gender: gender.value,
+      bio: bio.value
+    }
+
+    userUpdate(data)
+      .then(data => {
+        if (data.type === 'error' || data.type === 'empty') {
+          // mensajes de error
+          alert('Error')
+        } else {
+          message.innerHTML = 'Datos actualizados con éxito'
+          message.classList.remove('d-none')
+          setTimeout(() => {
+            message.innerHTML = ''
+            message.classList.add('d-none')
+            removeAttributes(saveButton, { disabled: '' }) // Establece el boton como deshabilitado
+          }, 3000);
+          setTimeout(() => {
+            // mensajes de éxito
+            saveButton.innerHTML = buttonOriginalValue
+          }, 500);
+        }
+      }).catch(error => {
+      console.log(error)
+    })
+  })
+}
+
+if (updateAvatarForm) {
+  updateAvatarForm.addEventListener('change', e => {
+    const formData = new FormData(updateAvatarForm)
+    var request = new XMLHttpRequest();
+    request.open("POST", "/update-avatar");
+    request.send(formData);
+    
+    // simular cambio de avatar
+    const file = formData.get('userAvatar')
+    const image = URL.createObjectURL(file)
+    avatarChange.setAttribute('src', image)
   })
 }

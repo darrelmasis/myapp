@@ -1224,9 +1224,11 @@ exports.postData = postData;
 },{}],6:[function(require,module,exports){
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var _dom = require("./modules/dom");
 
-var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+var _regeneratorRuntime = _interopRequireWildcard(require("regenerator-runtime"));
 
 var _postData = require("./modules/postData");
 
@@ -1236,6 +1238,10 @@ var _charsets = require("mysql/lib/protocol/constants/charsets");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -1243,6 +1249,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var signinForm = (0, _dom.select)('signinForm');
 var signupForm = (0, _dom.select)('signupForm');
 var searchForm = (0, _dom.select)('searchForm');
+var userUpdateForm = (0, _dom.select)('userUpdateForm');
+var updateAvatarForm = (0, _dom.select)('updateAvatarForm');
 var customerForm = (0, _dom.select)('customerForm');
 var getCoords = (0, _dom.select)('getCoordsButton'); // Prepara el registro de los usuarios
 
@@ -1564,8 +1572,10 @@ if (searchForm) {
 if (getCoords) {
   getCoords.addEventListener('click', function (e) {
     (0, _geolocation.default)().then(function (res) {
+      coords.value = '';
       var currentCoords = "".concat(res.coords.latitude, ", ").concat(res.coords.longitude);
       coords.value = currentCoords;
+      console.log(res);
     });
   });
 } // Prepara la actualización de los clientes
@@ -1614,7 +1624,6 @@ if (customerForm) {
       coords: coords.value,
       customerCode: customerCode.textContent
     };
-    console.log(data);
     customerUpdate(data).then(function (data) {
       if (data.type === 'error' || data.type === 'empty') {
         // mensajes de error
@@ -1630,6 +1639,87 @@ if (customerForm) {
     }).catch(function (error) {
       console.log(error);
     });
+  });
+}
+
+var userUpdate = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee5(userData) {
+    var data;
+    return _regeneratorRuntime.default.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return (0, _postData.postData)('/userUpdate', 'POST', userData);
+
+          case 2:
+            data = _context5.sent;
+            return _context5.abrupt("return", data);
+
+          case 4:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+
+  return function userUpdate(_x5) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+
+if (userUpdateForm) {
+  userUpdateForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var buttonOriginalValue = saveButton.innerHTML;
+    saveButton.innerHTML = '<i class="far fa-save me-2"></i> Guardando...';
+    (0, _dom.addAttributes)(saveButton, {
+      disabled: ''
+    }); // Establece el boton como deshabilitado
+
+    var data = {
+      userId: userId.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      gender: gender.value,
+      bio: bio.value
+    };
+    userUpdate(data).then(function (data) {
+      if (data.type === 'error' || data.type === 'empty') {
+        // mensajes de error
+        alert('Error');
+      } else {
+        message.innerHTML = 'Datos actualizados con éxito';
+        message.classList.remove('d-none');
+        setTimeout(function () {
+          message.innerHTML = '';
+          message.classList.add('d-none');
+          (0, _dom.removeAttributes)(saveButton, {
+            disabled: ''
+          }); // Establece el boton como deshabilitado
+        }, 3000);
+        setTimeout(function () {
+          // mensajes de éxito
+          saveButton.innerHTML = buttonOriginalValue;
+        }, 500);
+      }
+    }).catch(function (error) {
+      console.log(error);
+    });
+  });
+}
+
+if (updateAvatarForm) {
+  updateAvatarForm.addEventListener('change', function (e) {
+    var formData = new FormData(updateAvatarForm);
+    var request = new XMLHttpRequest();
+    request.open("POST", "/update-avatar");
+    request.send(formData); // simular cambio de avatar
+
+    var file = formData.get('userAvatar');
+    var image = URL.createObjectURL(file);
+    avatarChange.setAttribute('src', image);
   });
 }
 
