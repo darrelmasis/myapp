@@ -1,0 +1,58 @@
+extends ../templates/template
+append config
+  - pageTitle= `${user.fullName}`
+  - genderVal= `${user.gender}`
+block main
+  include ../layout/header
+  .container.mt-3.mb-5
+    h1.h2.mb-3.text-center Editar Perfil
+    #profileEdit.card.text-center.bg-white.rounded.border.mb-3.m-auto
+      .card-body
+        .image-large.mb-5
+          form#updateAvatarForm(action="/update-avatar", method="POST" enctype="multipart/form-data" ) 
+            #avatar.rounded-circle
+              img#avatarChange(src=`/storage/${user.username}/${user.avatar}` alt="foto del cliente").w-100
+              label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100.text-center
+                i.far.fa-camera.fa-xl.text-light
+              input#userAvatar(type="file", name="userAvatar" hidden)
+        form#userUpdateForm(action="/userUpdate", method="POST")
+          .row
+            .col-md-6.text-start
+              .form-group.mb-3
+                label(for="firstName").mb-2.fw-semibold Nombre
+                input#firstName(type="text", name="firstName" placeholder="Nombre" value=`${user.fullName.split(' ')[0]}`).form-control
+              .form-group.mb-3
+                label(for="gender").mb-2.fw-semibold Género
+                select#gender(name="gender").form-select
+                  option(value="") -Seleccionar-
+                  option(value="Masculino") Masculino
+                  option(value="Femenino") Femenino
+
+                  script.
+                    let select = document.getElementById('gender')
+                    for (let i= 0; i < select.options.length; i++) {
+                      if(select[i].value == "#{genderVal}") {
+                        select[i].setAttribute('selected', 'true')
+                      }
+                    }
+            .col-md-6.text-start
+              .form-group.mb-3
+                label(for="lastName").mb-2.fw-semibold Apellido
+                input#userId(type="text", hidden name="userId" value=`${user.id}`)
+                input#lastName(type="text", name="lastName" placeholder="Apellido" value=`${user.fullName.split(' ')[1]}`).form-control
+              .form-group.mb-3
+                label(for="email").mb-2.fw-semibold Correo Electrónico
+                input#email(type="text", name="email" readonly placeholder="Correo Electrónico" value=`${user.email}`).form-control.text-secondary
+          .row 
+            .col-md-12.text-start
+              .form-group
+              label(for="bio").mb-2.fw-semibold Biografía
+              if user.bio == null
+                textarea#bio(name="bio", rows="3" placeholder="Escribe algo sobre ti...").form-control
+              else 
+                textarea#bio(name="bio", rows="3" placeholder="Escribe algo sobre ti...").form-control=  `${user.bio}`
+
+          #message.alert.alert-success.text-center.mt-3.d-none
+          button#saveButton(type="submit").btn.btn-primary.mt-3
+            i.far.fa-save.me-2
+            | Guardar Cambios
