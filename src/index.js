@@ -6,8 +6,8 @@ const router = require('./routes/router')
 const path = require('path')
 const port = process.env.PORT || 3000
 const cookieParser = require('cookie-parser')
-
-
+const cors = require('cors')
+app.use(cors())
 // Configuración básica
 app.set('title', 'myapp')
 app.set('port', port)
