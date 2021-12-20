@@ -1,9 +1,11 @@
 const express = require('express')
+const app = express()
 const router = express.Router()
 const bcrypt = require('bcryptjs')
 const userController = require('../controllers/user_controller')
 const customerController = require('../controllers/customer_controller')
 const searchController = require('../controllers/search_controller')
+
 
 router.get('/', userController.isLogged, (req, res) => {
   if (res.isLogged) {
@@ -74,11 +76,30 @@ router.get('/signout/:username', userController.signout, (req, res) => {
 
 // Rutas para la búsqueda
 router.post('/search', searchController.search)
+
+// Ruta para la actualización de los clientes
 router.post('/cliente', customerController.update)
+
+// Ruta para la edición del perfil del usuario
+router.get('/editar-perfil', userController.isLogged, (req, res) => {
+  // si está logueado
+  if (res.isLogged) {
+      res.render('userProfileEdit', {user: res.data })
+    // }
+  } else {
+    res.redirect('/signin')
+  }
+})
+
+// Ruta para la actualización del perfil  de usuario
+router.post('/userUpdate', userController.update)
+
+// Ruta para la actualización del avatar  de usuario
+router.post('/update-avatar',  userController.isLogged, userController.upload.single('userAvatar'), userController.updateAvatar)
 
 // Definimos los errores 404
 router.get('*', (req, res) => {
-  res.status(404).render('404')
+  res.status(404).render('404') 
 })
 
 

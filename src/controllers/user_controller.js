@@ -2,6 +2,11 @@ const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/user_model')
 const { promisify } = require('util')
+const user_model = require('../models/user_model')
+const multer = require('multer')
+const mimeTypes = require('mime-types')
+const fs = require('fs');
+
 let response = {}
 
 const signup = async (req, res) => {
@@ -12,6 +17,7 @@ const signup = async (req, res) => {
       email: req.body.email.toLowerCase(),
       password: await bcryptjs.hash(req.body.password, 8),
       gender: req.body.gender,
+      avatar: 'defect.png',
       createTime: new Date()
     }
     const exist = await userModel.exist(user.email)
@@ -99,6 +105,7 @@ const isLogged = async (req, res, next) => {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
       await userModel.isLogged(id.id).then(data => {
         res.data = data[0]
+        req.data = data[0]
         res.isLogged = true
         return next()
       })
@@ -135,4 +142,56 @@ const signout = (req, res) => {
   res.redirect(`/signin?user=${req.params.username}`)
 }
 
-module.exports = { signup, signin, isLogged, get, signout }
+const update = async (req, res) => {
+  try {
+    const userData = {
+      fullName: req.body.firstName + ' ' + req.body.lastName,
+      gender: req.body.gender,
+      bio: req.body.bio
+    }
+    const userId = req.body.userId
+
+    user_model.update(userId,userData)
+    response.type = 'success'
+    response.message = 'Información actualizada correctamente'
+    return res.send(response)
+  } catch (error) {
+    response.type = 'error'
+    response.message = '¡Oops! Hubo algunos errores al actualizar la información'
+    return res.send(response)
+  }
+}
+
+const storage = multer.diskStorage({
+  destination: async (req, file, cb) => {
+    if (!fs.existsSync(`src/public/storage/${req.data.username}`)){
+      fs.mkdirSync(`src/public/storage/${req.data.username}`)
+    }
+      cb('', `src/public/storage/${req.data.username}`)
+  },
+  filename: async (req, file, cb) => {
+    // const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
+    cb('', 'avatar.' + mimeTypes.extension(file.mimetype))
+  }
+})
+
+const upload = multer({ storage })
+
+const updateAvatar = async (req, res) => {
+  try {
+    const id = res.data.id
+    const data = {
+      avatar: req.file.filename
+    }
+    user_model.update(id,data)
+    response.type = 'success'
+    response.message = 'Información actualizada correctamente'
+    return res.send(response)
+  } catch (error) {
+    response.type = 'error'
+    response.message = '¡Oops! Hubo algunos errores al actualizar la información'
+    return res.send(response)
+  }
+}
+
+module.exports = { signup, signin, isLogged, get, signout, update, updateAvatar, upload}
