@@ -9,22 +9,21 @@ block main
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
             .image-large
-              img(src="/dist/assets/defect.png" alt="foto del cliente").w-100
+              if userProfile.avatar == '' || userProfile.avatar == 'defect.png' || userProfile.avatar == null
+                img(src=`../dist/assets/defect.png` alt="avatar").w-100
+              else
+                img(src=`/storage/${userProfile.username}/${userProfile.avatar}` alt="avatar").w-100
             .mt-3 
               h1.h5.card-title= `${userProfile.fullName}`  
               p.small.fw-semibold.text-secondary.mb-3= `@${userProfile.username }`
+              if userProfile.bio !== null && userProfile.bio !== ''
+                p.text-secondary.mb-3= `${userProfile.bio }`
               if userProfile.active 
-                a(href="#").btn.btn-primary.fw-semibold
+                a(href="/editar-perfil").btn.btn-sm.btn-primary.fw-semibold
                   i.far.fa-edit.me-2
-                  | Editar
+                  | Editar perfil
               else
                 a(href="#").btn.btn-outline-primary.fw-semibold 
                   i.far.fa-plus.me-2 
                   | Agregar
-            .geolocation.mt-3
-              #latitude
-                .text-secondary Lat: sin datos
-              #longitude
-                .text-secondary Lng: sin datos
-              
       .col-md-9

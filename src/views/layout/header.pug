@@ -1,3 +1,8 @@
+.alert.alert-warning.alert-dismissible.fade.show.text-center.mb-0
+  button(type="button" data-bs-dismiss="alert" aria-label="Close").btn-close
+  | Estás usando una versión 
+  span.fw-semibold BETA 
+  | de la aplicación
 header.main-header.border-bottom
   nav.navbar.navbar-expand.navbar-light.bg-white
     .container 
@@ -11,12 +16,12 @@ header.main-header.border-bottom
         li.nav-item.dropdown
           button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
             .image-small.me-2
-              img(src="/dist/assets/defect.png" alt="Avatar").w-100
+              img(src=`/storage/${user.username}/${user.avatar}` alt="Avatar").w-100
             span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
             .dropdown-item-text.d-flex.align-items-center.mb-3
               .image-medium.me-2 
-                img(src="/dist/assets/defect.png" alt="Avatar").w-100
+                img(src=`/storage/${user.username}/${user.avatar}` alt="Avatar").w-100
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`

@@ -68,7 +68,8 @@ block main
                   .col-sm-3.fw-semibold Cliente desde:
                   .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
               .text-center.my-3
-                button#saveButton(type="submit").btn.btn-success.btn-lg.text-center.mb-3
-                  i.far.fa-save.me-3
-                  | Guardar
+                button#saveButton(type="submit").btn.btn-success.text-center.mb-3
+                  i.far.fa-save.me-2
+                  | Guardar cambios
                 .text-danger.fw-semibold.small * Revisar bien la información antes de guardar
+    #customersMap.mb-5.rounded.border.bg-light
