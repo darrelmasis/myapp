@@ -18,6 +18,14 @@ class User {
     }
   }
 
+  async update(userId, data) {
+    try {
+      return await baseModel.update('users', data, `WHERE id = '${userId}'`)
+    } catch (error) {
+      return error
+    }
+  }
+
   async signin(data) {
     try {
       return await baseModel.read('*', 'users', 'WHERE username = ? OR email = ?', [data.username, data.username])

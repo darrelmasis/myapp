@@ -80,7 +80,6 @@ class Base_model {
     });
 
     const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
-    console.log(query)
     connection.query(query, (err, result) => {
       if (err) {
         return console.log(err)
