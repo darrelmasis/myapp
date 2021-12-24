@@ -6,6 +6,7 @@ const user_model = require('../models/user_model')
 const multer = require('multer')
 const mimeTypes = require('mime-types')
 const fs = require('fs');
+const jimp = require('jimp')
 
 let response = {}
 
@@ -17,7 +18,7 @@ const signup = async (req, res) => {
       email: req.body.email.toLowerCase(),
       password: await bcryptjs.hash(req.body.password, 8),
       gender: req.body.gender,
-      avatar: 'defect.png',
+      avatar: 'avatar.png',
       createTime: new Date()
     }
     const exist = await userModel.exist(user.email)
@@ -40,6 +41,10 @@ const signup = async (req, res) => {
         userModel.create(user)
         response.type = 'success'
         response.message = 'Usuario registrado correctamente'
+        fs.mkdirSync(`src/public/storage/${user.username}`, { recursive: true })
+        fs.copyFile('src/public/dist/assets/defect.png', `src/public/storage/${user.username}/avatar.png`, (err) => {
+          if (err) throw err;
+        });
         return res.send(response)
       }
     }
@@ -162,16 +167,16 @@ const update = async (req, res) => {
   }
 }
 
+let timeStamp = Date.now()
+
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-    if (!fs.existsSync(`src/public/storage/${req.data.username}`)){
-      fs.mkdirSync(`src/public/storage/${req.data.username}`)
-    }
-      cb('', `src/public/storage/${req.data.username}`)
+      cb('', `src/public/storage/${req.data.username}/`)
   },
   filename: async (req, file, cb) => {
-    // const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
-    cb('', 'avatar.' + mimeTypes.extension(file.mimetype))
+
+    const imagePath = `${timeStamp}.jpg`
+    cb('', imagePath)
   }
 })
 
@@ -181,11 +186,13 @@ const updateAvatar = async (req, res) => {
   try {
     const id = res.data.id
     const data = {
-      avatar: req.file.filename
+      avatar: `${timeStamp}.jpg`
     }
+
     user_model.update(id,data)
     response.type = 'success'
     response.message = 'Información actualizada correctamente'
+
     return res.send(response)
   } catch (error) {
     response.type = 'error'

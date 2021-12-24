@@ -95,7 +95,7 @@ router.get('/editar-perfil', userController.isLogged, (req, res) => {
 router.post('/userUpdate', userController.update)
 
 // Ruta para la actualización del avatar  de usuario
-router.post('/update-avatar',  userController.isLogged, userController.upload.single('userAvatar'), userController.updateAvatar)
+router.post('/update-avatar', userController.isLogged, userController.upload.single('userAvatar'), userController.updateAvatar)
 
 // Definimos los errores 404
 router.get('*', (req, res) => {

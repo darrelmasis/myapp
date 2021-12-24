@@ -3,13 +3,15 @@ import regeneratorRuntime, { async } from "regenerator-runtime";
 import { postData } from "./modules/postData";
 import getPosition from "./modules/geolocation"
 import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
+import jimp from "jimp"
+import fs from "fs"
 
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
 const searchForm = select('searchForm')
 const userUpdateForm = select('userUpdateForm')
 const updateAvatarForm = select('updateAvatarForm')
-const customerForm = select ('customerForm')
+const customerForm = select('customerForm')
 const getCoords = select('getCoordsButton')
 
 // Prepara el registro de los usuarios
@@ -33,8 +35,8 @@ if (signupForm) {
     }
     passwordOk === true ? data.password = password.value : data.password = ''
     signup(data)
-      .then(data => {
-        if (data.type === 'error' || data.type === 'empty') {
+      .then(dataResponse => {
+        if (dataResponse.type === 'error' || dataResponse.type === 'empty') {
           messages.classList.remove('text-success')
           messages.classList.add('text-danger')
           removeAttributes(btnSubmit, { disabled: '' }) // Establece el boton como habilitado
@@ -48,7 +50,7 @@ if (signupForm) {
           window.location.href = `/signin?user=${data.username}` // redirige al usuario al inicio de sesión y se autocompleta el campo del nombre de usuario
         }
         messages.classList.remove('visually-hidden')
-        messages.innerHTML = data.message
+        messages.innerHTML = dataResponse.message
       }).catch(error => {
         console.log('Error: ' + error)
         btnSubmit.value = 'Registrarse'
@@ -190,7 +192,7 @@ if (searchForm) {
                 // Limpiamos los resultados anteriores
                 searchResults.innerHTML = ''
                 resultsMessage.innerHTML = ''
-                
+
                 // Mostramos estados de resultados
                 resultsState.innerHTML = `<div class="text-muted small text-end me-3">Mostrando ${LIMIT} resultados de ${response.message.length}</div>`
                 for (let i = 0; i < LIMIT; i++) {
@@ -316,21 +318,77 @@ if (userUpdateForm) {
           }, 500);
         }
       }).catch(error => {
-      console.log(error)
+        console.log(error)
+      })
     })
-  })
-}
+  }
 
 if (updateAvatarForm) {
   updateAvatarForm.addEventListener('change', e => {
+
+    /**
+     * Cargar la imágen
+     */
     const formData = new FormData(updateAvatarForm)
-    var request = new XMLHttpRequest();
-    request.open("POST", "/update-avatar");
-    request.send(formData);
-    
-    // simular cambio de avatar
-    const file = formData.get('userAvatar')
-    const image = URL.createObjectURL(file)
-    avatarChange.setAttribute('src', image)
+    const reader = new FileReader()
+    reader.readAsDataURL(formData.get('userAvatar'))
+    /**
+     * Recortar imagen
+     */
+    reader.addEventListener('load', () => {
+      jimp.read(reader.result).then(image => {
+        const imageWidth = image.getWidth()
+        const imageHeight = image.getHeight()
+
+        let x, y, w, h;
+        if (imageWidth !== imageHeight) {
+          if (imageHeight > imageWidth) {
+            x = 0
+            y = imageHeight / 4
+            w = imageWidth
+            h = imageWidth
+          } else {
+            x = imageWidth / 4
+            y = 0
+            w = imageHeight
+            h = imageHeight
+          }
+          image.crop(x, y, w, h)
+        }
+        image.resize(170, 170)
+        image.quality(60)
+        image.getBase64(jimp.AUTO, async (err, res) => {
+          // // simular cambio de avatar
+          avatarChange.setAttribute('src', res)
+          
+          const response = await fetch(res)
+          const myBlob = await response.blob()
+          const newFormData = new FormData()
+          newFormData.append('userAvatar', myBlob, 'name.jpg')
+          const request = new XMLHttpRequest();
+          request.open("POST", '/update-avatar');
+
+          request.addEventListener('load', e => { 
+            if (request.readyState === request.DONE) {
+              switch (request.status) {
+                case 200:
+                  const data = JSON.parse(e.target.responseText)
+                  break;
+              }
+            }
+          })
+          request.send(newFormData)
+        })
+      })
+    })
+    /**
+     * Enviar imagen al servidor
+     */
+
+
+
+    //   // Tratar imágen    const formData = new FormData(updateAvatarForm)
+
+
   })
 }
