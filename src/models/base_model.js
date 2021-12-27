@@ -84,7 +84,7 @@ class Base_model {
       if (err) {
         return console.log(err)
       } else {
-        return console.log(result)
+        return result
       }
     })
 
