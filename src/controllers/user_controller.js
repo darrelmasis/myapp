@@ -2,11 +2,17 @@ const bcryptjs = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const userModel = require('../models/user_model')
 const { promisify } = require('util')
-const user_model = require('../models/user_model')
 const multer = require('multer')
-const mimeTypes = require('mime-types')
-const fs = require('fs');
-const jimp = require('jimp')
+const fs = require('fs');  
+const { async } = require('regenerator-runtime')
+const cloudinary = require('cloudinary').v2
+
+const cloudinaryConfig = {
+  cloud_name: 'darrelmasis', 
+  api_key: '956779834764534', 
+  api_secret: '2I-HxI_MVDQ-kKlZ3tEyWS-4t9A' 
+}
+cloudinary.config(cloudinaryConfig)
 
 let response = {}
 
@@ -41,10 +47,6 @@ const signup = async (req, res) => {
         userModel.create(user)
         response.type = 'success'
         response.message = 'Usuario registrado correctamente'
-        fs.mkdirSync(`src/public/storage/${user.username}`, { recursive: true })
-        fs.copyFile('src/public/dist/assets/defect.png', `src/public/storage/${user.username}/avatar.png`, (err) => {
-          if (err) throw err;
-        });
         return res.send(response)
       }
     }
@@ -77,6 +79,7 @@ const signin = async (req, res) => {
       } else {
         let results = await userModel.signin(user)
         results = results[0]
+
         if (!(await bcryptjs.compare(user.password, results.password))) {
           response.type = 'error'
           response.message = 'Usuario o contraseña inconrrecto'
@@ -93,6 +96,7 @@ const signin = async (req, res) => {
           response.message = 'Iniciando sesión...'
           return res.send(response)
         }
+
       }
     }
 
@@ -110,7 +114,7 @@ const isLogged = async (req, res, next) => {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
       await userModel.isLogged(id.id).then(data => {
         res.data = data[0]
-        req.data = data[0]
+        res.data.cloud = `https://res.cloudinary.com/${res.data.username}/image/upload` //url del cloud storage CDN
         res.isLogged = true
         return next()
       })
@@ -134,6 +138,7 @@ const get = async (req, res, next) => {
           return next()
         } else {
           res.userProfile = data[0]
+          data[0].cloud = `https://res.cloudinary.com/${data[0].username}/image/upload` //url del cloud storage CDN
           return next()
         }
       })
@@ -156,7 +161,7 @@ const update = async (req, res) => {
     }
     const userId = req.body.userId
 
-    user_model.update(userId,userData)
+    userModel.update(userId,userData)
     response.type = 'success'
     response.message = 'Información actualizada correctamente'
     return res.send(response)
@@ -171,7 +176,7 @@ let timeStamp = Date.now()
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-      cb('', `src/public/storage/${req.data.username}/`)
+      cb('', `src/public/storage/`)
   },
   filename: async (req, file, cb) => {
 
@@ -179,20 +184,21 @@ const storage = multer.diskStorage({
     cb('', imagePath)
   }
 })
-
 const upload = multer({ storage })
 
 const updateAvatar = async (req, res) => {
   try {
     const id = res.data.id
-    const data = {
-      avatar: `${timeStamp}.jpg`
-    }
+    await cloudinary.uploader.upload(req.file.path, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
+      const data = {
+        avatar: `v${result.version}/${result.public_id}.${ result.format }`
+      }
+      userModel.update(id, data)
+      response.type = 'success'
+      response.message = 'Información actualizada correctamente'
+    })
 
-    user_model.update(id,data)
-    response.type = 'success'
-    response.message = 'Información actualizada correctamente'
-
+    fs.unlinkSync(req.file.path) // elimina los archivos locales en ./storage
     return res.send(response)
   } catch (error) {
     response.type = 'error'
