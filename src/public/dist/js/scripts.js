@@ -49838,20 +49838,21 @@ if (updateAvatarForm) {
                   case 0:
                     // // simular cambio de avatar
                     avatarChange.setAttribute('src', res);
-                    _context6.next = 3;
+                    headerAvatar.setAttribute('src', res);
+                    _context6.next = 4;
                     return fetch(res);
 
-                  case 3:
+                  case 4:
                     response = _context6.sent;
-                    _context6.next = 6;
+                    _context6.next = 7;
                     return response.blob();
 
-                  case 6:
+                  case 7:
                     myBlob = _context6.sent;
                     newFormData = new FormData();
-                    newFormData.append('userAvatar', myBlob, 'name.jpg');
+                    newFormData.append('userAvatar', myBlob, 'avatar.jpg');
                     request = new XMLHttpRequest();
-                    request.open("POST", '/update-avatar');
+                    request.open("POST", '/update-avatar', true);
                     request.addEventListener('load', function (e) {
                       if (request.readyState === request.DONE) {
                         switch (request.status) {
@@ -49863,7 +49864,7 @@ if (updateAvatarForm) {
                     });
                     request.send(newFormData);
 
-                  case 13:
+                  case 14:
                   case "end":
                     return _context6.stop();
                 }
@@ -49877,10 +49878,6 @@ if (updateAvatarForm) {
         }());
       });
     });
-    /**
-     * Enviar imagen al servidor
-     */
-    //   // Tratar imágen    const formData = new FormData(updateAvatarForm)
   });
 }
 

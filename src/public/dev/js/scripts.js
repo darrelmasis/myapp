@@ -360,14 +360,14 @@ if (updateAvatarForm) {
         image.getBase64(jimp.AUTO, async (err, res) => {
           // // simular cambio de avatar
           avatarChange.setAttribute('src', res)
+          headerAvatar.setAttribute('src', res)
           
           const response = await fetch(res)
           const myBlob = await response.blob()
           const newFormData = new FormData()
-          newFormData.append('userAvatar', myBlob, 'name.jpg')
+          newFormData.append('userAvatar', myBlob, 'avatar.jpg')
           const request = new XMLHttpRequest();
-          request.open("POST", '/update-avatar');
-
+          request.open("POST", '/update-avatar', true);
           request.addEventListener('load', e => { 
             if (request.readyState === request.DONE) {
               switch (request.status) {
@@ -377,18 +377,9 @@ if (updateAvatarForm) {
               }
             }
           })
-          request.send(newFormData)
+          request.send(newFormData)  
         })
       })
     })
-    /**
-     * Enviar imagen al servidor
-     */
-
-
-
-    //   // Tratar imágen    const formData = new FormData(updateAvatarForm)
-
-
   })
 }
