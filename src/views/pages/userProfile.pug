@@ -12,7 +12,7 @@ block main
               if userProfile.avatar == '' || userProfile.avatar == 'defect.png' || userProfile.avatar == null
                 img(src=`../dist/assets/defect.png` alt="avatar").w-100
               else
-                img(src=`/storage/${userProfile.username}/${userProfile.avatar}` alt="avatar").w-100
+                img(src=`${userProfile.cloud}/${user.avatar}` alt="avatar").w-100
             .mt-3 
               h1.h5.card-title= `${userProfile.fullName}`  
               p.small.fw-semibold.text-secondary.mb-3= `@${userProfile.username }`
