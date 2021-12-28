@@ -173,23 +173,13 @@ const update = async (req, res) => {
 }
 
 let timeStamp = Date.now()
-
-const storage = multer.diskStorage({
-  destination: async (req, file, cb) => {
-      cb('', `src/public/storage/`)
-  },
-  filename: async (req, file, cb) => {
-
-    const imagePath = `${timeStamp}.jpg`
-    cb('', imagePath)
-  }
-})
-const upload = multer({ storage })
+const memoryStorage = multer.memoryStorage()
+const upload = multer({ memoryStorage })
 
 const updateAvatar = async (req, res) => {
   try {
     const id = res.data.id
-    await cloudinary.uploader.upload(req.file.path, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
+    await cloudinary.uploader.upload(req.body.userAvatarBase64, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
       const data = {
         avatar: `v${result.version}/${result.public_id}.${ result.format }`
       }
