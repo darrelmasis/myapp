@@ -114,7 +114,7 @@ const isLogged = async (req, res, next) => {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
       await userModel.isLogged(id.id).then(data => {
         res.data = data[0]
-        res.data.cloud = `https://res.cloudinary.com/${res.data.username}/image/upload` //url del cloud storage CDN
+        res.data.cloud = `https://res.cloudinary.com/darrelmasis/image/upload` //url del cloud storage CDN
         res.isLogged = true
         return next()
       })
@@ -138,7 +138,7 @@ const get = async (req, res, next) => {
           return next()
         } else {
           res.userProfile = data[0]
-          data[0].cloud = `https://res.cloudinary.com/${data[0].username}/image/upload` //url del cloud storage CDN
+          data[0].cloud = `https://res.cloudinary.com/darrelmasis/image/upload` //url del cloud storage CDN
           return next()
         }
       })
