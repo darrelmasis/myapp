@@ -44,10 +44,19 @@ const signup = async (req, res) => {
           response.message = 'Las contraseñas no coinciden'
           return res.send(response)
         }
-        userModel.create(user)
-        response.type = 'success'
-        response.message = 'Usuario registrado correctamente'
-        return res.send(response)
+        let defaultAvatar = ''
+        if (user.gender === 'Masculino') {
+          defaultAvatar = 'male-avatar.png'
+        } else {
+          defaultAvatar = 'female-avatar.png'
+        }
+        await cloudinary.uploader.upload(`src/public/dist/assets/${defaultAvatar}`, { public_id: `${user.username}/avatar` }, (error, result) => {
+          user.avatar = `v${result.version}/${result.public_id}.${ result.format }`
+          userModel.create(user)
+          response.type = 'success'
+          response.message = 'Usuario registrado correctamente'
+          return res.send(response)
+        })
       }
     }
 
