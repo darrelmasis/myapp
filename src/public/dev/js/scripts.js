@@ -366,6 +366,7 @@ if (updateAvatarForm) {
           const myBlob = await response.blob()
           const newFormData = new FormData()
           newFormData.append('userAvatar', myBlob, 'avatar.jpg')
+          newFormData.append('userAvatarBase64', res)
           const request = new XMLHttpRequest();
           request.open("POST", '/update-avatar', true);
           request.addEventListener('load', e => { 

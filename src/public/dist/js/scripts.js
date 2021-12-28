@@ -49851,6 +49851,7 @@ if (updateAvatarForm) {
                     myBlob = _context6.sent;
                     newFormData = new FormData();
                     newFormData.append('userAvatar', myBlob, 'avatar.jpg');
+                    newFormData.append('userAvatarBase64', res);
                     request = new XMLHttpRequest();
                     request.open("POST", '/update-avatar', true);
                     request.addEventListener('load', function (e) {
@@ -49864,7 +49865,7 @@ if (updateAvatarForm) {
                     });
                     request.send(newFormData);
 
-                  case 14:
+                  case 15:
                   case "end":
                     return _context6.stop();
                 }
