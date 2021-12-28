@@ -49068,6 +49068,50 @@ function extend() {
 },{}],238:[function(require,module,exports){
 "use strict";
 
+var Jimp = require('jimp');
+
+var crop = function crop(imageFile, aspectRatio, newSize) {
+  return new Promise(function (resolve) {
+    // Lee la imágen
+    Jimp.read(imageFile).then(function (img) {
+      // Define las propiedadesde la imagen
+      var image = {};
+      image.width = img.getWidth();
+      image.height = img.getHeight();
+      image.aspectRatio = image.width / image.height;
+      image.outputWidth = image.width;
+      image.outputHeight = image.height;
+      /* Si es mayor que nuestro aspectRatio
+        Asigna el ancho y alto de la imagen */
+
+      if (image.aspectRatio > aspectRatio) {
+        image.outputWidth = image.height * aspectRatio;
+      } else if (image.aspectRatio < aspectRatio) {
+        image.outputHeight = image.width / aspectRatio;
+      } // Calcula la posición a recortar la imágen
+
+
+      image.x = (image.width - image.outputWidth) * .5;
+      image.y = (image.height - image.outputHeight) * .5; // Recorta la imágen
+
+      img.crop(image.x, image.y, image.outputWidth, image.outputHeight); // Redimenciona la imágen
+
+      img.resize(170, 170); // Comprime la imagen
+
+      img.quality(70); // Obtiene el URI en base64
+
+      img.getBase64(Jimp.AUTO, function (err, res) {
+        return resolve(res);
+      });
+    });
+  });
+};
+
+module.exports = crop;
+
+},{"jimp":124}],239:[function(require,module,exports){
+"use strict";
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -49175,7 +49219,7 @@ var nomProp = function nomProp(string) {
 
 exports.nomProp = nomProp;
 
-},{}],239:[function(require,module,exports){
+},{}],240:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49248,7 +49292,7 @@ var get = /*#__PURE__*/function () {
 var _default = get;
 exports.default = _default;
 
-},{}],240:[function(require,module,exports){
+},{}],241:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49300,7 +49344,7 @@ var postData = /*#__PURE__*/function () {
 
 exports.postData = postData;
 
-},{}],241:[function(require,module,exports){
+},{}],242:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -49315,7 +49359,9 @@ var _geolocation = _interopRequireDefault(require("./modules/geolocation"));
 
 var _charsets = require("mysql/lib/protocol/constants/charsets");
 
-var _jimp = _interopRequireDefault(require("jimp"));
+var _jimp = _interopRequireWildcard(require("jimp"));
+
+var _cropImage = _interopRequireDefault(require("../js/modules/cropImage"));
 
 var _fs = _interopRequireDefault(require("fs"));
 
@@ -49324,6 +49370,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -49801,87 +49853,82 @@ if (updateAvatarForm) {
     var formData = new FormData(updateAvatarForm);
     var reader = new FileReader();
     reader.readAsDataURL(formData.get('userAvatar'));
+    loader.classList.remove('d-none');
+    uploadAvatar.classList.add('d-none');
     /**
      * Recortar imagen
      */
 
     reader.addEventListener('load', function () {
-      _jimp.default.read(reader.result).then(function (image) {
-        var imageWidth = image.getWidth();
-        var imageHeight = image.getHeight();
-        var x, y, w, h;
+      (0, _cropImage.default)(reader.result, 1, 170).then( /*#__PURE__*/function () {
+        var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(result) {
+          var avatars, _iterator, _step, element, response, myBlob, request;
 
-        if (imageWidth !== imageHeight) {
-          if (imageHeight > imageWidth) {
-            x = 0;
-            y = imageHeight / 4;
-            w = imageWidth;
-            h = imageWidth;
-          } else {
-            x = imageWidth / 4;
-            y = 0;
-            w = imageHeight;
-            h = imageHeight;
-          }
+          return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
+            while (1) {
+              switch (_context6.prev = _context6.next) {
+                case 0:
+                  // Simular cambio en tiempo real del avatar
+                  avatars = document.getElementsByClassName('avatar');
+                  _iterator = _createForOfIteratorHelper(avatars);
 
-          image.crop(x, y, w, h);
-        }
+                  try {
+                    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                      element = _step.value;
+                      element.src = result;
+                    }
+                  } catch (err) {
+                    _iterator.e(err);
+                  } finally {
+                    _iterator.f();
+                  }
 
-        image.resize(170, 170);
-        image.quality(60);
-        image.getBase64(_jimp.default.AUTO, /*#__PURE__*/function () {
-          var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime.default.mark(function _callee6(err, res) {
-            var response, myBlob, newFormData, request;
-            return _regeneratorRuntime.default.wrap(function _callee6$(_context6) {
-              while (1) {
-                switch (_context6.prev = _context6.next) {
-                  case 0:
-                    // // simular cambio de avatar
-                    avatarChange.setAttribute('src', res);
-                    headerAvatar.setAttribute('src', res);
-                    _context6.next = 4;
-                    return fetch(res);
+                  _context6.next = 5;
+                  return fetch(result);
 
-                  case 4:
-                    response = _context6.sent;
-                    _context6.next = 7;
-                    return response.blob();
+                case 5:
+                  response = _context6.sent;
+                  _context6.next = 8;
+                  return response.blob();
 
-                  case 7:
-                    myBlob = _context6.sent;
-                    newFormData = new FormData();
-                    newFormData.append('userAvatar', myBlob, 'avatar.jpg');
-                    newFormData.append('userAvatarBase64', res);
-                    request = new XMLHttpRequest();
-                    request.open("POST", '/update-avatar', true);
-                    request.addEventListener('load', function (e) {
-                      if (request.readyState === request.DONE) {
-                        switch (request.status) {
-                          case 200:
-                            var data = JSON.parse(e.target.responseText);
-                            break;
-                        }
+                case 8:
+                  myBlob = _context6.sent;
+                  //Convertir la respuesta a tipo blob
+                  formData.set('userAvatar', myBlob, 'userAvatar.jpg'); // Asignar el blob al elemento userAvatar
+
+                  formData.append('userAvatarBase64', result); // Crear un nuevo elemento del formData
+                  //Enviar datos al servidor
+
+                  request = new XMLHttpRequest();
+                  request.open('POST', '/update-avatar', true);
+                  request.addEventListener('load', function (e) {
+                    if (request.readyState === request.DONE) {
+                      switch (request.status) {
+                        case 200:
+                          loader.classList.add('d-none');
+                          uploadAvatar.classList.remove('d-none');
+                          break;
                       }
-                    });
-                    request.send(newFormData);
+                    }
+                  });
+                  request.send(formData);
 
-                  case 15:
-                  case "end":
-                    return _context6.stop();
-                }
+                case 15:
+                case "end":
+                  return _context6.stop();
               }
-            }, _callee6);
-          }));
+            }
+          }, _callee6);
+        }));
 
-          return function (_x6, _x7) {
-            return _ref6.apply(this, arguments);
-          };
-        }());
-      });
+        return function (_x6) {
+          return _ref6.apply(this, arguments);
+        };
+      }());
     });
   });
 }
 
-},{"./modules/dom":238,"./modules/geolocation":239,"./modules/postData":240,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[241]);
+},{"../js/modules/cropImage":238,"./modules/dom":239,"./modules/geolocation":240,"./modules/postData":241,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[242]);
 
 //# sourceMappingURL=scripts.js.map

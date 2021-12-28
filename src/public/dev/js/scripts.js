@@ -4,7 +4,9 @@ import { postData } from "./modules/postData";
 import getPosition from "./modules/geolocation"
 import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
 import jimp from "jimp"
+import cropImage from "../js/modules/cropImage"
 import fs from "fs"
+import { crop } from "jimp";
 
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
@@ -332,54 +334,39 @@ if (updateAvatarForm) {
     const formData = new FormData(updateAvatarForm)
     const reader = new FileReader()
     reader.readAsDataURL(formData.get('userAvatar'))
+    loader.classList.remove('d-none')
+    uploadAvatar.classList.add('d-none')
     /**
      * Recortar imagen
      */
     reader.addEventListener('load', () => {
-      jimp.read(reader.result).then(image => {
-        const imageWidth = image.getWidth()
-        const imageHeight = image.getHeight()
+      cropImage(reader.result, 1, 170)
+        .then(async result => {
+          // Simular cambio en tiempo real del avatar
+          const avatars = document.getElementsByClassName('avatar')
 
-        let x, y, w, h;
-        if (imageWidth !== imageHeight) {
-          if (imageHeight > imageWidth) {
-            x = 0
-            y = imageHeight / 4
-            w = imageWidth
-            h = imageWidth
-          } else {
-            x = imageWidth / 4
-            y = 0
-            w = imageHeight
-            h = imageHeight
+          for (const element of avatars) {
+            element.src = result
           }
-          image.crop(x, y, w, h)
-        }
-        image.resize(170, 170)
-        image.quality(60)
-        image.getBase64(jimp.AUTO, async (err, res) => {
-          // // simular cambio de avatar
-          avatarChange.setAttribute('src', res)
-          headerAvatar.setAttribute('src', res)
-          
-          const response = await fetch(res)
-          const myBlob = await response.blob()
-          const newFormData = new FormData()
-          newFormData.append('userAvatar', myBlob, 'avatar.jpg')
-          newFormData.append('userAvatarBase64', res)
-          const request = new XMLHttpRequest();
-          request.open("POST", '/update-avatar', true);
-          request.addEventListener('load', e => { 
+
+          const response = await fetch(result) // Obtener la imágen del resultdo de la promesa
+          const myBlob = await response.blob() //Convertir la respuesta a tipo blob
+          formData.set('userAvatar', myBlob, 'userAvatar.jpg') // Asignar el blob al elemento userAvatar
+          formData.append('userAvatarBase64', result) // Crear un nuevo elemento del formData
+          //Enviar datos al servidor
+          const request = new XMLHttpRequest()
+          request.open('POST', '/update-avatar', true)
+          request.addEventListener('load', e => {
             if (request.readyState === request.DONE) {
               switch (request.status) {
                 case 200:
-                  const data = JSON.parse(e.target.responseText)
-                  break;
+                  loader.classList.add('d-none')
+                  uploadAvatar.classList.remove('d-none')
+                break
               }
             }
           })
-          request.send(newFormData)  
-        })
+          request.send(formData)
       })
     })
   })
