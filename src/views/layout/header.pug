@@ -16,12 +16,12 @@ header.main-header.border-bottom
         li.nav-item.dropdown
           button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
             .image-small.me-2
-              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100
+              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100.avatar
             span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
             .dropdown-item-text.d-flex.align-items-center.mb-3
               .image-medium.me-2 
-                img(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100
+                img(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100.avatar
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`
