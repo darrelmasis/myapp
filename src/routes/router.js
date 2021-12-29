@@ -6,6 +6,12 @@ const userController = require('../controllers/user_controller')
 const customerController = require('../controllers/customer_controller')
 const searchController = require('../controllers/search_controller')
 
+app.get('*',function(req,res,next){
+  if(req.headers['x-forwarded-proto']!='https')
+    res.redirect('https://dm-myapp.herokuapp.com'+req.url)
+  else
+    next()
+})
 
 router.get('/', userController.isLogged, (req, res) => {
   if (res.isLogged) {
