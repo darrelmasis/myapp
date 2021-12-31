@@ -188,17 +188,25 @@ const upload = multer({ memoryStorage })
 const updateAvatar = async (req, res) => {
   try {
     const id = res.data.id
+    console.log(req.body)
     await cloudinary.uploader.upload(req.body.userAvatarBase64, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
-      const data = {
+      if (error) {
+        response.type = 'error'
+        response.message = error
+        return res.send(response)
+      } else {
+        console.log(result)
+        const data = {
         avatar: `v${result.version}/${result.public_id}.${ result.format }`
+        }
+        userModel.update(id, data)
+        response.type = 'success'
+        response.message = 'Imágen actualizada con éxito'
       }
-      userModel.update(id, data)
-      response.type = 'success'
-      response.message = 'Información actualizada correctamente'
+      return res.send(response)
+      
     })
 
-    fs.unlinkSync(req.file.path) // elimina los archivos locales en ./storage
-    return res.send(response)
   } catch (error) {
     response.type = 'error'
     response.message = '¡Oops! Hubo algunos errores al actualizar la información'
