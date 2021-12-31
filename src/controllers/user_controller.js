@@ -166,6 +166,7 @@ const update = async (req, res) => {
     const userData = {
       fullName: req.body.firstName + ' ' + req.body.lastName,
       gender: req.body.gender,
+      email: req.body.email,
       bio: req.body.bio
     }
     const userId = req.body.userId

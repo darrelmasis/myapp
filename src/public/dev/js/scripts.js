@@ -298,7 +298,8 @@ if (userUpdateForm) {
       firstName: firstName.value,
       lastName: lastName.value,
       gender: gender.value,
-      bio: bio.value
+      bio: bio.value,
+      email: email.value
     }
 
     userUpdate(data)
