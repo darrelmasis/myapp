@@ -8,16 +8,17 @@ block main
     h1.h2.mb-3.text-center Editar Perfil
     #profileEdit.card.text-center.bg-white.rounded.border.mb-3.m-auto
       .card-body
-        .image-large.mb-5
-          form#updateAvatarForm(action="/update-avatar", method="POST" enctype="multipart/form-data" ) 
-            #avatar.rounded-circle
-              span#loader.loader.position-absolute.d-none
-                img(src="../../../dist/assets/loader.gif", alt="Loader" width="30%")
-              img#avatarChange(src=`${user.cloud}/${user.avatar}` alt="avatar del usuario").w-100.avatar
-              label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100.text-center
+        .image-large.m-auto
+          form#updateAvatarForm(action="/update-avatar", method="POST" enctype="multipart/form-data").h-100
+            #avatar.rounded-circle.h-100
+              label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100
                 i.far.fa-camera.fa-xl.text-light
               input#userAvatar(type="file", name="userAvatar" hidden)
-        form#userUpdateForm(action="/userUpdate", method="POST")
+              span#loader.loader.position-absolute.d-none
+                img(src="../../../dist/assets/loader.gif", alt="Loader" width="32px")
+              img#avatarChange(src=`${user.cloud}/${user.avatar}` alt="avatar del usuario").w-100.avatar
+        //- div.alert.alert-success.mt-3 Foto actualizada con éxito
+        form#userUpdateForm(action="/userUpdate", method="POST").mt-5
           .row
             .col-md-6.text-start
               .form-group.mb-3

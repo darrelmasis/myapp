@@ -8,10 +8,7 @@ block main
       .col-md-3
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
-            .image-large
-              if userProfile.avatar == '' || userProfile.avatar == 'avatar.png' || userProfile.avatar == null
-                img(src=`../dist/assets/defect.png` alt="avatar").w-100
-              else
+            .image-large.m-auto
                 img(src=`${userProfile.cloud}/${userProfile.avatar}` alt="avatar").w-100
             .mt-3 
               h1.h5.card-title= `${userProfile.fullName}`  

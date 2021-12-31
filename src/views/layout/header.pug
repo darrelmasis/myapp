@@ -7,27 +7,26 @@ header.main-header.border-bottom
   nav.navbar.navbar-expand.navbar-light.bg-white
     .container 
       a(href="/").navbar-brand
-        img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Logotipo")
+        img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Monisa Harinas logo")
       ul.navbar-nav.ms-auto
-        li.nav-item.me-4
-          a(href="/").nav-link.fw-semibold
-            i.far.fa-search.me-2
-            | Buscar
         li.nav-item.dropdown
-          button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.bg-light.rounded-pill.caret
-            .image-small.me-2
-              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100.avatar
-            span.fw-semibold=`${user.fullName.split(' ')[0]}`
+          button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.btn-light.rounded-pill.caret.p-0.pe-2
+            .image-small
+              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="").avatar
+            //- span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
             .dropdown-item-text.d-flex.align-items-center.mb-3
               .image-medium.me-2 
-                img(src=`${user.cloud}/${user.avatar}` alt="Avatar").w-100.avatar
+                img(src=`${user.cloud}/${user.avatar}` alt="").avatar
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`
-            a(href=`/@${user.username}`).dropdown-item.rounded.fw-semibold.d-flex.align-items-center.text-muted
+            a(href=`/@${user.username}`).dropdown-item.rounded.fw-semibold.d-flex.align-items-center.text-muted.mb-2
               span.far.fa-user-circle.me-2 
-              | Ver perfil
+              | Perfil
+            a(href=`/editar-perfil`).dropdown-item.rounded.fw-semibold.d-flex.align-items-center.text-muted.mb-2
+              span.far.fa-cog.me-2 
+              | Ajustes
             .dropdown-divider
             a(href=`/signout/${user.username}`).dropdown-item.rounded.text-danger.fw-semibold.d-flex.align-items-center
               span.far.fa-sign-out-alt.me-2
