@@ -49953,7 +49953,7 @@ var getTime = function getTime(expiredDate) {
 };
 
 setInterval(function () {
-  var t = getTime('Jan 01 2022 00:00:00 GMT-0600');
+  var t = getTime('Jan 01 2022 00:00:00 GMT-6');
   days.innerHTML = t.remainingDays;
   hours.innerHTML = t.remainingHours;
   minutes.innerHTML = t.remainingMinutes;
