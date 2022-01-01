@@ -397,9 +397,14 @@ const getTime = (expiredDate) => {
 }
 
 setInterval(() => {
-  const t = getTime('Jan 01 2022 00:00:00 GMT-0500')
+  const t = getTime('Jan 01 2022 00:00:00 GMT-6')
   days.innerHTML = t.remainingDays
   hours.innerHTML = t.remainingHours
   minutes.innerHTML = t.remainingMinutes
   seconds.innerHTML = t.remainingSeconds
+
+  if (t.remainingTime <= 1) {
+    clearInterval()
+    c.innerHTML = `<p class="fw-bold text-warning h1">Felíz cumpleaños Kailuma</p>`
+  }
 }, 1000);

@@ -49953,11 +49953,16 @@ var getTime = function getTime(expiredDate) {
 };
 
 setInterval(function () {
-  var t = getTime('Jan 01 2022 00:00:00 GMT-0500');
+  var t = getTime('Jan 01 2022 00:00:00 GMT-0600');
   days.innerHTML = t.remainingDays;
   hours.innerHTML = t.remainingHours;
   minutes.innerHTML = t.remainingMinutes;
   seconds.innerHTML = t.remainingSeconds;
+
+  if (t.remainingTime <= 1) {
+    clearInterval();
+    c.innerHTML = "<p class=\"fw-bold text-warning h1\">Fel\xEDz cumplea\xF1os Kailuma</p>";
+  }
 }, 1000);
 
 },{"../js/modules/cropImage":238,"./modules/dom":239,"./modules/geolocation":240,"./modules/postData":241,"child_process":83,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[242]);
