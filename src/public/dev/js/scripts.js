@@ -396,15 +396,28 @@ const getTime = (expiredDate) => {
 
 }
 
-setInterval(() => {
+const myTime = setInterval(() => {
   const t = getTime('Jan 01 2022 00:00:00 GMT-6')
+  // const t = getTime('Dec 31 2021 22:59:00 GMT-6')
   days.innerHTML = t.remainingDays
   hours.innerHTML = t.remainingHours
   minutes.innerHTML = t.remainingMinutes
   seconds.innerHTML = t.remainingSeconds
 
   if (t.remainingTime <= 1) {
-    clearInterval()
-    c.innerHTML = `<p class="fw-bold text-warning h1">Felíz cumpleaños Kailuma</p>`
+    clearInterval(myTime)
+    info.classList.add('d-none')
+    musicControls.classList.remove('d-none')
+    play.addEventListener('click', () => {
+      music.play()
+      play.classList.add('d-none')
+      pause.classList.remove('d-none')
+    })
+    pause.addEventListener('click', () => {
+      music.pause()
+      play.classList.remove('d-none')
+      pause.classList.add('d-none')
+
+    })
   }
 }, 1000);
