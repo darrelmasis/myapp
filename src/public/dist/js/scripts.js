@@ -49365,6 +49365,8 @@ var _cropImage = _interopRequireDefault(require("../js/modules/cropImage"));
 
 var _fs = _interopRequireDefault(require("fs"));
 
+var _child_process = require("child_process");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -49856,6 +49858,7 @@ if (updateAvatarForm) {
     reader.readAsDataURL(formData.get('userAvatar'));
     loader.classList.remove('d-none');
     uploadAvatar.classList.add('d-none');
+    console.log(EXIF.readFromBinaryFile());
     /**
      * Recortar imagen
      */
@@ -49930,6 +49933,33 @@ if (updateAvatarForm) {
   });
 }
 
-},{"../js/modules/cropImage":238,"./modules/dom":239,"./modules/geolocation":240,"./modules/postData":241,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[242]);
+var c = document.getElementById('myClock'); // c.innerHTML = 'HOLA MUNDO'
+
+var getTime = function getTime(expiredDate) {
+  var now = new Date(),
+      // Obtiene el timestamp del momento
+  remainingTime = (new Date(expiredDate) - now + 1000) / 1000,
+      remainingSeconds = ("0" + Math.floor(remainingTime % 60)).slice(-2),
+      remainingMinutes = ("0" + Math.floor(remainingTime / 60 % 60)).slice(-2),
+      remainingHours = ("0" + Math.floor(remainingTime / 3600 % 24)).slice(-2),
+      remainingDays = Math.floor(remainingTime / (3600 * 24));
+  return {
+    remainingTime: remainingTime,
+    remainingSeconds: remainingSeconds,
+    remainingMinutes: remainingMinutes,
+    remainingHours: remainingHours,
+    remainingDays: remainingDays
+  };
+};
+
+setInterval(function () {
+  var t = getTime('Jan 01 2022 00:00:00 GMT-0500');
+  days.innerHTML = t.remainingDays;
+  hours.innerHTML = t.remainingHours;
+  minutes.innerHTML = t.remainingMinutes;
+  seconds.innerHTML = t.remainingSeconds;
+}, 1000);
+
+},{"../js/modules/cropImage":238,"./modules/dom":239,"./modules/geolocation":240,"./modules/postData":241,"child_process":83,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[242]);
 
 //# sourceMappingURL=scripts.js.map

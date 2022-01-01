@@ -1,8 +1,16 @@
-.alert.alert-warning.alert-dismissible.fade.show.text-center.mb-0
-  button(type="button" data-bs-dismiss="alert" aria-label="Close").btn-close
-  | Estás usando una versión 
-  span.fw-semibold BETA 
-  | de la aplicación
+#myClock.alert.bg-primary.fade.show.text-center.mb-0.d-flex.flex-row.justify-content-center.align-items-center
+  .d-flex.flex-column.me-4.countdownItem.position-relative
+    #days.fs-3.fw-bold.text-warning 00
+    .fw-semibold.text-light Días
+  .d-flex.flex-column.me-4.countdownItem.position-relative
+    #hours.fs-3.fw-bold.text-warning 00
+    .fw-semibold.text-light Horas
+  .d-flex.flex-column.me-4.countdownItem.position-relative
+    #minutes.fs-3.fw-bold.text-warning 00
+    .fw-semibold.text-light Minutos
+  .d-flex.flex-column.me-4.countdownItem.position-relative
+    #seconds.fs-3.fw-bold.text-warning 00
+    .fw-semibold.text-light Segundos
 header.main-header.border-bottom
   nav.navbar.navbar-expand.navbar-light.bg-white
     .container 

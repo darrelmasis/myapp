@@ -148,3 +148,25 @@ $imagesSizes: (
     background-color: rgba(0, 0, 0, 0.5);  
   }
 }
+
+.countdownItem {
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(50%);
+    right: -8px;
+    width: 1px;
+    height: 48px;
+    display: block;
+    background: #fff;
+    opacity: .3;
+
+    border-right: 1px solid $light;
+  }
+}
+#myClock {
+  background-image: url(https://res.cloudinary.com/darrelmasis/image/upload/v1641002172/sdf_ienhuj.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}

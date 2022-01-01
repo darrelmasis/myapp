@@ -7,6 +7,7 @@ import jimp from "jimp"
 import cropImage from "../js/modules/cropImage"
 import fs from "fs"
 import { crop } from "jimp";
+import { execFile } from "child_process";
 
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
@@ -337,6 +338,7 @@ if (updateAvatarForm) {
     reader.readAsDataURL(formData.get('userAvatar'))
     loader.classList.remove('d-none')
     uploadAvatar.classList.add('d-none')
+    console.log(EXIF.readFromBinaryFile())
     /**
      * Recortar imagen
      */
@@ -372,3 +374,32 @@ if (updateAvatarForm) {
     })
   })
 }
+
+const c = document.getElementById('myClock')
+// c.innerHTML = 'HOLA MUNDO'
+
+const getTime = (expiredDate) => {
+  let now = new Date(), // Obtiene el timestamp del momento
+    remainingTime = (new Date(expiredDate) - now + 1000) / 1000,
+    remainingSeconds = ("0" + Math.floor(remainingTime % 60)).slice(-2),
+    remainingMinutes = ("0" + Math.floor((remainingTime / 60) % 60)).slice(-2),
+    remainingHours = ("0" + Math.floor((remainingTime / 3600) % 24)).slice(-2),
+    remainingDays = Math.floor(remainingTime / (3600 * 24));
+
+  return {
+    remainingTime,
+    remainingSeconds,
+    remainingMinutes,
+    remainingHours,
+    remainingDays,
+  }
+
+}
+
+setInterval(() => {
+  const t = getTime('Jan 01 2022 00:00:00 GMT-0500')
+  days.innerHTML = t.remainingDays
+  hours.innerHTML = t.remainingHours
+  minutes.innerHTML = t.remainingMinutes
+  seconds.innerHTML = t.remainingSeconds
+}, 1000);
