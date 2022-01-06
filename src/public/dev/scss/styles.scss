@@ -69,10 +69,13 @@ $border-shadow: 0 1px 2px rgba($dark, 0.2);
   background-color: $gray-300;
 }
 
-#userDropdownMenu {
+#userDropdownMenu{
   min-width: 15.625rem;
 }
 
+#notifications-menu {
+  min-width: 20rem;
+}
 $imagesSizes: (
   small: 32px,
   medium: 56px,
@@ -86,7 +89,6 @@ $imagesSizes: (
     max-width: $value;
     display: block;
     border-radius: 50%;
-    overflow: hidden;
     background-color: $light;
 
     & .avatar {
@@ -106,10 +108,6 @@ $imagesSizes: (
   max-width: 650px;
 }
 
-#avatar {
-  position: relative;
-  overflow: hidden;
-}
 
 #uploadAvatar {
   position: absolute;
@@ -169,4 +167,79 @@ $imagesSizes: (
   background-image: url(https://res.cloudinary.com/darrelmasis/image/upload/v1641002172/sdf_ienhuj.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.avatar {
+  position: relative;
+  border-radius: 50%;
+  &-image {
+    width:100%;
+    border-radius: 50%;
+  }
+}
+
+.user-status {
+  &:before {
+    content: "";
+    width: 0.75rem;
+    height: 0.75rem;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-sizing: content-box;
+  }
+}
+.user-status-online:before {
+  background-color: $success;
+}
+
+.user-status-offline:before {
+  background-color: $danger;
+}
+
+#message-box {
+  height: 2.5rem;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  resize: none;
+}
+
+.chat-body {
+  position: relative;
+  height: 20rem;
+}
+
+.chat-container {
+  overflow-y: auto;
+  padding: .5rem;
+  font-size: 0.8125em;
+  margin-right: .5rem;
+}
+.chat {
+  display: flex;
+  align-items: center;
+  margin: .5rem 0;
+  &-user {
+      justify-content: flex-end;
+      > .chat-text {
+          background-color: $primary;
+          color: $white;
+          // border-radius: 1rem 1rem 0 1rem;
+      }
+  }
+
+  .user-avatar {
+      margin-right: .5rem;
+  }
+}
+
+.chat-text {
+  background-color: darken($light, 10%);
+  padding: 1rem 1.25rem;
+  border-radius: 1rem;
+  max-width: 70%;
+  font-weight: 500;
+  font-size: 1.1em;
 }
