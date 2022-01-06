@@ -1,41 +1,64 @@
-audio#music(src="https://res.cloudinary.com/darrelmasis/video/upload/v1641009200/feliz-cumpleanos_xmie2x.mp3")
-#myClock.alert.bg-primary.fade.show.text-center.mb-0.d-flex.flex-row.justify-content-center.align-items-center
-  #info.d-flex.flex-row.justify-content-center.align-items-center
-    .d-flex.flex-column.me-4.countdownItem.position-relative
-      #days.fs-3.fw-bold.text-warning 00
-      .fw-semibold.text-light Días
-    .d-flex.flex-column.me-4.countdownItem.position-relative
-      #hours.fs-3.fw-bold.text-warning 00
-      .fw-semibold.text-light Horas
-    .d-flex.flex-column.me-4.countdownItem.position-relative
-      #minutes.fs-3.fw-bold.text-warning 00
-      .fw-semibold.text-light Minutos
-    .d-flex.flex-column.me-4.position-relative
-      #seconds.fs-3.fw-bold.text-warning 00
-      .fw-semibold.text-light Segundos
-  #musicControls.d-flex.flex-column.d-none
-    p.fw-bold.text-warning.h1 Felíz cumpleaños Kailuma 
-    button#play(type="button").btn.btn-warning.fw-semibold
-      i.far.fa-play.me-3
-      | Escúchar
-    button#pause(type="button").btn.btn-danger.fw-semibold.d-none
-      i.far.fa-pause.me-3
-      | Pausar
+//- audio#music(src="https://res.cloudinary.com/darrelmasis/video/upload/v1641009200/feliz-cumpleanos_xmie2x.mp3")
+//- #myClock.alert.bg-primary.fade.show.text-center.mb-0.d-flex.flex-row.justify-content-center.align-items-center
+//-   #info.d-flex.flex-row.justify-content-center.align-items-center
+//-     .d-flex.flex-column.me-4.countdownItem.position-relative
+//-       #days.fs-3.fw-bold.text-warning 00
+//-       .fw-semibold.text-light Días
+//-     .d-flex.flex-column.me-4.countdownItem.position-relative
+//-       #hours.fs-3.fw-bold.text-warning 00
+//-       .fw-semibold.text-light Horas
+//-     .d-flex.flex-column.me-4.countdownItem.position-relative
+//-       #minutes.fs-3.fw-bold.text-warning 00
+//-       .fw-semibold.text-light Minutos
+//-     .d-flex.flex-column.me-4.position-relative
+//-       #seconds.fs-3.fw-bold.text-warning 00
+//-       .fw-semibold.text-light Segundos
 header.main-header.border-bottom
   nav.navbar.navbar-expand.navbar-light.bg-white
     .container 
       a(href="/").navbar-brand
         img(src="/dist/assets/logo-harinas@svg.svg" height="32" alt="Monisa Harinas logo")
       ul.navbar-nav.ms-auto
+        li.navbar-item.dropdown.me-3
+          button#notifications(type="button" data-bs-toggle="dropdown" aria-expanded="false").nav-link.btn
+            i.far.fa-bell.me-1
+            .badge.bg-danger.rounded-circle 4
+          #notifications-menu(aria-labelledby="notifications").dropdown-menu.dropdown-menu-end.px-2
+            .dropdown.header.text-center.fw-bold Notificaciones
+            .dropdown-divider
+            a(href="#").dropdown-item.rounded.d-flex.align-items-center.text-muted.mb-2
+              .image-small.avatar.me-3.d-inlie-flex
+                img(src=`${user.cloud}/${user.avatar}`).avatar-image
+              .text-muted
+                .fw-semibold Kailuma Mena
+                .small.text-wrap se ha conectado
+            a(href="#").dropdown-item.rounded.d-flex.align-items-center.text-muted.mb-2
+              .image-small.avatar.me-3.d-inlie-flex
+                img(src=`${user.cloud}/${user.avatar}`).avatar-image
+              .text-muted
+                .fw-semibold Derek Noguera
+                .small.text-wrap Te ha agregado como contácto
+            a(href="#").dropdown-item.rounded.d-flex.align-items-center.text-muted.mb-2
+              .image-small.avatar.me-3.d-inlie-flex
+                img(src=`${user.cloud}/${user.avatar}`).avatar-image
+              .text-muted
+                .fw-semibold Silvio Mendieta
+                .small.text-wrap Ha modificado el nombre del cliente HA235
+            a(href="#").dropdown-item.rounded.d-flex.align-items-center.text-muted.mb-2
+              .image-small.avatar.me-3.d-inlie-flex
+                img(src=`${user.cloud}/${user.avatar}`).avatar-image
+              .text-muted
+                .fw-semibold Kailuma Mena
+                .small se ha conectado
         li.nav-item.dropdown
           button(type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false").btn.btn-light.rounded-pill.caret.p-0.pe-2
-            .image-small
-              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="").avatar
+            .image-small.avatar
+              img#headerAvatar(src=`${user.cloud}/${user.avatar}` alt="").avatar-image
             //- span.fw-semibold=`${user.fullName.split(' ')[0]}`
           div#userDropdownMenu(aria-labelledby="userDropdown").dropdown-menu.dropdown-menu-end.px-2
             .dropdown-item-text.d-flex.align-items-center.mb-3
-              .image-medium.me-2 
-                img(src=`${user.cloud}/${user.avatar}` alt="").avatar
+              .image-medium.avatar.user-status.me-2
+                img(src=`${user.cloud}/${user.avatar}` alt="").avatar-image
               .d-flex.align-item-center.justify-content-center.flex-column
                 div.fw-semibold= `${user.fullName}`
                 .text-muted.small= `@${user.username}`

@@ -1,0 +1,28 @@
+extends ../templates/template
+append config
+  - title = 'Mensajes'
+block main
+  include ../layout/header
+  main.container
+    .row 
+      .col-md-4
+      .col-md-8.mt-3 
+        .chat.flex-column
+          .chat-header.bg-white.rounded-top.p-3.w-100
+            .row.align-items-center
+              .col-auto
+                .image-medium.avatar
+                  img(src=`${user.cloud}/${user.avatar}`, alt="").avatar-image
+              .col
+                .fw-semibold= `${user.fullName}`
+          #chatBody.chat-body.bg-white.p-3.overflow-auto.w-100
+            #messages.chat-container
+          .chat-footer.bg-white.p-3.rounded-bottom.w-100
+            form(action="#"  method="POST").rounded-pill.bg-light.p-2
+              .row.align-items-center.gx-0
+                .col
+                  input#user(type="hidden", name="user" value=`${user.username}`)
+                  textarea#messageBox(name="message" rows="1" placeholder="Escribe un mensaje aquí").form-control.bg-transparent.border-0.ps-3
+                .col-auto
+                  button.btn.btn-icon.btn-primary.rounded-circle.ms-3
+                    i.far.fa-paper-plane

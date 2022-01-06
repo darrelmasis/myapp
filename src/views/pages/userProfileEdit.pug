@@ -8,15 +8,14 @@ block main
     h1.h2.mb-3.text-center Editar Perfil
     #profileEdit.card.text-center.bg-white.rounded.border.mb-3.m-auto
       .card-body
-        .image-large.m-auto
+        .image-large.avatar.m-auto
           form#updateAvatarForm(action="/update-avatar", method="POST" enctype="multipart/form-data").h-100
-            #avatar.rounded-circle.h-100
-              label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100
-                i.far.fa-camera.fa-xl.text-light
-              input#userAvatar(type="file", accept="image/*" capture="camera" name="userAvatar" hidden)
-              span#loader.loader.position-absolute.d-none
-                img(src="../../../dist/assets/loader.gif", alt="Loader" width="32px")
-              img#avatarChange(src=`${user.cloud}/${user.avatar}` alt="avatar del usuario").w-100.avatar
+            label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100.rounded-circle
+              i.far.fa-camera.fa-xl.text-light
+            input#userAvatar(type="file", accept="image/*" capture="camera" name="userAvatar" hidden)
+            span#loader.loader.position-absolute.d-none
+              img(src="../../../dist/assets/loader.gif", alt="Loader" width="32px")
+            img#avatarChange(src=`${user.cloud}/${user.avatar}` alt="avatar del usuario").w-100.avatar-image
         form#userUpdateForm(action="/userUpdate", method="POST").mt-5
           .row
             .col-md-6.text-start

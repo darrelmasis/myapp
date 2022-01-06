@@ -8,8 +8,8 @@ block main
       .col-md-3
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
-            .image-large.m-auto
-                img(src=`${userProfile.cloud}/${userProfile.avatar}` alt="avatar").w-100
+            .image-large.avatar.m-auto.user-status
+                img(src=`${userProfile.cloud}/${userProfile.avatar}` alt="avatar").avatar-image
             .mt-3 
               h1.h5.card-title= `${userProfile.fullName}`  
               p.small.fw-semibold.text-secondary.mb-3= `@${userProfile.username }`
