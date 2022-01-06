@@ -6,7 +6,7 @@ const multer = require('multer')
 const fs = require('fs');  
 const { async } = require('regenerator-runtime')
 const cloudinary = require('cloudinary').v2
-
+const mail = require('../models/mailer_model')
 const cloudinaryConfig = {
   cloud_name: 'darrelmasis', 
   api_key: '956779834764534', 
@@ -15,6 +15,7 @@ const cloudinaryConfig = {
 cloudinary.config(cloudinaryConfig)
 
 let response = {}
+let loginAttempts = 0
 
 const signup = async (req, res) => {
   try {
@@ -72,9 +73,8 @@ const signin = async (req, res) => {
   try {
     const user = {
       username: req.body.username,
-      password: req.body.password
+      password: req.body.password,
     }
-
     if (user.username === '' || user.password === '') {
       response.type = 'empty'
       response.message = 'Todos los campos son obligatorios'
@@ -92,6 +92,17 @@ const signin = async (req, res) => {
         if (!(await bcryptjs.compare(user.password, results.password))) {
           response.type = 'error'
           response.message = 'Usuario o contraseña inconrrecto'
+          loginAttempts++
+          if (loginAttempts >= 3) {
+            const data = {
+              from: 'darrelmasis@gmail.com',
+              to: results.email,
+              subject: 'Incio de sesión',
+              text: 'Hemos detectado que has tratado de iniciar sesión muchas veces',
+              html: '<a href="https:/dm-myapp.herokuapp.com/reset-password">Restablecer Contraseña</a>'
+            }
+            mail.send(data).then(result => console.log(loginAttempts))
+          }
           return res.send(response)
         } else {
           const id = results.id
@@ -103,6 +114,7 @@ const signin = async (req, res) => {
           res.cookie('jwt', token, cookiesOptions)
           response.type = 'success'
           response.message = 'Iniciando sesión...'
+          loginAttempts = 0
           return res.send(response)
         }
 
