@@ -49981,28 +49981,51 @@ messageBox.addEventListener('keyup', function (e) {
     socket.emit('chat', {
       user: user.value,
       text: messageBox.value.slice(0, -1),
-      time: '11:31 p.m'
+      avatar: avatar.value
     });
     messageBox.value = '';
   }
 });
+messageBox.addEventListener('keydown', function (e) {
+  socket.emit('typing', {
+    name: userFullName.value
+  });
+});
+socket.on('typing', function (res) {
+  chatPreview.innerText = res.msg;
+  setTimeout(function () {
+    chatPreview.innerText = '';
+  }, 3000);
+});
 socket.on('chat', function (messages) {
   var chatDiv = '';
   var chatText = '';
+  var chatAvatar = '';
+  var avatarImage = '';
 
   if (messages.length > 0) {
     chatText = (0, _dom.createCustomElement)('div', {
       class: 'chat-text'
     }, [messages[messages.length - 1].text]);
+    avatarImage = (0, _dom.createCustomElement)('img', {
+      src: "".concat(messages[messages.length - 1].avatar),
+      class: 'avatar-image'
+    }, []);
 
     if (messages[messages.length - 1].user === user.value) {
+      chatAvatar = (0, _dom.createCustomElement)('div', {
+        class: 'chat-avatar image-small avatar ms-3'
+      }, [avatarImage]);
       chatDiv = (0, _dom.createCustomElement)('div', {
         class: 'chat chat-user'
-      }, [chatText]);
+      }, [chatText, chatAvatar]);
     } else {
+      chatAvatar = (0, _dom.createCustomElement)('div', {
+        class: 'chat-avatar image-small avatar me-3'
+      }, [avatarImage]);
       chatDiv = (0, _dom.createCustomElement)('div', {
         class: 'chat'
-      }, [chatText]);
+      }, [chatAvatar, chatText]);
     }
 
     allMessages.appendChild(chatDiv);

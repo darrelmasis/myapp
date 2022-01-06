@@ -427,22 +427,37 @@ messageBox.addEventListener('keyup', e => {
     socket.emit('chat', {
       user: user.value,
       text: messageBox.value.slice(0, -1),
-      time: '11:31 p.m'
+      avatar: avatar.value
     })
     messageBox.value = ''
   }
 })
 
+messageBox.addEventListener('keydown', e => {
+  socket.emit('typing', {name: userFullName.value})
+})
+
+socket.on('typing', res => {
+  chatPreview.innerText = res.msg
+  setTimeout(() => {
+  chatPreview.innerText = ''
+  }, 3000);
+})
+
 socket.on('chat', messages => {
   let chatDiv = ''
   let chatText = ''
- 
+  let chatAvatar = ''
+  let avatarImage = ''
   if (messages.length > 0) {
-    chatText = createCustomElement('div', {class: 'chat-text'}, [messages[messages.length - 1].text])
+    chatText = createCustomElement('div', { class: 'chat-text' }, [messages[messages.length - 1].text])
+    avatarImage = createCustomElement('img', {src:`${messages[messages.length - 1].avatar}`, class: 'avatar-image'}, [])
     if (messages[messages.length - 1].user === user.value) {
-      chatDiv = createCustomElement('div', { class: 'chat chat-user' }, [chatText])
+      chatAvatar = createCustomElement('div', {class: 'chat-avatar image-small avatar ms-3'}, [avatarImage])
+      chatDiv = createCustomElement('div', { class: 'chat chat-user' }, [chatText,chatAvatar])
     } else {
-      chatDiv = createCustomElement('div', {class: 'chat'}, [chatText])
+      chatAvatar = createCustomElement('div', {class: 'chat-avatar image-small avatar me-3'}, [avatarImage])
+      chatDiv = createCustomElement('div', {class: 'chat'}, [chatAvatar, chatText])
     }
     allMessages.appendChild(chatDiv)
     chatBody.scrollTop = chatBody.scrollHeight
