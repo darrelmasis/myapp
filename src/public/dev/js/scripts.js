@@ -9,6 +9,7 @@ import fs from "fs"
 import { crop } from "jimp";
 import { execFile } from "child_process";
 
+const socket = io()
 const signinForm = select('signinForm')
 const signupForm = select('signupForm')
 const searchForm = select('searchForm')
@@ -375,9 +376,6 @@ if (updateAvatarForm) {
   })
 }
 
-const c = document.getElementById('myClock')
-// c.innerHTML = 'HOLA MUNDO'
-
 const getTime = (expiredDate) => {
   let now = new Date(), // Obtiene el timestamp del momento
     remainingTime = (new Date(expiredDate) - now + 1000) / 1000,
@@ -396,28 +394,58 @@ const getTime = (expiredDate) => {
 
 }
 
-const myTime = setInterval(() => {
-  const t = getTime('Jan 01 2022 00:00:00 GMT-6')
-  // const t = getTime('Dec 31 2021 22:59:00 GMT-6')
-  days.innerHTML = t.remainingDays
-  hours.innerHTML = t.remainingHours
-  minutes.innerHTML = t.remainingMinutes
-  seconds.innerHTML = t.remainingSeconds
+// const myTime = setInterval(() => {
+//   const t = getTime('Jan 06 2022 00:00:00 GMT-6')
+//   // const t = getTime('Dec 31 2021 22:59:00 GMT-6')
+//   days.innerHTML = t.remainingDays
+//   hours.innerHTML = t.remainingHours
+//   minutes.innerHTML = t.remainingMinutes
+//   seconds.innerHTML = t.remainingSeconds
 
-  if (t.remainingTime <= 1) {
-    clearInterval(myTime)
-    info.classList.add('d-none')
-    musicControls.classList.remove('d-none')
-    play.addEventListener('click', () => {
-      music.play()
-      play.classList.add('d-none')
-      pause.classList.remove('d-none')
-    })
-    pause.addEventListener('click', () => {
-      music.pause()
-      play.classList.remove('d-none')
-      pause.classList.add('d-none')
+//   if (t.remainingTime <= 1) {
+//     clearInterval(myTime)
+//     info.classList.add('d-none')
+//     musicControls.classList.remove('d-none')
+//     play.addEventListener('click', () => {
+//       music.play()
+//       play.classList.add('d-none')
+//       pause.classList.remove('d-none')
+//     })
+//     pause.addEventListener('click', () => {
+//       music.pause()
+//       play.classList.remove('d-none')
+//       pause.classList.add('d-none')
 
+//     })
+//   }
+// }, 1000);
+
+const allMessages = document.getElementById('messages')
+const chatBody = document.getElementById('chatBody')
+messageBox.addEventListener('keyup', e => {
+  if (e.key === 'Enter') {
+    socket.emit('chat', {
+      user: user.value,
+      text: messageBox.value.slice(0, -1),
+      time: '11:31 p.m'
     })
+    messageBox.value = ''
   }
-}, 1000);
+})
+
+socket.on('chat', messages => {
+  let chatDiv = ''
+  let chatText = ''
+ 
+  if (messages.length > 0) {
+    chatText = createCustomElement('div', {class: 'chat-text'}, [messages[messages.length - 1].text])
+    if (messages[messages.length - 1].user === user.value) {
+      chatDiv = createCustomElement('div', { class: 'chat chat-user' }, [chatText])
+    } else {
+      chatDiv = createCustomElement('div', {class: 'chat'}, [chatText])
+    }
+    allMessages.appendChild(chatDiv)
+    chatBody.scrollTop = chatBody.scrollHeight
+  }
+
+})

@@ -49383,6 +49383,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+var socket = io();
 var signinForm = (0, _dom.select)('signinForm');
 var signupForm = (0, _dom.select)('signupForm');
 var searchForm = (0, _dom.select)('searchForm');
@@ -49933,8 +49934,6 @@ if (updateAvatarForm) {
   });
 }
 
-var c = document.getElementById('myClock'); // c.innerHTML = 'HOLA MUNDO'
-
 var getTime = function getTime(expiredDate) {
   var now = new Date(),
       // Obtiene el timestamp del momento
@@ -49950,32 +49949,66 @@ var getTime = function getTime(expiredDate) {
     remainingHours: remainingHours,
     remainingDays: remainingDays
   };
-};
+}; // const myTime = setInterval(() => {
+//   const t = getTime('Jan 06 2022 00:00:00 GMT-6')
+//   // const t = getTime('Dec 31 2021 22:59:00 GMT-6')
+//   days.innerHTML = t.remainingDays
+//   hours.innerHTML = t.remainingHours
+//   minutes.innerHTML = t.remainingMinutes
+//   seconds.innerHTML = t.remainingSeconds
+//   if (t.remainingTime <= 1) {
+//     clearInterval(myTime)
+//     info.classList.add('d-none')
+//     musicControls.classList.remove('d-none')
+//     play.addEventListener('click', () => {
+//       music.play()
+//       play.classList.add('d-none')
+//       pause.classList.remove('d-none')
+//     })
+//     pause.addEventListener('click', () => {
+//       music.pause()
+//       play.classList.remove('d-none')
+//       pause.classList.add('d-none')
+//     })
+//   }
+// }, 1000);
 
-var myTime = setInterval(function () {
-  var t = getTime('Jan 01 2022 00:00:00 GMT-6'); // const t = getTime('Dec 31 2021 22:59:00 GMT-6')
 
-  days.innerHTML = t.remainingDays;
-  hours.innerHTML = t.remainingHours;
-  minutes.innerHTML = t.remainingMinutes;
-  seconds.innerHTML = t.remainingSeconds;
-
-  if (t.remainingTime <= 1) {
-    clearInterval(myTime);
-    info.classList.add('d-none');
-    musicControls.classList.remove('d-none');
-    play.addEventListener('click', function () {
-      music.play();
-      play.classList.add('d-none');
-      pause.classList.remove('d-none');
+var allMessages = document.getElementById('messages');
+var chatBody = document.getElementById('chatBody');
+messageBox.addEventListener('keyup', function (e) {
+  if (e.key === 'Enter') {
+    socket.emit('chat', {
+      user: user.value,
+      text: messageBox.value.slice(0, -1),
+      time: '11:31 p.m'
     });
-    pause.addEventListener('click', function () {
-      music.pause();
-      play.classList.remove('d-none');
-      pause.classList.add('d-none');
-    });
+    messageBox.value = '';
   }
-}, 1000);
+});
+socket.on('chat', function (messages) {
+  var chatDiv = '';
+  var chatText = '';
+
+  if (messages.length > 0) {
+    chatText = (0, _dom.createCustomElement)('div', {
+      class: 'chat-text'
+    }, [messages[messages.length - 1].text]);
+
+    if (messages[messages.length - 1].user === user.value) {
+      chatDiv = (0, _dom.createCustomElement)('div', {
+        class: 'chat chat-user'
+      }, [chatText]);
+    } else {
+      chatDiv = (0, _dom.createCustomElement)('div', {
+        class: 'chat'
+      }, [chatText]);
+    }
+
+    allMessages.appendChild(chatDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+});
 
 },{"../js/modules/cropImage":238,"./modules/dom":239,"./modules/geolocation":240,"./modules/postData":241,"child_process":83,"fs":83,"jimp":124,"mysql/lib/protocol/constants/charsets":132,"regenerator-runtime":186}]},{},[242]);
 
