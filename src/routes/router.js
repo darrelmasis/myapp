@@ -103,10 +103,19 @@ router.post('/userUpdate', userController.update)
 // Ruta para la actualización del avatar  de usuario
 router.post('/update-avatar', userController.isLogged, userController.upload.single('userAvatar'), userController.updateAvatar)
 
+router.get('/chat', userController.isLogged, (req, res) => {
+  // si está logueado
+  if (res.isLogged) {
+    res.render('messenger', {user: res.data })
+  } else {
+    res.redirect('/signin')
+  }
+})
 // Definimos los errores 404
 router.get('*', (req, res) => {
   res.status(404).render('404') 
 })
+
 
 
 module.exports = router
