@@ -3,9 +3,10 @@ append config
   - pageTitle= `${userProfile.fullName}`
 block main
   include ../layout/header
-  .container.mt-3
-    .row
-      .col-md-3
+  .container.mt-
+    .container-fluid.profile-banner
+    .row.position-relative
+      .col-md-3.position-absolute
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
             .image-large.avatar.m-auto
