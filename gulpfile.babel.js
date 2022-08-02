@@ -5,6 +5,7 @@ import darthSass from 'sass'
 import babelify from 'babelify'
 import minify from 'gulp-minify'
 import rename from 'gulp-rename'
+import notify from 'gulp-notify'
 import buffer from 'vinyl-buffer'
 import plumber from 'gulp-plumber'
 import postcss from 'gulp-postcss'
@@ -13,7 +14,6 @@ import browserSync from 'browser-sync'
 import autoprefixer from 'autoprefixer'
 import sourcemaps from 'gulp-sourcemaps'
 import source from 'vinyl-source-stream'
-
 const server = browserSync.create()
 const sass = gulpSass(darthSass)
 const path = {
@@ -25,6 +25,11 @@ const path = {
   scripts: {
     src: "./src/public/dev/js/scripts.js",
     dest: "./src/public/dist/js"
+  },
+
+  views: {
+    src: "./src/public/dev/js/router.js",
+    dest: "./src/public/dist/js"
   }
 }
 
@@ -33,7 +38,7 @@ const stylesDev = () => {
   return gulp.src(path.styles.src)
     .pipe(sourcemaps.init())
     .pipe(plumber({
-      handleError: function (err) {
+      errorHandler: function (err) {
         console.log(err);
         this.emit('end');
       }
@@ -47,6 +52,11 @@ const stylesDev = () => {
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest(path.styles.dest))
     .pipe(server.stream({ match: '**/*.css' }))
+    .pipe(notify({
+      title: 'Modo de desasrrollo',
+      message: 'Estilos SCSS compilados con éxito',
+      wait: true
+    }))
 }
 
 // Compila Sass para producción
@@ -71,7 +81,7 @@ const scriptsDev = () => {
     .bundle()
     .on('error', err => {
       console.log(err)
-      this.emit('end')
+      this.end()
     })
     .pipe(source('scripts.js'))
     .pipe(buffer())
@@ -100,6 +110,24 @@ const scriptsBuild = () => {
     .pipe(gulp.dest(path.scripts.dest))
 }
 
+const viewsBuild = () => {
+  return browserify(path.views.src)
+    .transform(babelify, {
+      global: true
+    })
+    .bundle()
+    .on('error', err => {
+      console.log(err)
+      this.emit('end')
+    })
+    .pipe(source('router.js'))
+    .pipe(buffer())
+    .pipe(minify({ ext: { src: '.js', min: '.min.js' } }))
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(path.views.dest))
+}
+
 const browserSyncServe = done => {
   server.init({
     proxy: 'localhost:3000'
@@ -121,7 +149,8 @@ const watchFiles = done => {
 
 exports.dev = parallel(browserSyncServe, watchFiles)
 exports.build = series(stylesBuild, scriptsBuild)
-exports.styles = stylesDev
+exports.styles = parallel(stylesDev, watchFiles)
 exports.scripts = scriptsDev
 exports.build_styles = stylesBuild
 exports.build_scripts = scriptsBuild
+exports.build_views = viewsBuild

@@ -8,7 +8,7 @@ block main
       .col-md-3
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
-            .image-large.avatar.m-auto.user-status
+            .image-large.avatar.m-auto
                 img(src=`${userProfile.cloud}/${userProfile.avatar}` alt="avatar").avatar-image
             .mt-3 
               h1.h5.card-title= `${userProfile.fullName}`  
@@ -20,7 +20,25 @@ block main
                   i.far.fa-edit.me-2
                   | Editar perfil
               else
-                a(href="#").btn.btn-outline-primary.fw-semibold 
-                  i.far.fa-plus.me-2 
-                  | Agregar
+                if userProfile.isFriend
+                  form#removeContactForm(action="/removeContact")
+                    button#removeButton.btn.btn-danger.fw-semibold
+                      i.far.fa-user-minus.me-2
+                      | Eliminar
+                  form#addContactForm(action="/addContact").d-none
+                    button#addButton.btn.btn-primary.fw-semibold 
+                      i.far.fa-user-plus.me-2 
+                      | Agregar
+                else
+                  form#addContactForm(action="/addContact")
+                    button#addButton.btn.btn-primary.fw-semibold
+                      i.far.fa-user-plus.me-2
+                      | Agregar
+                  form#removeContactForm(action="/removeContact").d-none
+                    button#removeButton.btn.btn-danger.fw-semibold
+                      i.far.fa-user-minus.me-2
+                      | Eliminar
       .col-md-9
+  script.
+    let localUser = JSON.parse("#{JSON.stringify(user)}".replace(/&quot;/g,'"'))
+    let remoteUser = JSON.parse("#{JSON.stringify(userProfile)}".replace(/&quot;/g,'"'))

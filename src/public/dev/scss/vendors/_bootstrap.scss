@@ -18,6 +18,10 @@ $gray-900: #2a3b47;
   box-shadow: none!important
 }
 
+.extra-small {
+  font-size: .665em
+}
+
 @import "../../../../../node_modules/bootstrap/scss/variables";
 @import "../../../../../node_modules/bootstrap/scss/mixins";
 @import "../../../../../node_modules/bootstrap/scss/utilities";

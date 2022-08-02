@@ -1,0 +1,27 @@
+extends ../templates/template
+append config
+  - title = 'Búsqueda'
+block main
+  include ../layout/header
+  main.container         
+    div#searchDynamic.position-fixed
+      .container
+        .row
+          .col-md-6
+            div#searchContainer.search.position-relative.w-100.border.bg-white
+              form#resultsForm(action="/search/" method="GET")
+                div.input-group.align-items-center
+                  div.input-group-text.border-0.p-0.mx-3.bg-transparent
+                    span#searchIcon
+                      span.far.fa-search.text-secondary
+                    span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.visually-hidden
+                  input#searchBar(placeholder="¿A quién buscas hoy?" type="text" name="q" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
+                  button#clearButton(type='button').input-group-text.border-0.p-0.mx-3.visually-hidden.bg-transparent
+                    .far.fa-times-circle.text-secondary
+            .text-muted.small.text-end.me-3 7861 resultado(s) (5.574 segundos)
+    div#resultsRow.row 
+      .col-md-6.position-relative
+        div#preloader.preLoader.py-5.w-100.align-items-center.justify-content-center.d-flex.visually-hidden
+          img(src="/dist/assets/loader.gif", alt="" width="32")
+        div#allResults
+        

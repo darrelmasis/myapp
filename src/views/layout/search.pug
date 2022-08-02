@@ -1,13 +1,14 @@
-div#searchContainer.search.position-relative.w-100.border.bg-white
-  form#searchForm(action="/search" method="POST")
+div#searchContainer.search.position-relative.w-100.bg-white.py-2
+  form#searchForm(action="/search/" method="GET")
     div.input-group.align-items-center
-      div.input-group-text.border-0.p-0.mx-3.bg-transparent
-        span#searchIcon.far.fa-search.text-secondary
+      div#searchIconContainer.input-group-text.border-0.p-0.bg-transparent
+        span#searchIcon
+          span.far.fa-search.text-secondary
         span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.visually-hidden
-      input#searchBar(placeholder="¿A quién buscas hoy?" type="search" name="search" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
-      button#btnClear(type='button').input-group-text.border-0.p-0.mx-3.visually-hidden.bg-transparent
+      input#searchBar(placeholder="¿A quién buscas hoy?" type="text" name="q" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
+      button#clearButton(type='button').input-group-text.border-0.p-0.mx-3.visually-hidden.bg-transparent
         .far.fa-times-circle.text-secondary
-  div#resultsData.search-results.border.pb-3.bg-white.visually-hidden
+  div#resultsData.search-results.pb-2.bg-white.visually-hidden
     div#resultsState
     div#searchResults.list-group.rounded-0
     div#resultsMessage

@@ -39,11 +39,10 @@ block main
             .col-md-6.text-start
               .form-group.mb-3
                 label(for="lastName").mb-2.fw-semibold Apellido
-                input#userId(type="text", hidden name="userId" value=`${user.id}`)
                 input#lastName(type="text", name="lastName" placeholder="Apellido" value=`${user.fullName.split(' ')[1]}`).form-control
               .form-group.mb-3
                 label(for="email").mb-2.fw-semibold Correo Electrónico
-                input#email(type="text", name="email" placeholder="Correo Electrónico" value=`${user.email}`).form-control.text-secondary
+                input#email(type="text", name="email" placeholder="Correo Electrónico" value=`${user.email}`).form-control
           .row 
             .col-md-12.text-start
               .form-group

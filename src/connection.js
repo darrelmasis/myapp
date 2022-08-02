@@ -1,3 +1,10 @@
+/**
+ * TODO:
+ * Realiza la conexión a la base de datos
+ * @author [DM] <darrelmasis@gmail.com>
+ * @version 1.0
+ * @return {connection}
+ */
 const mysql = require('mysql')
 const { mysql_database } = require('./config')
 
@@ -9,11 +16,9 @@ pool.getConnection((error, success) => {
   if (error) {
     throw error
   } else {
-    console.log('%cConexión con la base de datos exitosa',"color: blue; font-size:15px;")
+    console.log('Conexión con la base de datos exitosa')
     return success
   }
 })
-
-
 
 module.exports = pool

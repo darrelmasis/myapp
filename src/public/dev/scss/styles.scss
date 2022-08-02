@@ -2,6 +2,16 @@
 @import "./vendors/bootstrap";
 
 $border-shadow: 0 1px 2px rgba($dark, 0.2);
+html {
+  scroll-behavior: smooth;
+}
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin-top: 4.8125rem
+}
 
 .logo {
   width: 15rem;
@@ -14,7 +24,7 @@ $border-shadow: 0 1px 2px rgba($dark, 0.2);
 }
 
 .search {
-  border-radius: calc(0.5 * 2.75rem);
+  border-radius: calc(0.5 * 3.75rem);
   @media (min-width: map-get($grid-breakpoints, 'lg')) {
     & {
       max-width: 35rem;
@@ -23,19 +33,27 @@ $border-shadow: 0 1px 2px rgba($dark, 0.2);
 
   &[class~='open' ] {
     background-color: transparent!important;
-    border: 1px solid transparent!important;
+    border: 2px solid transparent!important;
   }
 
   &-results {
-    margin-top: -2.75rem;
+    margin-top: -3.35rem;
     padding-top: 2.75rem;
     border-radius: calc(0.25 * 2.75rem);
     z-index: -1;
   }
-}
 
-#searchBar {
+}
+#searchIconContainer {
+  margin-right: 1.0625rem;
+  margin-left: 1.125rem;
+}
+#searchContainer, #resultsData{
+  border: 2px solid #dee2e6;
+}
+#searchBar,#searchInput {
   height: 2.75rem;
+  font-weight: 500;
   padding: 0;
   &::-webkit-search-cancel-button {
     display: none;
@@ -77,6 +95,7 @@ $border-shadow: 0 1px 2px rgba($dark, 0.2);
   min-width: 20rem;
 }
 $imagesSizes: (
+  xsmall: 16px,
   small: 32px,
   medium: 56px,
   large: 112px
@@ -179,71 +198,204 @@ $imagesSizes: (
 }
 
 .user-status {
+  & > img {
+    mask-image: url(../../dist/assets/avatar-mask.svg);
+    mask-size: 100% 100%;
+  }
   &:before {
     content: "";
+    position: absolute;
+    display: block;
     width: 0.75rem;
     height: 0.75rem;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 3px;
+    right: 3px;
     border-radius: 50%;
-    border: 2px solid #fff;
-    box-sizing: content-box;
+  }
+
+  &-online::before {
+    background-color: #05ff82;
+  }
+  &-offline::before {
+    background-color: $warning;
   }
 }
-.user-status-online:before {
-  background-color: $success;
+
+
+.thin-scroll::-webkit-scrollbar {
+  width: 8px;     /* Tamaño del scroll en vertical */
+  opacity: 0;
 }
 
-.user-status-offline:before {
-  background-color: $danger;
+.thin-scroll::-webkit-scrollbar-thumb {
+  background-color: darken($light, 20%);
+  border-radius: .5rem;
+  visibility: hidden;
+
+  &:hover {
+    background-color: darken($light, 30%);
+  }
+
+  &:active {
+    background-color: darken($light, 40%);
+  }
 }
 
-#message-box {
-  height: 2.5rem;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  resize: none;
+.thin-scroll:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
 }
 
-.chat-body {
-  position: relative;
-  height: 20rem;
-}
+// Estilos de la ventana de chat
 
-.chat-container {
-  overflow-y: auto;
-  padding: .5rem;
-  font-size: 0.8125em;
-  margin-right: .5rem;
-}
 .chat {
-  display: flex;
-  align-items: center;
-  margin: .5rem 0;
-  &-user {
-      justify-content: flex-end;
-      > .chat-text {
-          background-color: $primary;
-          color: $white;
-          border-radius: 1rem 1rem 0 1rem;
-      }
+  &-header {
+    background-color: $white;
   }
 
-  .user-avatar {
-      margin-right: .5rem;
+  &-body {
+    position: relative;
+    background-color: darken($white,3%);
+  }
+
+  &-footer {
+    background-color: $white;
+  }
+}
+
+// Estilos de las cajas de chat
+.messenger-body {
+  height: calc(100vh - 239px);
+  overflow-y: scroll;
+  font-size: .9em;
+  margin-right: .5rem;
+  padding: 1rem .5rem 1rem 1rem;
+}
+
+// Estilos para los mensajes
+.message {
+  display: flex;
+  align-items: flex-end;
+  margin: 0 0 .15rem 0;
+
+  &-text {
+    padding:  8px 12px;
+    word-break: break-word;
   }
 
   &-avatar {
-    margin-top: 5rem
+    background-color: darken($light, 10%);
+    border-radius: 50%;
+    margin-right: .5rem;
+    margin-bottom: -.75rem;
+  }
+
+  &-rows {
+    width: 100%;
+  }
+
+  &-first {
+    border-radius: 1.125rem 1.125rem 1.125rem 0.25rem!important; // solo se usa en el primer mensaje y se aasigna dinámicamente
+  }
+
+  &-group {
+    margin-bottom: 1rem;
+    &-from {
+      display: flex;
+      align-items: flex-end;
+      flex-direction: column;
+      & > .message {
+        justify-content: flex-end;
+        max-width: 80%;
+      }
+      // estilos a la caja del mensaje individal del remitente
+      & > .message > .message-text {
+        background-color: $primary;
+        color: $white;
+      }
+
+        // Border-raius para los mensjaes del usuario
+      & > .message:first-child > .message-text {
+        border-radius: 1.125rem 1.125rem 0.25rem 1.125rem;
+      }
+    
+      & > .message:last-child > .message-text {
+        border-radius: 1.125rem 0.25rem 1.125rem 1.125rem;
+      }
+
+      & > .message:not(:first-child,:last-child) > .message-text{
+        border-radius: 1.125rem 0.25rem 0.25rem 1.125rem;
+      }
+
+    }
+
+    &-to {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      // estilos a la caja del mensaje individal del remitente
+      & > .message {
+        max-width: 90%;
+      }
+      & > .message-rows > .message > .message-text {
+        background-color: darken($light, 10%);
+        color: $dark;
+      }
+
+        // Border-raius para los mensajes del otro usuario
+      & > .message-rows > .message:first-child > .message-text {
+        border-radius: 1.125rem 1.125rem 1.125rem 0.25rem;
+      }
+
+      & > .message-rows > .message:last-child > .message-text {
+        border-radius: 0.25rem 1.125rem 1.125rem 1.125rem;
+      }
+
+      & > .message-rows > .message:not(:first-child,:last-child) > .message-text{
+        border-radius: 0.25rem 1.125rem 1.125rem 0.25rem ;
+      }
+    }
+
+
+  }
+
+  &-friend {
+
   }
 }
 
-.chat-text {
-  background-color: darken($light, 10%);
-  padding: 1rem 1.25rem;
-  border-radius: 1rem 1rem 1rem 0;
-  max-width: 70%;
-  font-weight: 500;
-  font-size: 1.1em;
+
+#messageBox {
+  width: 100%;
+  resize: none;
+  max-height: 6rem;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  background-color: transparent;
+  border: 0;
 }
+
+.btn-icon {
+  padding: .5rem .75rem;
+}
+
+.searchbar-header {
+  background-color: darken($light, 3%);
+}
+
+.index-1 {
+  z-index: -1;
+}
+
+#searchDynamic {
+  z-index: 2;
+  top: 61px;
+  right: 0;
+  left: 0;
+  padding: 1rem 0 1rem 0;
+  background-color: $body-bg
+}
+
+#resultsRow {
+  margin-top: 9rem;
+}
+@import "./layout/chatapp";

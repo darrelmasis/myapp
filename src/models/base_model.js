@@ -77,16 +77,10 @@ class Base_model {
       if (i < array.lenght - 1) {
         param.push(',')
       }
-    });
+    })
 
     const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
-    connection.query(query, (err, result) => {
-      if (err) {
-        return console.log(err)
-      } else {
-        return result
-      }
-    })
+    return this.#promise(query,param)
 
   }
 
@@ -113,6 +107,14 @@ class Base_model {
     const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
 
     return this.#promise(query)
+  }
+  /**
+   * 
+   * @param {string} query cualquier consulta SQL
+   * @returns Promise
+   */
+  query(query, values) {
+    return this.#promise(query, values)
   }
 }
 

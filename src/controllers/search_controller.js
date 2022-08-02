@@ -1,31 +1,38 @@
 const searchModel = require('../models/search_model')
 let response = {}
-const search = async (req, res) => {
+const search = async (req, res, next) => {
+  
   try {
     const search = {
-      value: req.body.searchValue
+      value: req.body.searchValue || req.params.q,
+      scrollLimit: req.body.scrollLimit
     }
+    // si el valor de la búsqueda está vacío
     if(search.value === '') {
       response.type = 'empty'
       response.message = 'Búsqueda vacía'
+      if (req.route.path === '/search/:q') {
+        return next()
+      }
       return res.send(response)
     } else {
-      const valueLength = search.value.length
-      let type = 'match'
-      const preResults = await searchModel.search(search.value, type)
-      if(preResults.length === 0 && type === 'match') {
-        type = 'like'
-      } else if(preResults.length === 0 && type === 'like') {
-        type = 'match'
+      
+      const results = await searchModel.search(search.value, search.scrollLimit)
+      response.type = 'success'
+      response.message = `Se han encontrado ${results.length} coincidencias`
+      response.data = results
+      response.length = response.data.length
+      res.results = response
+      if (req.route.path === '/search/:q') {
+        return next()
       }
 
-      const results = await searchModel.search(search.value, type)
-      response.type = 'success'
-      response.message = results
       return res.send(response)
     }
 
+
   } catch (error) {
+    console.log(error)
     return error
   }
 }

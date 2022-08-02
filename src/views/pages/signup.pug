@@ -2,9 +2,9 @@ extends ../templates/template
 append config
   -pageTitle = 'Registrarse'
 block main
-  main.container.text-center.mb-5
+  main.container.text-center
     .mx-auto.mt-5
-      img(src="./dist/assets/logo-harinas@svg.svg" width="192" alt="logotipo de harinas monisa").mb-3
+      //- img(src="./dist/assets/logo-harinas@svg.svg" width="192" alt="logotipo de harinas monisa").mb-3
       h1.h3.mb-4.fw-light Crea tu cuenta
       form#signupForm(action="/signup" method="POST" style="max-width: 420px").w-100.mx-auto.p-4.bg-white.rounded.shadow-sm.border
         .row.g-3.mb-3
@@ -12,13 +12,16 @@ block main
             .text-start
               label(for="firstname").form-label.fw-bold.text-muted Nombre
               input#firstname(type="text" placeholder="Nombre" name="firstname" autocomplete="off").form-control
+              #firstNameMessage.validate-message.text-danger.small
           .col
             .text-start
               label(for="lastname").form-label.fw-bold.text-muted Apellido
               input#lastname(type="text" placeholder="Apellido" name="lastname" autocomplete="off").form-control
+              #lastNameMessage.validate-message.text-danger.small
         .text-start.mb-3
           label(for="email").form-label.fw-bold.text-muted Correo electrónico
           input#email(type="email" placeholder="Correo Electrónico" name="email" autocomplete="off" ).form-control
+          #emailMessage.validate-message.text-danger.small
         .row.g-3.mb-3
           .col
             .text-start 
@@ -28,6 +31,7 @@ block main
             .text-start 
               label(for="passwordVerify").form-label.fw-bold.text-muted Repetir contraseña
               input#passwordVerify(type="password" placeholder="Contraseña" name="passwordVerify" autocomplete="off").form-control
+              #passwordMessage.validate-message.text-danger.small
         .row.g-3.mb-3
           .text-start
             label(for="gender").form-label.fw-bold.text-muted Género
@@ -42,7 +46,7 @@ block main
         button#btnSubmit(type="submit").btn.btn-primary.btn-lg.w-100.mb-4.fw-bold
           | Registrarse
           i.far.fa-arrow-right.ms-2
-        #messages.mb-3.visually-hidden
+        #messages.mb-3
         div.border-top.mb-3
         p ¿Ya tienes una cuenta?
           a(href="/signin").btn.btn-link Iniciar sesión

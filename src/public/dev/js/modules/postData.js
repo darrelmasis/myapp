@@ -1,7 +1,6 @@
 const postData = async (uri, method, data) => {
   const header = new Headers()
   header.append('Content-Type', 'application/json')
-
   const postData = {
     method: method,
     headers: header,

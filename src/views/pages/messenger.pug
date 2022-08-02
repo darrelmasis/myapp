@@ -3,29 +3,70 @@ append config
   - title = 'Mensajes'
 block main
   include ../layout/header
-  main.container
-    .row 
-      .col-md-4
-      .col-md-8.mt-3 
-        .chat.flex-column
-          .chat-header.bg-white.rounded-top.p-3.w-100
-            .row.align-items-center
-              .col-auto
-                .image-medium.avatar
+  #chatApp.chat-app.container
+    .row
+      aside.chat-app--aside.col-md-4.border-end
+        .py-3
+          .chat-app--header.d-flex.align-items-center
+            .image-small.avatar.me-3
                   img(src=`${user.cloud}/${user.avatar}`, alt="").avatar-image
-              .col
-                .fw-semibold= `${user.fullName}`
-          #chatBody.chat-body.bg-white.p-3.overflow-auto.w-100
-            #messages.chat-container
-          .chat-footer.bg-white.p-3.rounded-bottom.w-100
-            #chatPreview.text-muted.mb-3.ms-4.fw-semibold.small
-            form(action="#"  method="POST").rounded-pill.bg-light.p-2
-              .row.align-items-center.gx-0
-                .col
-                  input#user(type="hidden", name="user" value=`${user.username}`)
-                  input#userFullName(type="hidden", name="userFullName" value=`${user.fullName}`)
-                  input#avatar(type="hidden", name="avatar" value=`${user.cloud}/${user.avatar}`)
-                  textarea#messageBox(name="message" rows="1" placeholder="Escribe un mensaje aquí").form-control.bg-transparent.border-0.ps-3
-                .col-auto
-                  button.btn.btn-icon.btn-primary.rounded-circle.ms-3
-                    i.far.fa-paper-plane
+            .chat-app--title.m-0.fw-semibold.me-3 Chats
+          .chat-app--search.bg-light.my-3
+          .chat-app--chats
+            #chatList.chat-list.thin-scroll
+              if contacts === null || contacts.length === 0
+                .d-flex.align-items-center.justify-content-center
+                  h3.text-center.mt-4.fw-light Parece que no tienes contactos aun
+              else
+                each val in contacts
+                  a(href=`/chat/@${val.username}`).card.bg-white.border-0.text-reset.text-decoration-none.chat.position-realtive  
+                    .card-body
+                      .row
+                        .col-auto.me-3.pe-0
+                          .image-medium.avatar.user-status.user-status-online
+                            img(src=`${user.cloud}/${val.avatar}`, alt="").avatar-image
+                        .col.ps-0
+                          .d-flex.align-items-center.mb-1
+                            span(href=`/@${val.username}`).fw-semibold.me-auto.d-inline-block= `${val.fullName}`
+                            span(title="Último mensjae").extra-small.text-muted 08:45 PM
+                          .d-flex.align-items-center
+                            if val.bio !== null && val.bio !== ''
+                              div.last-chat-message.small.text-muted.me-1= `${val.bio}`
+                            else
+                              div.last-chat-message.small.text-muted.me-1
+                                i (Sin biografía)
+                            div(title="Mensajes no leidos").unread-chat-messages.badge.bg-primary.ms-3.ms-auto.d-none
+                              span 3
+      main.chat-layout--main.col-md-8.bg-white.border-end.p-0
+        if friend === null
+          .d-flex.align-items-center.flex-column
+            img(src="https://images01.nicepage.com/c461c07a441a5d220e8feb1a/a17abde8d83650a582a28432/users-with-speech-bubbles-vector_53876-82250.jpg", width="300" alt="")
+            h3.text-center.mt-4.text-muted= `¡Bienvenido(a)! ${user.fullName} `
+            p.text-muted Inicia una conversacióncon tus contactos
+        else
+          .messenger
+            .messenger-header.p-3
+              .row.align-items-center
+                .col-auto.pe-0.me-3
+                  .image-medium.avatar.user-status.user-status-online
+                    img(src=`${user.cloud}/${friend.avatar}`, alt="").avatar-image
+                .col.ps-0
+                  .d-flex.flex-column
+                    a(href=`/@${friend.username}`).fw-semibold.text-reset= `${friend.fullName}`
+                    span#userStatus.small.text-muted En linea
+            .messenger-body.bg-light.border-top.border-bottom.p-3.thin-scroll
+              #messengerMessages.messenger-messages.thin-scroll
+            .messenger-footer.p-3
+              form#sendMessageForm(action="" method="POST").rounded-pill.p-2
+                .row.align.items-center.gx-0
+                  .col.align-items-center
+                    textarea#messageBox(name="message" rows="1" placeholder="Escribe un mensaje aquí").form-control.thin-scroll.pb-0
+                  .col-auto
+                    button#sendMessage.btn.btn-icon.btn-primary.rounded-circle.ms-3
+                      i.far.fa-paper-plane
+
+  script.
+    let localUser = JSON.parse("#{JSON.stringify(user)}".replace(/&quot;/g,'"'))
+    let remoteUser = JSON.parse("#{JSON.stringify(friend)}".replace(/&quot;/g,'"'))
+    let contacts = JSON.parse("#{JSON.stringify(contacts)}".replace(/&quot;/g,'"'))
+    console.log(contacts)

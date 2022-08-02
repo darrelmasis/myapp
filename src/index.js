@@ -2,15 +2,8 @@ const express = require('express')
 const app = express()
 const http = require('http')
 const server = http.createServer(app)
+const io = require('socket.io')(server)
 
-const io = require('socket.io')(server, {
-  cors: {
-    origin: "https://localhost:3000",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["my-custom-header"],
-    credentials: true
-  }
-})
 
 require('./socket.io.js')(io) // importa el archivo socket.io.js que contiene la lógica del webSocket
 
@@ -20,6 +13,7 @@ const port = process.env.PORT || 3000
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 app.use(cors())
+
 // Configuración básica
 app.set('title', 'myapp')
 app.set('port', port)
@@ -33,7 +27,6 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Middlewares
-app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 //para poder trabajar con las cookies

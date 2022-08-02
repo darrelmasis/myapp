@@ -20,7 +20,6 @@ block main
                   i.far.fa-location-crosshairs.fa-lg
       .col-md-9.mb-3
         .bg-white.rounded.border.py-3
-          h2.h4.mb-3.ms-3 Actualizar información del cliente
           form#customerForm(action="/cliente", method="POST")
             ul.list-group.list-group-flush
               li.list-group-item.border-0
@@ -33,28 +32,24 @@ block main
                   .col-sm-9.text-secondary=`${customer.fullName}`
               li.list-group-item.border-0
                 .row 
-                  .col-sm-3.fw-semibold Razón social:
-                  .col-sm-9.text-secondary=`${customer.bussinessName}`
-              li.list-group-item.border-0
-                .row 
                   .col-sm-3.fw-semibold Dirección:
                   .col-sm-9
-                    input#address(type="text", name="address" value=`${customer.address}`).form-control.bg-light
+                    input#address(type="text", name="address" value=`${customer.address}` placeholder="Dirección" spellcheck="false").form-control.bg-light
               li.list-group-item.border-0
                 .row 
                   .col-sm-3.fw-semibold Móvil:
                   .col-sm-9
-                    input#primaryPhone(type="text", name="primaryPhone" value=`${customer.primaryPhone}`).form-control.bg-light
+                    input#phoneNumber(type="tel", name="phoneNumber" value=`${customer.phoneNumber}` placeholder="Número de teléfono").form-control.bg-light
               li.list-group-item.border-0
                 .row 
                   .col-sm-3.fw-semibold Correo:
                   .col-sm-9
-                    input#primaryEmail(type="text", name="primaryEmail" value=`${customer.primaryEmail}`).form-control.bg-light
+                    input#email(type="email", name="email" value=`${customer.email}` placeholder="Correo electrónico").form-control.bg-light
               li.list-group-item.border-0
                 .row 
                     .col-sm-3.fw-semibold Coordenadas:
                     .col-sm-9
-                      input#coords(type="text", name="coords" value=`${customer.coords}`).form-control.bg-light
+                      input#coords(type="text", name="coords" value=`${customer.coords}` placeholder="Coordenadas").form-control.bg-light
               li.list-group-item.border-0
                 .row 
                   .col-sm-3.fw-semibold Tipo:
@@ -63,13 +58,8 @@ block main
                 .row 
                   .col-sm-3.fw-semibold Vendedor:
                   .col-sm-9.text-secondary= `${customer.sellerFullName}`
-              li.list-group-item.border-0
-                .row 
-                  .col-sm-3.fw-semibold Cliente desde:
-                  .col-sm-9.text-secondary= `${customer.dateFormat(customer.admissionDate).large}`
               .text-center.my-3
                 button#saveButton(type="submit").btn.btn-success.text-center.mb-3
                   i.far.fa-save.me-2
                   | Guardar cambios
                 .text-danger.fw-semibold.small * Revisar bien la información antes de guardar
-    #customersMap.mb-5.rounded.border.bg-light

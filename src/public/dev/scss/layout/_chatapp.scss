@@ -1,0 +1,53 @@
+@media (min-width: 768px) {
+  .chat-app--aside {
+    height: calc(100vh - 61px);
+  }
+}
+
+.last-chat-message {
+  display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.unread-chat-messages{
+  position: relative;
+  border-radius: 2.25rem;
+  height: calc(1em + 0.5625em);
+  padding: 0.389em;
+
+  & > span {
+    display: block;
+    min-width: 1em;
+    font-size: 9px;
+  }
+}
+
+.chat {
+    &:not(:first-child) {
+     margin-top: 1rem
+    }
+}
+
+.messenger {
+  &-header {
+
+  }
+  &-body {
+
+  }
+  &-footer {
+
+  }
+}
+
+#sendMessageForm {
+  background-color: darken($color: $light, $amount: 5%);
+}
+
+
+#chatList {
+  max-height: calc(100vh - 157px);
+  overflow: auto; 
+}

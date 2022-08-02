@@ -5,7 +5,7 @@ const all = document.querySelectorAll.bind(document)
 /**
  * 
  * @param {string} elementSelector 
- * @param {int} type 
+ * @param {int} type (id | q | all)
  * @returns DOM element
  */
 const select = (elementSelector, type = 'id') => {
@@ -67,21 +67,41 @@ const removeAttributes = (element, attrObj) => {
 };
 
 const passVerify = (pass1, pass2) => {
-  let passOk
-  if(pass1 == '' && pass2 == '') {
-    passOk = false
+
+  if (pass1 !== '' && pass2 !== '' && pass1 === pass2 && pass1.length >= 8 && pass2.length >= 8) {
+    return true
   } else {
-    pass1 === pass2 ? passOk = true : passOk = false
+    return false
   }
-  return passOk
 }
 
 const nomProp = (string) => {
-  let newString = []
-  string.split(' ').forEach(word => {
-    word.toLowerCase()
-    newString.push(word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
-  });
-  return newString.toString().replace(',','')
+  if (string !== '') {
+    const myArray = []
+    const arr = string.trim().split(' ')
+
+    arr.forEach(slice => {
+      slice !== '' ? myArray.push(slice.charAt(0).toUpperCase() + slice.slice(1).toLowerCase()) : false
+    });
+
+    return myArray.join(' ')
+  }
+  return string
 }
-export { select, createCustomElement, addAttributes, removeAttributes, passVerify, nomProp}
+
+const validate = (string, type = '') => {
+  switch (type) {
+    case email:
+      const regex = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi
+      return regex.test(string)
+
+    default:
+      break;
+  }
+}
+
+const sanitize = (string) => {
+  //convertir la cadena de búsqueda a minusculas, quitar tildes y eñes
+}
+
+export { select, createCustomElement, addAttributes, removeAttributes, passVerify, nomProp, validate }

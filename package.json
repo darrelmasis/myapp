@@ -4,7 +4,7 @@
   "description": "Sistema de gestión de clientes",
   "main": "./src/index.js",
   "engines": {
-    "node": "v14.17.4"
+    "node": ">=14.17.4 <=16.16.0"
   },
   "scripts": {
     "start": "node ./src/index.js",
@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/darrelmasis/myapp#readme",
   "dependencies": {
+    "@babel/runtime": "^7.17.9",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.1.0",
     "cloudinary": "^1.27.1",
@@ -44,15 +45,19 @@
   "devDependencies": {
     "@babel/cli": "^7.14.8",
     "@babel/core": "^7.15.0",
+    "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/register": "^7.15.3",
     "autoprefixer": "^10.3.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babelify": "^10.0.0",
     "browser-sync": "^2.27.7",
     "browserify": "^17.0.0",
+    "eslint": "^8.9.0",
     "gulp": "^4.0.2",
     "gulp-beautify": "^3.0.0",
     "gulp-minify": "^3.1.0",
+    "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.0",
     "gulp-rename": "^2.0.0",

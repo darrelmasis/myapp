@@ -1,0 +1,22 @@
+div#searchContainer.search.position-relative.searchbar-header
+  form#searchForm(action="/search" method="POST")
+    div.input-group.align-items-center
+      div.input-group-text.border-0.p-0.mx-3.bg-transparent
+        span#searchIcon.far.fa-search.text-secondary
+        span#searchSpinner.spinner-border.spinner-border-sm.text-secondary.visually-hidden
+      input#searchBar(placeholder="¿A quién buscas hoy?" type="search" name="search" autocomplete="off" spellcheck="false").form-control.border-0.bg-transparent
+      button#clearButton(type='button').input-group-text.border-0.p-0.mx-3.visually-hidden.bg-transparent
+        .far.fa-times-circle.text-secondary
+  div#resultsData.border.pb-2.bg-white.position-absolute.visually-hidden
+    div#resultsState
+      .text-muted.small.text-end.me-3 77 resultados (0.602 segundos)
+    div#searchResults.list-group.rounded-0
+      a(href="/cliente/A0736" class="align-item-center list-group-item d-flex list-group-item-action border-0")
+        span.text-truncate E. Chamorro Industrial, S.A.
+      a(href="/cliente/A0736" class="align-item-center list-group-item d-flex list-group-item-action border-0")
+        span.text-truncateAdm Americas S De R.L.
+      a(href="/cliente/A0736" class="align-item-center list-group-item d-flex list-group-item-action border-0")
+        span.text-truncate Inversiones Lama Nicaragua S.A.
+      a(href="/cliente/A0736" class="align-item-center list-group-item d-flex list-group-item-action border-0")
+        span.text-truncate E. Chamorro Industrial, S.A.
+    div#resultsMessage
