@@ -1,12 +1,14 @@
 extends ../templates/template
 append config
   - pageTitle= `${userProfile.fullName}`
+  - bodyMargin = 'mt-header'
 block main
   include ../layout/header
-  .container.mt-
-    .container-fluid.profile-banner
+  header.container.profile-banner.position-relative.p-0.overflow-hidden.d-flex.align-items-center
+    img(src=" https://monisa.com/wp-content/uploads/2017/12/Slider-1-Monisa.jpg").w-100
+  .container
     .row.position-relative
-      .col-md-3.position-absolute
+      #userInfo.col-md-3.position-relative
         .card.text-center.bg-white.rounded.border.mb-3
           .card-body
             .image-large.avatar.m-auto
