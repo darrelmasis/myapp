@@ -114,6 +114,9 @@ class Search {
           let listItem = createCustomElement('a', { href: `/${resultItem.type}${resultItem.href}`, class: 'align-item-center list-group-item d-flex list-group-item-action border-0' }, [icon, content])
           this.searchResults.searchResults.appendChild(listItem)
         }
+        
+        let showAllResults = createCustomElement('a', { href: `/search/${searchBar.value}`, class: 'text-primary rounded-bottom list-group-item text-center list-group-item-action border-0' }, ['Ver todos los resultados'])
+        this.searchResults.searchResults.appendChild(showAllResults)
       }
     }
   }
