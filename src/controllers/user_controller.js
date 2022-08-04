@@ -206,6 +206,7 @@ const update = async (req, res) => {
 const updateAvatar = async (req, res) => {
   try {
     const id = res.data.id
+    const timeStamp = Date.now()
     await cloudinary.uploader.upload(req.body.userAvatarBase64, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
       if (error) {
         response.type = 'error'
