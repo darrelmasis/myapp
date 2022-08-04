@@ -176,8 +176,7 @@ if (updateAvatarForm) {
       cropImage(reader.result, 1, 170)
         .then(async result => {
           // Simular cambio en tiempo real del avatar
-          const avatars = document.getElementsByClassName('avatar')
-
+          const avatars = document.getElementsByClassName('avatar-image')
           for (const element of avatars) {
             element.src = result
           }
