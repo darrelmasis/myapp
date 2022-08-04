@@ -418,4 +418,8 @@ $imagesSizes: (
 .mt-header {
   margin-top: 61px;
 }
+
+#searchResults a:last-child {
+  border-radius: 0 0 0.6875rem 0.6875rem;
+}
 @import "./layout/chatapp";
