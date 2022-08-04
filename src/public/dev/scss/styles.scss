@@ -9,10 +9,6 @@ html:focus-within {
   scroll-behavior: smooth;
 }
 
-body {
-  margin-top: 4.8125rem
-}
-
 .logo {
   width: 15rem;
   height: 10rem;
@@ -416,7 +412,11 @@ $imagesSizes: (
 }
 
 .mt-header {
-  margin-top: 61px;
+  margin-top: 3.8125rem;
+}
+
+.mt-header-lg {
+  margin-top: 4.8125rem;
 }
 
 #searchResults a:last-child {

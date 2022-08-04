@@ -1,6 +1,7 @@
 extends ../templates/template
 append config
   - pageTitle= `${customer.customerCode}`
+  - bodyMargin= 'mt-header-lg'
 block main
   include ../layout/header
   .container.mt-3
