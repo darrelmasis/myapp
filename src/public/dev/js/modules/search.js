@@ -115,8 +115,10 @@ class Search {
           this.searchResults.searchResults.appendChild(listItem)
         }
         
-        let showAllResults = createCustomElement('a', { href: `/search/${searchBar.value}`, class: 'text-primary rounded-bottom list-group-item text-center list-group-item-action border-0' }, ['Ver todos los resultados'])
-        this.searchResults.searchResults.appendChild(showAllResults)
+        if (results.length > 5) {
+          let showAllResults = createCustomElement('a', { href: `/search/${searchBar.value}`, class: 'text-primary list-group-item text-center list-group-item-action border-0' }, ['Ver todos los resultados'])
+          this.searchResults.searchResults.appendChild(showAllResults)
+        }
       }
     }
   }
