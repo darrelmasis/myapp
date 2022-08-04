@@ -14,7 +14,7 @@ block main
             label(for="userAvatar" title="Actualizar foto de perfil")#uploadAvatar.w-100.rounded-circle
               i.far.fa-camera.fa-xl.text-light
             input#userAvatar(type="file", accept="image/*" capture="camera" name="userAvatar" hidden)
-            span#loader.loader.position-absolute.d-none
+            span#loader.loader.position-absolute.d-none.rounded-circle
               img(src="../../../dist/assets/loader.gif", alt="Loader" width="32px")
             img#avatarChange(src=`${user.cloud}/${user.avatar}` alt="avatar del usuario").w-100.avatar-image
         form#userUpdateForm(action="/userUpdate", method="POST").mt-5
