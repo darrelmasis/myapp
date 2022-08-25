@@ -1,10 +1,10 @@
 import { select, addAttributes, removeAttributes, passVerify, nomProp, createCustomElement } from "./modules/dom";
 import regeneratorRuntime, { async } from "regenerator-runtime";
 import { postData } from "./modules/postData";
-import getPosition from "./modules/geolocation"
+import getGeoLocation from "./modules/geolocation"
 import { LATIN1_BIN } from "mysql/lib/protocol/constants/charsets";
 import cropImage from "../js/modules/cropImage"
-
+import maps from '../js/modules/maps'
 
 const socket = io()
 const signinForm = select('signinForm')
@@ -71,7 +71,7 @@ if (signinForm) {
 
 if (getCoords) {
   getCoords.addEventListener('click', e => {
-    getPosition().then(res => {
+    getGeoLocation().then(res => {
       coords.value = ''
       const currentCoords = `${res.coords.latitude}, ${res.coords.longitude}`
       coords.value = currentCoords
@@ -113,6 +113,8 @@ if (customerForm) {
         console.log(error)
       })
   })
+
+  maps(localUser)
 }
 
 const userUpdate = async userData => {
@@ -156,6 +158,8 @@ if (userUpdateForm) {
         console.log(error)
       })
   })
+
+
 }
 
 if (updateAvatarForm) {
