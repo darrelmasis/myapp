@@ -14,6 +14,8 @@ import browserSync from 'browser-sync'
 import autoprefixer from 'autoprefixer'
 import sourcemaps from 'gulp-sourcemaps'
 import source from 'vinyl-source-stream'
+import babel from 'gulp-babel'
+import uglify from 'gulp-uglify'
 const server = browserSync.create()
 const sass = gulpSass(darthSass)
 const path = {
@@ -85,7 +87,6 @@ const scriptsDev = () => {
     })
     .pipe(source('scripts.js'))
     .pipe(buffer())
-    .pipe(minify({ ext: {src: '.min.js', min: '.js' } }))
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(path.scripts.dest))
@@ -104,7 +105,8 @@ const scriptsBuild = () => {
     })
     .pipe(source('scripts.js'))
     .pipe(buffer())
-    .pipe(minify({ ext: { src: '.js', min: '.min.js' } }))
+    .pipe(uglify())
+    .pipe(rename({dirname: '/', basename: 'scripts', prefix: '', suffix: '', extname: '.min.js'}))
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(path.scripts.dest))
