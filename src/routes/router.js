@@ -55,12 +55,12 @@ router.route('/@:username')
       if (res.userProfile === false) {
         res.status(404).render('404')
       } else {
-        if (res.userProfile.username === res.data.username) {
+        if (res.userProfile.id === res.loggedUserId) {
           res.userProfile.active = true
         } else {
           res.userProfile.active = false
         }
-        res.render('userProfile', { userProfile: res.userProfile, user: res.data })
+        res.render('userProfile', { userProfile: res.userProfile, user: res.loggedUserData })
       }
     } else {
       res.redirect('/signin')

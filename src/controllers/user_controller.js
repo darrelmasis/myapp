@@ -143,13 +143,17 @@ const isLogged = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
       const id = await promisify(jwt.verify)(req.cookies.jwt, 'super_secret')
-      await userModel.isLogged(id.id).then(data => {
-        res.data = data[0]
-        res.data.cloud = `https://res.cloudinary.com/darrelmasis/image/upload` //url del cloud storage CDN
+
+      await userModel.read('fullName,username,email,gender,avatar,bio', 'id', id.id)
+        .then(data => {
+        // res.data = data[0]
+        // res.isLogged = true
+        data[0].cloud = `https://res.cloudinary.com/darrelmasis/image/upload` //url del cloud storage CDN
         res.isLogged = true
+        res.loggedUserId = id.id
+        res.loggedUserData = data[0]
         return next()
       })
-
     } catch (error) {
       console.log(error)
       return next()
@@ -162,14 +166,14 @@ const isLogged = async (req, res, next) => {
 
 const get = async (req, res, next) => {
   try {
-    await userModel.read(req.params.username)
+    await userModel.read('id, fullName, username, bio, email, gender, avatar', 'username', req.params.username)
       .then(data => {
         if (data.length === 0) {
           res.userProfile = false
           return next()
         } else {
-          res.userProfile = data[0]
           data[0].cloud = `https://res.cloudinary.com/darrelmasis/image/upload` //url del cloud storage CDN
+          res.userProfile = data[0]
           return next()
         }
       })
@@ -307,10 +311,11 @@ const removeContact = async (req, res,) => {
 const hasContact = async (req, res, next) => {
   // Traer toda la lista de contactos del usuario activo
   // y verificar si el perfil del usuario en pantalla está en la lista
-  const q = await userModel.query('SELECT contacts.contactsId FROM contacts INNER JOIN users ON contacts.userID = ? && users.id = ?', [res.data.id, res.data.id])
+  let loggedUserId = res.loggedUserId
+  const q = await userModel.query('SELECT contacts.contactsId FROM contacts INNER JOIN users ON contacts.userID = ? && users.id = ?', [loggedUserId, loggedUserId])
   if (q.length > 0) {
     const contactsList = JSON.parse(q[0].contactsId)
-    const isFriend = contactsList.some(friend => friend === res.userProfile.id)
+    const isFriend = contactsList.some(friend => friend === res.userProfile.id) // comprueba si al menos un elemento del array cumple con la condición
     res.userProfile.isFriend = isFriend
   } else {
     res.userProfile.isFriend = false

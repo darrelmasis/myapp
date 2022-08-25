@@ -10,9 +10,9 @@ class User {
     }
   }
 
-  async read(data) {
+  async read(columns, tableColumn, data) {
     try {
-      return await baseModel.read('*', 'users', `WHERE username = '${data}'`)
+      return await baseModel.read(columns, 'users', `WHERE ${tableColumn} = ?`, [data])
     } catch (error) {
       return error
     }
@@ -20,7 +20,7 @@ class User {
 
   async update(userId, data) {
     try {
-      return await baseModel.update('users', data, `WHERE id = '${userId}'`)
+      return await baseModel.update('users', data, 'WHERE id = ?', [userId])
     } catch (error) {
       return error
     }
