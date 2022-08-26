@@ -9,7 +9,7 @@
 
   "rewrites": [
      {
-        "source": "/src/(.*)",
+        "source": "./(.*)",
         "destination": "./src/index.js"
      }
   ]
