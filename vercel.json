@@ -7,10 +7,10 @@
      }
   ],
 
-  "rewrites": [
+  "routes": [
      {
-        "source": "./(.*)",
-        "destination": "./src/index.js"
+        "src": "/(.*)",
+        "dest": "/"
      }
   ]
 }
