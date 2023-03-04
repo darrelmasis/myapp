@@ -10,6 +10,10 @@ class Base_model {
     try {
       const promise = new Promise((resolve, reject) => {
         connection.query(query, data, (err, result) => {
+          // console.log("*********************************")
+          // console.log(query)
+          // console.log("____________________________________")
+          console.log("data: " + data)
           if (err) {
             reject(err)
           } else {
@@ -71,16 +75,20 @@ class Base_model {
     const keys = Object.keys(data)
     const values = Object.values(data)
     let param = []
-
     keys.forEach((key, i, array) => {
       param.push(`${key} = '${values[i]}'`)
       if (i < array.lenght - 1) {
         param.push(',')
       }
     })
+    // console.log("param: " + param)
+    // console.log("data: ")
+    // console.log(data)
+    // console.log("condition: ")
+    // console.log(condition)
 
     const query = `UPDATE ${table} SET ${param.toString()} ${condition}`
-    return this.#promise(query,param)
+    return this.#promise(query,data)
 
   }
 

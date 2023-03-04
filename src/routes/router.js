@@ -7,7 +7,7 @@ const search = require('../controllers/search_controller')
 
 router.get('/', user.isLogged, (req, res) => {
   if (res.isLogged) {
-    res.render('index', { user: res.data })
+    res.render('index', { user: res.loggedUserData })
   } else {
     res.redirect('/signin')
   }
@@ -66,14 +66,17 @@ router.route('/@:username')
       res.redirect('/signin')
     }
   })
-
-router.route('/addContact').post(user.addContact)
-router.route('/removeContact').post(user.removeContact)
+  .post(user.isLogged, user.get, (req, res, next) => {
+    console.log(req.body.operationType)
+    req.body.userId = res.loggedUserId
+    req.body.contactsId = res.userProfile.id
+    next()
+  }, user.toogleContact)
 
 router.route('/editar-perfil')
   .get(user.isLogged, (req, res) => {
     if (res.isLogged) {
-      res.render('userProfileEdit', { user: res.data })
+      res.render('userProfileEdit', { user: res.loggedUserData })
       // }
     } else {
       res.redirect('/signin')
@@ -81,7 +84,8 @@ router.route('/editar-perfil')
   })
 
 router.route('/userUpdate').post(user.isLogged, user.update)
-router.route('/update-avatar').post(user.isLogged, user.upload.single('userAvatar'), user.updateAvatar)
+router.route('/update-avatar')
+  .post(user.isLogged, user.upload.single('userAvatar'), user.updateAvatar)
 
 /**
  * Buscador
@@ -92,7 +96,7 @@ router.route('/search').post(search.search)
 router.route('/search/:q')
   .get(user.isLogged, search.search, (req, res) => {
     if (res.isLogged) {
-      res.render('searchResults', { user: res.data, searchResults: res.results })
+      res.render('searchResults', { user: res.loggedUserData, searchResults: res.results })
     } else {
       res.redirect('/signin')
     }
@@ -107,7 +111,7 @@ router.route('/cliente/:id')
       if (res.customerData === false) {
         res.status(404).render('404')
       } else {
-        res.render('customerProfile', { customer: res.customerData, user: res.data })
+        res.render('customerProfile', { customer: res.customerData, user: res.loggedUserData })
       }
     } else {
       res.redirect('/signin')
@@ -124,7 +128,7 @@ router.route('/chat')
   .get(user.isLogged, user.getContacts, (req, res) => {
   // si está logueado
   if (res.isLogged) {
-    res.render('messenger', { user: res.data, friend: null, contacts: res.userContacts })
+    res.render('messenger', { user: res.loggedUserData, friend: null, contacts: res.userContacts })
   } else {
     res.redirect('/signin')
   }
@@ -137,7 +141,7 @@ router.route('/chat/@:username').get(user.isLogged, user.get, user.getContacts, 
     if (!res.userProfile) {
       res.status(404).render('404')
     } else {
-      res.render('messenger', { user: res.data, friend: res.userProfile, contacts: res.userContacts})
+      res.render('messenger', { user: res.loggedUserData, friend: res.userProfile, contacts: res.userContacts})
     }
   } else {
     res.redirect('/signin')

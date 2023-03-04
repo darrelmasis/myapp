@@ -208,8 +208,8 @@ if (updateAvatarForm) {
   })
 }
 // Prepara añadircontacto
-const addContact = async contactId => {
-  const data = await postData('/addContact', 'POST', contactId)
+const addContact = async operationType => {
+  const data = await postData(window.location.pathname, 'POST', operationType)
   return data
 }
 // Envía los datos del formulario para agregar un nuevo contacto
@@ -221,13 +221,15 @@ if (addContactForm) {
     addButton.innerHTML = '<svg class="svg-inline--fa fa-user-plus fa-w-20 me-2" aria-hidden="true" focusable="false" data-prefix="far" data-icon="user-plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M224 256C294.695 256 352 198.691 352 128S294.695 0 224 0C153.312 0 96 57.309 96 128S153.312 256 224 256ZM224 48C268.113 48 304 83.887 304 128C304 172.111 268.113 208 224 208C179.889 208 144 172.111 144 128C144 83.887 179.889 48 224 48ZM274.664 304H173.336C77.609 304 0 381.602 0 477.332C0 496.477 15.523 512 34.664 512H413.336C432.477 512 448 496.477 448 477.332C448 381.602 370.398 304 274.664 304ZM48.705 464C55.379 401.133 108.727 352 173.336 352H274.664C339.273 352 392.621 401.133 399.297 464H48.705ZM616 200H568V152C568 138.75 557.25 128 544 128S520 138.75 520 152V200H472C458.75 200 448 210.75 448 224S458.75 248 472 248H520V296C520 309.25 530.75 320 544 320S568 309.25 568 296V248H616C629.25 248 640 237.25 640 224S629.25 200 616 200Z"></path></svg> Guardando...'
     addAttributes(addButton, { disabled: '' }) // Establece el boton como deshabilitado
     const data = {
-      userId: localUser.id,
-      contactsId: remoteUser.id
+      operationType: 'add'
     }
     addContact(data)
       .then(data => {
         if (data.type === 'error' || data.type === 'empty') {
           // mensajes de error
+          removeAttributes(addButton, { disabled: '' }) // Establece el boton como deshabilitado
+          addButton.innerHTML = originalButton
+
           console.log(data.message)
         } else {
           removeAttributes(addButton, { disabled: '' }) // Establece el boton como deshabilitado
@@ -240,8 +242,8 @@ if (addContactForm) {
 }
 
 // Prepara eliminar contacto
-const removeContact = async contactId => {
-  const data = await postData('/removeContact', 'POST', contactId)
+const removeContact = async operationType => {
+  const data = await postData(window.location.pathname, 'POST', operationType)
   return data
 }
 // Envía los datos del formulario para remover un contacto existente
@@ -252,16 +254,17 @@ if (removeContactForm) {
     removeButton.innerHTML = '<svg class="svg-inline--fa fa-user-minus fa-w-20 me-2" aria-hidden="true" focusable="false" data-prefix="far" data-icon="user-minus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" data-fa-i2svg=""><path fill="currentColor" d="M274.664 304H173.336C77.609 304 0 381.602 0 477.332C0 496.477 15.523 512 34.664 512H413.336C432.477 512 448 496.477 448 477.332C448 381.602 370.398 304 274.664 304ZM48.705 464C55.379 401.133 108.727 352 173.336 352H274.664C339.273 352 392.621 401.133 399.297 464H48.705ZM224 256C294.695 256 352 198.691 352 128S294.695 0 224 0C153.312 0 96 57.309 96 128S153.312 256 224 256ZM224 48C268.113 48 304 83.887 304 128C304 172.111 268.113 208 224 208C179.889 208 144 172.111 144 128C144 83.887 179.889 48 224 48ZM616 200H472C458.75 200 448 210.75 448 224S458.75 248 472 248H616C629.25 248 640 237.25 640 224S629.25 200 616 200Z"></path></svg> Eliminando...'
     addAttributes(removeButton, { disabled: '' }) // Establece el boton como deshabilitado
     const data = {
-      userId: localUser.id,
-      contactsId: remoteUser.id
+      operationType: 'remove'
     }
     removeContact(data)
       .then(data => {
         if (data.type === 'error' || data.type === 'empty') {
           // mensajes de error
-          console.log(data.message)
+          removeAttributes(removeButton, { disabled: '' }) // Establece el boton como habilitado
+          removeButton.innerHTML = originalButton
+          // console.log(data.message)
         } else {
-          removeAttributes(removeButton, { disabled: '' }) // Establece el boton como deshabilitado
+          removeAttributes(removeButton, { disabled: '' }) // Establece el boton como habilitado
           removeButton.innerHTML = originalButton
           addContactForm.classList.toggle('d-none')
           removeContactForm.classList.toggle('d-none')

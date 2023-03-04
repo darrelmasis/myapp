@@ -109,6 +109,9 @@ class Search {
           } else if (resultItem.type === '@') {
             icon = userIcon
           }
+          if (resultItem.fullName.toLowerCase().includes(searchBar.value.toLowerCase())) {
+            resultItem.fullName = resultItem.fullName.replace(new RegExp(`(${searchBar.value})`,"i"), "<strong>$1</strong>");
+          }
 
           let content = createCustomElement('span', { class: 'text-truncate' }, [resultItem.fullName])
           let listItem = createCustomElement('a', { href: `/${resultItem.type}${resultItem.href}`, class: 'align-items-center list-group-item d-flex list-group-item-action border-0' }, [icon, content])

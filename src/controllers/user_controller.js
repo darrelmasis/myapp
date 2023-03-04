@@ -195,8 +195,8 @@ const update = async (req, res) => {
       email: req.body.email,
       bio: req.body.bio
     }
-    const userId = res.data.id
-    userModel.update(userId, userData)
+    const userId = res.loggedUserId
+    userModel.update(userData, userId)
     response.type = 'success'
     response.message = 'Información actualizada correctamente'
     return res.send(response)
@@ -209,9 +209,9 @@ const update = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   try {
-    const id = res.data.id
+    const id = res.loggedUserId
     const timeStamp = Date.now()
-    await cloudinary.uploader.upload(req.body.userAvatarBase64, { public_id: `${res.data.username}/${timeStamp}-avatar-large` }, (error, result) => {
+    await cloudinary.uploader.upload(req.body.userAvatarBase64, { public_id: `${res.loggedUserData.username}/${timeStamp}-avatar-large` }, (error, result) => {
       if (error) {
         response.type = 'error'
         response.message = error
@@ -220,7 +220,7 @@ const updateAvatar = async (req, res) => {
         const data = {
           avatar: `v${result.version}/${result.public_id}.${result.format}`
         }
-        userModel.update(id, data)
+        userModel.update(data, id)
         response.type = 'success'
         response.message = 'Imágen actualizada con éxito'
       }
@@ -231,6 +231,7 @@ const updateAvatar = async (req, res) => {
   } catch (error) {
     response.type = 'error'
     response.message = '¡Oops! Hubo algunos errores al actualizar la información'
+    console.log(response)
     return res.send(response)
   }
 }
@@ -280,7 +281,7 @@ const addContact = async (req, res) => {
   }
 }
 
-const removeContact = async (req, res,) => {
+const removeContact = async (req, res) => {
   try {
     const data = {
       userId: req.body.userId,
@@ -308,6 +309,15 @@ const removeContact = async (req, res,) => {
 
 }
 
+const toogleContact = async (req, res) => {
+  const type = req.body.operationType
+  console.log(type)
+  if (type === 'add') {
+    addContact(req, res)
+  } else {
+    removeContact(req, res)
+  }
+}
 const hasContact = async (req, res, next) => {
   // Traer toda la lista de contactos del usuario activo
   // y verificar si el perfil del usuario en pantalla está en la lista
@@ -343,4 +353,4 @@ const getContacts = async (req, res, next) => {
 const memoryStorage = multer.memoryStorage()
 const upload = multer({ memoryStorage })
 
-module.exports = { signup, signin, isLogged, get, signout, update, updateAvatar, upload, addContact, hasContact, removeContact, getContacts }
+module.exports = { signup, signin, isLogged, get, signout, update, updateAvatar, upload, addContact, hasContact, removeContact, getContacts, toogleContact}

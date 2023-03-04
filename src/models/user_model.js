@@ -18,8 +18,9 @@ class User {
     }
   }
 
-  async update(userId, data) {
+  async update(data, userId) {
     try {
+      // return await baseModel.update('users', data, `WHERE id = ${userId}`)
       return await baseModel.update('users', data, 'WHERE id = ?', [userId])
     } catch (error) {
       return error
