@@ -67,7 +67,6 @@ router.route('/@:username')
     }
   })
   .post(user.isLogged, user.get, (req, res, next) => {
-    console.log(req.body.operationType)
     req.body.userId = res.loggedUserId
     req.body.contactsId = res.userProfile.id
     next()
