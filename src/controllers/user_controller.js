@@ -311,7 +311,6 @@ const removeContact = async (req, res) => {
 
 const toogleContact = async (req, res) => {
   const type = req.body.operationType
-  console.log(type)
   if (type === 'add') {
     addContact(req, res)
   } else {

@@ -18,10 +18,9 @@ class User {
     }
   }
 
-  async update(data, userId) {
+  async update(setData, userId) {
     try {
-      // return await baseModel.update('users', data, `WHERE id = ${userId}`)
-      return await baseModel.update('users', data, 'WHERE id = ?', [userId])
+      return await baseModel.update('users', setData, 'WHERE id = ?', [userId])
     } catch (error) {
       return error
     }
@@ -63,7 +62,7 @@ class User {
         case 'create':
           return await baseModel.create('contacts', sData)
         case 'update':
-          return await baseModel.update('contacts', {contactsId: sData.contactsId}, `WHERE userId = ${sData.userId}`)
+          return await baseModel.update('contacts', {contactsId: sData.contactsId}, 'WHERE userId = ?', [sData.userId])
       }
     } catch (error) {
       return error
