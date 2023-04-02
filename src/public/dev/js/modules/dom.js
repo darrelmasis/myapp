@@ -100,8 +100,18 @@ const validate = (string, type = '') => {
   }
 }
 
-const sanitize = (string) => {
-  //convertir la cadena de búsqueda a minusculas, quitar tildes y eñes
+const sanitizeSearchParams = (string, invert = false) => {
+  if (invert) {
+    return string.replace(/\+/g, ' ')
+  }
+
+  return string.replace(/\s+/g, '+')
 }
 
-export { select, createCustomElement, addAttributes, removeAttributes, passVerify, nomProp, validate }
+const resaltarPalabras = (texto, palabrasResaltadas) => {
+  const palabras = palabrasResaltadas.map(palabra => palabra.trim()).filter(palabra => palabra !== '');
+  const expresionRegular = new RegExp(`(${palabras.join('|')})`, 'gi');
+  return texto.replace(expresionRegular, '<strong>$&</strong>');
+}
+
+export { select, createCustomElement, addAttributes, removeAttributes, passVerify, nomProp, validate, sanitizeSearchParams, resaltarPalabras}
