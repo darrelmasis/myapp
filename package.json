@@ -4,7 +4,7 @@
   "description": "Sistema de gestión de clientes",
   "main": "./src/index.js",
   "engines": {
-    "node": ">=14.17.4 <=16.16.0"
+    "node": ">=14.17.4 <=18.15.0"
   },
   "scripts": {
     "start": "node ./src/index.js",
@@ -34,7 +34,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jimp": "^0.16.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "multer": "^1.4.4",
     "mysql": "^2.18.1",
     "nodemailer": "^6.7.2",
@@ -57,7 +57,7 @@
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-beautify": "^3.0.0",
-    "gulp-minify": "^0.0.15",
+    "gulp-minify": "^3.1.0",
     "gulp-notify": "^4.0.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.0",
