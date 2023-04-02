@@ -1,4 +1,4 @@
-import { createCustomElement, select } from "./dom";
+import { createCustomElement, sanitizeSearchParams, select, resaltarPalabras} from "./dom";
 import { postData } from "./postData";
 
 class Search {
@@ -67,7 +67,7 @@ class Search {
   async search(searchValue, scrollLimit, cb = () => { }) {
     let results = {}
     let timeStart = Date.now()
-    const response = await postData('/search', 'POST', {searchValue, scrollLimit}) // Obtenemos los resultados de la búsqueda segun el searchvalue
+    const response = await postData('/search?q', 'POST', {searchValue, scrollLimit}) // Obtenemos los resultados de la búsqueda segun el searchvalue
     let timeEnd = Date.now()
     results.response = response
     results.time = timeEnd - timeStart
@@ -109,9 +109,7 @@ class Search {
           } else if (resultItem.type === '@') {
             icon = userIcon
           }
-          if (resultItem.fullName.toLowerCase().includes(searchBar.value.toLowerCase())) {
-            resultItem.fullName = resultItem.fullName.replace(new RegExp(`(${searchBar.value})`,"i"), "<strong>$1</strong>");
-          }
+          resultItem.fullName = resaltarPalabras(resultItem.fullName, searchBar.value.split(' '))
 
           let content = createCustomElement('span', { class: 'text-truncate' }, [resultItem.fullName])
           let listItem = createCustomElement('a', { href: `/${resultItem.type}${resultItem.href}`, class: 'align-items-center list-group-item d-flex list-group-item-action border-0' }, [icon, content])
@@ -119,7 +117,7 @@ class Search {
         }
         
         if (results.length > 5) {
-          let showAllResults = createCustomElement('a', { href: `/search/${searchBar.value}`, class: 'text-primary list-group-item text-center list-group-item-action border-0' }, ['Ver todos los resultados'])
+          let showAllResults = createCustomElement('a', { href: `/search?q=${sanitizeSearchParams(searchBar.value, false)}`, class: 'text-primary list-group-item text-center list-group-item-action border-0' }, ['Ver todos los resultados'])
           this.searchResults.searchResults.appendChild(showAllResults)
         }
       }
@@ -256,7 +254,7 @@ if (searchForm) {
     const itemSelected = select('.search-item__active', 'q')
     if (itemSelected === null || itemSelected === 'null') {
       if (searchBar.value !== '') {
-        location.href = `/search/${searchBar.value}`
+        location.href = `/search?q=${sanitizeSearchParams(searchBar.value, false)}`
         localStorage.setItem('currentSearch', searchBar.value)
       }
     } else {
@@ -275,19 +273,21 @@ if (resultsForm) {
   let isEnd = false
   
   const search = new Search(searchBar, clearButton, searchSpinner, searchIcon, results, searchContainer)
-  search.searchBar.value = localStorage.getItem('currentSearch')
+  const queryString = window.location.search
+  const urlParams = new URLSearchParams(queryString);
+
+  search.searchBar.value = urlParams.get('q')
 
   // Ejecuta la función loadResults al hacer scroll
   
   const loadResults = (scrollLimit) => {
-
     preloader.classList.remove('visually-hidden')
 
     let data = search.search(searchBar.value, scrollLimit)
     
     data.then(results => {
       preloader.classList.add('visually-hidden')
-      if (results.response.length === 0) {
+      if (results.response.length === 0 && isEnd === false) {
         isEnd = true
         let content = `No se han encontrado resultados para tu búsqueda`
         const cardBody = createCustomElement('div', { class: "card-body" }, [content])
@@ -296,7 +296,7 @@ if (resultsForm) {
       } else {
         for (let i = 0; i < results.response.data.length; i++) {
           const result = results.response.data[i]
-  
+          
   
           for (const key in result) {
             if (Object.hasOwnProperty.call(result, key)) {
@@ -333,12 +333,20 @@ if (resultsForm) {
 
   window.addEventListener('scroll', () => {
     
-    let target = (document.documentElement.scrollHeight - window.innerHeight) - ((document.documentElement.scrollHeight - window.innerHeight) * 0.3)
+    // let target = (document.documentElement.scrollHeight - window.innerHeight) - ((document.documentElement.scrollHeight - window.innerHeight) * 0.3)
 
-    if (window.scrollY >= target && !isEnd) {
+    // if (window.scrollY >= target && isEnd == false) {
+    //   scrollLimit.start += scrollLimit.end
+    //   loadResults(scrollLimit)
+    // }
+
+      const scrollTop = document.documentElement.scrollTop;
+      const clientHeight = document.documentElement.clientHeight;
+      const scrollHeight = document.documentElement.scrollHeight;
+    if (scrollTop + clientHeight >= scrollHeight && !isEnd) {
       scrollLimit.start += scrollLimit.end
-      loadResults(scrollLimit)
-    }
+        loadResults(scrollLimit);
+      }
   })
 
   // if (search.searchBar.value !== '') {
@@ -363,11 +371,12 @@ if (resultsForm) {
    */
   resultsForm.addEventListener('submit', e => {
     e.preventDefault()
+    const url = document.location.pathname + `?q=${searchBar.value}`
+    history.pushState({}, '', sanitizeSearchParams(url,false));
     preloader.classList.remove('visually-hidden')
     scrollLimit.start = 0
     allResults.innerHTML = ''
+    isEnd = false
     loadResults(scrollLimit)
-    // location.href = `/search/${searchBar.value}`
-    localStorage.setItem('currentSearch', searchBar.value)
   })
 }
