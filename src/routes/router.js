@@ -92,7 +92,7 @@ router.route('/update-avatar')
 
 router.route('/search').post(search.search)
 
-router.route('/search/:q')
+router.route('/search?:q')
   .get(user.isLogged, search.search, (req, res) => {
     if (res.isLogged) {
       res.render('searchResults', { user: res.loggedUserData, searchResults: res.results })
